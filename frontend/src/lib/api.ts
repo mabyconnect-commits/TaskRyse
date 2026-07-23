@@ -1,6 +1,11 @@
-// Typed fetch client for the Taskryse API. All calls go through /api/v1, which the
-// Vite dev server proxies to the Express backend on :4000.
-const BASE = '/api/v1';
+// Typed fetch client for the Taskryse API.
+//
+// Base URL resolution:
+//   * Default '/api/v1' (relative) — same-origin. Works behind the Vite dev proxy,
+//     the nginx proxy in docker-compose, and a Vercel same-project serverless backend.
+//   * Set VITE_API_BASE at build time to point at a cross-origin backend, e.g.
+//     "https://taskryse-api.onrender.com/api/v1" when the API is hosted separately.
+const BASE = import.meta.env.VITE_API_BASE || '/api/v1';
 const TOKEN_KEY = 'taskryse.token';
 
 export function getToken(): string | null {

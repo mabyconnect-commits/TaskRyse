@@ -29,6 +29,17 @@ cd frontend && npm install && npm run dev                                   # :5
 Open http://localhost:5173 and sign in with a demo account below. The Vite dev server
 proxies `/api` to the backend, so both run as one origin with no CORS setup.
 
+## Deploy
+
+- **Whole stack in one command:** `JWT_SECRET=$(openssl rand -hex 32) docker compose up --build`
+  → frontend on http://localhost:8080, API on :4000, Postgres bundled. The backend
+  migrates and seeds on first boot.
+- **Vercel:** the repo is import-ready — `vercel.json` builds the frontend and runs the
+  API as a serverless function (`api/index.js`); bring your own managed Postgres.
+
+Full instructions, env vars, and the "frontend on Vercel + API on a container host"
+split are in **[DEPLOY.md](./DEPLOY.md)**.
+
 ## The one rule that is enforced server-side
 
 > A plan unlocks **eligibility only**. It never grants tasks, earnings or returns.

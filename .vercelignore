@@ -1,0 +1,8 @@
+design
+test
+docker
+docker-compose.yml
+Dockerfile
+frontend/Dockerfile
+frontend/nginx.conf
+*.md
