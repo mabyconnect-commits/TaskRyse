@@ -1,16 +1,33 @@
-# Taskryse — Backend
+# Taskryse
 
 A global AI/digital-work platform. Contributors complete verified tasks; businesses
 sponsor and fund them; reviewers grade; support and admins operate. Nigeria-first (₦),
 multi-currency.
 
-This repository is the **backend** built from the design handoff (`BACKEND_SPEC.md`,
-`prisma/schema.prisma`, `openapi.yaml`). The HTML prototypes in `design/` are visual
-reference only — they are not rebuilt here. This service implements the data model,
-migrations, REST API, auth, RBAC and the money business rules the frontend will consume.
+Built from the design handoff (`BACKEND_SPEC.md`, `prisma/schema.prisma`, `openapi.yaml`).
+The HTML prototypes in `design/` are visual reference only. This repo now contains two
+runnable apps:
 
-Stack: **Node.js + Express + Prisma (PostgreSQL)**. Money is stored in **minor units**
-(kobo/cents) as `Int`/`BigInt` — never as floats.
+- **Backend** (this directory) — the data model, migrations, REST API, auth, RBAC and
+  money business rules. Node.js + Express + Prisma (PostgreSQL). Money in **minor units**
+  (kobo/cents) as `Int`/`BigInt`, never floats.
+- **Frontend** ([`frontend/`](./frontend)) — a React + TypeScript + Vite SPA wired to the
+  API, styled with the handoff's design tokens (Sora + Albert Sans, Indigo/orange/green).
+  See [`frontend/README.md`](./frontend/README.md).
+
+## Run both
+
+```bash
+# Backend (Postgres must be running)
+cp .env.example .env
+npm install && npx prisma migrate dev && npx prisma db seed && npm start   # :4000
+
+# Frontend (separate shell)
+cd frontend && npm install && npm run dev                                   # :5173
+```
+
+Open http://localhost:5173 and sign in with a demo account below. The Vite dev server
+proxies `/api` to the backend, so both run as one origin with no CORS setup.
 
 ## The one rule that is enforced server-side
 

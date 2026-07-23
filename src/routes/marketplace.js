@@ -12,6 +12,12 @@ const { notFound, conflict } = require('../lib/errors');
 
 const router = express.Router();
 
+// GET /categories — task categories (used by sponsors when creating campaigns).
+router.get('/categories', asyncHandler(async (req, res) => {
+  const categories = await prisma.taskCategory.findMany({ orderBy: { name: 'asc' } });
+  return sendJson(res, 200, categories);
+}));
+
 // GET /tasks — marketplace listing with per-caller eligibility.
 router.get('/tasks', asyncHandler(async (req, res) => {
   const { category, difficulty, minPay, country, qualification } = req.query;

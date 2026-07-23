@@ -17,6 +17,15 @@ async function assertOrgMember(orgId, userId) {
   return member;
 }
 
+// GET /orgs — organisations the caller belongs to (with their campaigns).
+router.get('/orgs', requireScope('org:manage'), asyncHandler(async (req, res) => {
+  const memberships = await prisma.orgMember.findMany({
+    where: { userId: req.user.id },
+    include: { org: { include: { campaigns: { include: { task: { select: { id: true, title: true, status: true } } } } } } },
+  });
+  return sendJson(res, 200, memberships.map((m) => ({ role: m.role, scopes: m.scopes, org: m.org })));
+}));
+
 const orgSchema = z.object({ name: z.string().min(2) });
 
 // POST /orgs — create an organisation; creator becomes an owner member.

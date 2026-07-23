@@ -18,6 +18,30 @@ async function ownedAssignment(tx, id, userId) {
   return a;
 }
 
+// GET /assignments — the caller's own assignments (their workspace).
+router.get('/assignments', requireScope('work:submit'), asyncHandler(async (req, res) => {
+  const assignments = await prisma.assignment.findMany({
+    where: { contributorId: req.user.id },
+    include: {
+      task: { select: { id: true, title: true, payMinor: true, currency: true, difficulty: true } },
+      submission: { include: { review: true } },
+    },
+    orderBy: { acceptedAt: 'desc' },
+  });
+  return sendJson(res, 200, assignments);
+}));
+
+// GET /assignments/:id — a single owned assignment with task + submission/review.
+router.get('/assignments/:id', requireScope('work:submit'), asyncHandler(async (req, res) => {
+  const a = await prisma.assignment.findUnique({
+    where: { id: req.params.id },
+    include: { task: true, submission: { include: { review: true } } },
+  });
+  if (!a) throw notFound('Assignment not found');
+  if (a.contributorId !== req.user.id) throw forbidden('Not your assignment');
+  return sendJson(res, 200, a);
+}));
+
 const autosaveSchema = z.object({ payload: z.any() });
 
 // PATCH /assignments/:id/autosave — persist in-progress work.
