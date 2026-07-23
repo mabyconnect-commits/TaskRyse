@@ -100,8 +100,13 @@ frontend calls the API at the same origin (`/api/v1`), so no extra config is nee
   an unpooled URL will exhaust Postgres under load. Use the provider's pooled URL.
 - **Cold starts.** The first request after idle is slower while the function warms.
 - **Prisma engine.** If a deploy ever fails to find the query engine, confirm the build
-  ran `prisma generate` (it does via `vercel.json`) and that `rhel-openssl-3.0.x` is in
-  `binaryTargets`.
+  ran `prisma generate` (it does via the root `postinstall`) and that `rhel-openssl-3.0.x`
+  is in `binaryTargets`.
+- **"Redeploy" rebuilds the *same* commit.** The Redeploy button on a past deployment
+  re-runs that exact commit — it does **not** pull the latest branch. After pushing a
+  config fix, deploy the newest commit instead (push triggers an auto-deploy, or pick the
+  latest commit's deployment from the Deployments list). Redeploying an old, failed
+  deployment will just reproduce the old failure.
 
 ---
 
