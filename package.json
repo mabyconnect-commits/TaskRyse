@@ -11,7 +11,8 @@
     "generate": "prisma generate",
     "seed": "node prisma/seed.js",
     "test": "node --test",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "vercel-build": "npm --prefix frontend install && npm --prefix frontend run build && rm -rf public && cp -r frontend/dist public"
   },
   "prisma": {
     "seed": "node prisma/seed.js"
