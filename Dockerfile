@@ -5,8 +5,10 @@ RUN apt-get update -y && apt-get install -y openssl && rm -rf /var/lib/apt/lists
 WORKDIR /app
 
 # Install dependencies (cached unless package files change).
+# --ignore-scripts skips the postinstall `prisma generate` here, because the schema
+# isn't copied yet; we run generate explicitly right after copying prisma/.
 COPY package.json package-lock.json ./
-RUN npm ci
+RUN npm ci --ignore-scripts
 
 # Copy source and generate the Prisma client.
 COPY prisma ./prisma
