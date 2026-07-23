@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Albert+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#EEEFF5; font-family:'Albert Sans',sans-serif; color:#171A3A; }
+  a { color:#FF6A3D; text-decoration:none; }
+  a:hover { color:#E5552B; }
+  input:focus, select:focus { outline:2px solid #FF6A3D; outline-offset:1px; }
+</style>
+</helmet>
+
+<div style="overflow-x:hidden; min-height:100vh">
+<div style="max-width:1240px; margin:0 auto; padding:20px 20px 4px 20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px 16px">
+  <div style="display:flex; align-items:center; gap:12px">
+    <a href="Taskryse Home.dc.html"><img src="assets/taskryse-logo.png" alt="Taskryse" style="height:26px; width:auto"></a>
+    <span style="background:#171A3A; color:#FFC857; font-family:Sora,sans-serif; font-size:10.5px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; padding:5px 11px; border-radius:999px; white-space:nowrap">Wallet · Bills · Ryse demo</span>
+  </div>
+  <div style="font-size:12.5px; color:#6B6E8C">Withdrawal PIN demo: <strong>2468</strong></div>
+</div>
+
+<div style="max-width:1240px; margin:0 auto; padding:16px 20px 64px 20px; display:flex; gap:28px; align-items:flex-start; flex-wrap:wrap; justify-content:center">
+
+  <!-- Phone -->
+  <div style="flex:0 0 auto; width:min(400px, 100%)">
+    <div style="background:#FAFAFC; border:1px solid #E3E4EE; border-radius:28px; box-shadow:0 24px 64px rgba(23,26,58,0.14); overflow:hidden; display:flex; flex-direction:column; height:800px; position:relative">
+
+      <!-- Section switcher -->
+      <div style="background:#FFFFFF; border-bottom:1px solid #ECEDF4; padding:12px 14px; display:flex; gap:6px; overflow-x:auto">
+        <sc-for list="{{ sections }}" as="sec" hint-placeholder-count="4">
+          <button onClick="{{ sec.go }}" style="border:none; cursor:pointer; white-space:nowrap; font-family:'Albert Sans',sans-serif; font-size:12.5px; font-weight:700; padding:8px 14px; border-radius:999px; background:{{ sec.bg }}; color:{{ sec.fg }}">{{ sec.label }}</button>
+        </sc-for>
+      </div>
+
+      <!-- ===== WALLET HOME ===== -->
+      <sc-if value="{{ vHome }}" hint-placeholder-val="{{ true }}">
+        <div style="flex:1; overflow-y:auto; padding:18px 18px 14px 18px">
+          <div style="background:#171A3A; border-radius:18px; padding:20px; color:#FFFFFF; margin-bottom:12px">
+            <div style="font-size:12px; color:#8B8FB3; margin-bottom:4px">Withdrawable balance</div>
+            <div style="font-family:Sora,sans-serif; font-size:32px; font-weight:800; margin-bottom:14px">{{ balance }}</div>
+            <div style="display:flex; gap:8px">
+              <button onClick="{{ startWithdraw }}" style="flex:1; border:none; background:#FF6A3D; color:#FFFFFF; font-family:Sora,sans-serif; font-size:13.5px; font-weight:700; padding:13px; border-radius:11px; cursor:pointer" style-hover="background:#E5552B">Withdraw</button>
+              <button onClick="{{ startBills }}" style="flex:1; border:1px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.08); color:#FFFFFF; font-family:Sora,sans-serif; font-size:13.5px; font-weight:700; padding:13px; border-radius:11px; cursor:pointer">Pay bills</button>
+            </div>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:16px">
+            <div style="border:1px solid #E3E4EE; background:#FFFFFF; border-radius:13px; padding:12px 10px">
+              <div style="font-size:10.5px; color:#6B6E8C; margin-bottom:3px">Pending review</div>
+              <div style="font-family:Sora,sans-serif; font-size:14px; font-weight:800; color:#B8860B">₦4,600</div>
+            </div>
+            <div style="border:1px solid #E3E4EE; background:#FFFFFF; border-radius:13px; padding:12px 10px">
+              <div style="font-size:10.5px; color:#6B6E8C; margin-bottom:3px">Total earned</div>
+              <div style="font-family:Sora,sans-serif; font-size:14px; font-weight:800">₦214,300</div>
+            </div>
+            <div style="border:1px solid #E3E4EE; background:#FFFFFF; border-radius:13px; padding:12px 10px">
+              <div style="font-size:10.5px; color:#6B6E8C; margin-bottom:3px">Promo credits</div>
+              <div style="font-family:Sora,sans-serif; font-size:14px; font-weight:800; color:#4A4D6B">₦500</div>
+            </div>
+          </div>
+          <div style="background:#FFF8EC; border:1px solid #F2E2BC; border-radius:12px; padding:10px 14px; font-size:11px; color:#7A5A12; line-height:1.55; margin-bottom:16px">Promo credits can pay Taskryse fees and bills — they are never withdrawable and never mix with earned money.</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px">
+            <div style="font-family:Sora,sans-serif; font-size:14px; font-weight:700">Transactions</div>
+            <a href="#" style="font-size:12px; font-weight:700">Download statement</a>
+          </div>
+          <sc-for list="{{ txs }}" as="tx" hint-placeholder-count="5">
+            <button onClick="{{ tx.open }}" style="width:100%; text-align:left; display:flex; justify-content:space-between; align-items:center; gap:10px; border:none; background:none; border-bottom:1px solid #ECEDF4; padding:12px 2px; cursor:pointer; font-family:'Albert Sans',sans-serif">
+              <div>
+                <div style="font-size:13.5px; font-weight:700; color:#171A3A">{{ tx.title }}</div>
+                <div style="font-size:11.5px; color:#6B6E8C">{{ tx.meta }}</div>
+              </div>
+              <div style="text-align:right">
+                <div style="font-family:Sora,sans-serif; font-size:13.5px; font-weight:800; color:{{ tx.amtColor }}">{{ tx.amt }}</div>
+                <div style="font-size:11px; font-weight:700; color:{{ tx.stColor }}">{{ tx.st }}</div>
+              </div>
+            </button>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- ===== TX RECEIPT ===== -->
+      <sc-if value="{{ vReceipt }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1; overflow-y:auto; padding:18px">
+          <button onClick="{{ closeReceipt }}" style="border:none; background:#F4F5FA; width:32px; height:32px; border-radius:10px; cursor:pointer; font-size:15px; margin-bottom:14px">←</button>
+          <div style="background:#FFFFFF; border:1px solid #E3E4EE; border-radius:16px; padding:20px">
+            <div style="text-align:center; border-bottom:1px dashed #E3E4EE; padding-bottom:16px; margin-bottom:14px">
+              <div style="font-family:Sora,sans-serif; font-size:24px; font-weight:800; color:{{ rAmtColor }}">{{ rAmt }}</div>
+              <div style="font-size:12px; font-weight:700; color:{{ rStColor }}; margin-top:4px">{{ rSt }}</div>
+            </div>
+            <sc-for list="{{ rRows }}" as="row" hint-placeholder-count="7">
+              <div style="display:flex; justify-content:space-between; gap:12px; font-size:12.5px; margin-bottom:9px">
+                <span style="color:#6B6E8C">{{ row.k }}</span><span style="font-weight:700; text-align:right">{{ row.v }}</span>
+              </div>
+            </sc-for>
+            <button style="width:100%; border:1.5px solid #D7D9E6; background:#FFFFFF; color:#171A3A; font-family:Sora,sans-serif; font-size:13px; font-weight:700; padding:12px; border-radius:11px; cursor:pointer; margin-top:8px">Download receipt (PDF)</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ===== WITHDRAW FLOW ===== -->
+      <sc-if value="{{ vWithdraw }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1; overflow-y:auto; padding:18px; display:flex; flex-direction:column">
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px">
+            <button onClick="{{ wBack }}" style="border:none; background:#F4F5FA; width:32px; height:32px; border-radius:10px; cursor:pointer; font-size:15px">←</button>
+            <span style="font-family:Sora,sans-serif; font-weight:700; font-size:15px">Withdraw · step {{ wStepN }} of 3</span>
+          </div>
+
+          <sc-if value="{{ w1 }}" hint-placeholder-val="{{ true }}">
+            <div style="font-size:12px; color:#6B6E8C; margin-bottom:6px">Withdraw to</div>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px">
+              <sc-for list="{{ wAccounts }}" as="ac" hint-placeholder-count="2">
+                <button onClick="{{ ac.pick }}" style="display:flex; justify-content:space-between; align-items:center; border:{{ ac.border }}; background:#FFFFFF; border-radius:12px; padding:13px 16px; cursor:pointer; font-family:'Albert Sans',sans-serif">
+                  <span style="font-size:13.5px; font-weight:700; color:#171A3A">{{ ac.name }}</span>
+                  <span style="font-size:12px; color:#6B6E8C">{{ ac.tag }}</span>
+                </button>
+              </sc-for>
+            </div>
+            <div style="font-size:12px; color:#6B6E8C; margin-bottom:6px">Amount (available: {{ balance }})</div>
+            <div style="display:flex; align-items:center; gap:8px; border:{{ wAmtBorder }}; background:#FFFFFF; border-radius:14px; padding:4px 4px 4px 16px; margin-bottom:8px">
+              <span style="font-family:Sora,sans-serif; font-weight:800; font-size:18px">₦</span>
+              <input value="{{ wAmt }}" onChange="{{ setWAmt }}" placeholder="0" inputMode="numeric" style="flex:1; min-width:0; border:none; background:none; font-family:Sora,sans-serif; font-size:22px; font-weight:800; padding:12px 4px; color:#171A3A">
+              <button onClick="{{ wMax }}" style="border:none; background:#F4F5FA; color:#FF6A3D; font-family:'Albert Sans',sans-serif; font-size:12px; font-weight:800; padding:10px 14px; border-radius:10px; cursor:pointer">MAX</button>
+            </div>
+            <sc-if value="{{ wAmtErr }}" hint-placeholder-val="{{ false }}">
+              <div style="font-size:12.5px; font-weight:600; color:#E5484D; margin-bottom:8px">{{ wAmtErrMsg }}</div>
+            </sc-if>
+            <div style="font-size:11.5px; color:#9A9DBA; line-height:1.6; margin-bottom:14px">Minimum ₦1,000 · maximum ₦500,000 per day · fee ₦{{ wFeeFlat }} flat</div>
+            <div style="flex:1"></div>
+            <button onClick="{{ wToConfirm }}" style="border:none; background:{{ wNextBg }}; color:#FFFFFF; font-family:Sora,sans-serif; font-size:14.5px; font-weight:700; padding:15px; border-radius:13px; cursor:pointer; width:100%">Continue</button>
+          </sc-if>
+
+          <sc-if value="{{ w2 }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#FFFFFF; border:1px solid #E3E4EE; border-radius:14px; padding:16px; margin-bottom:14px">
+              <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:9px"><span style="color:#6B6E8C">To</span><span style="font-weight:700">{{ wAcctLabel }}</span></div>
+              <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:9px"><span style="color:#6B6E8C">Amount</span><span style="font-weight:700">{{ wAmtFmt }}</span></div>
+              <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:9px"><span style="color:#6B6E8C">Processing fee</span><span style="font-weight:700">₦{{ wFeeFlat }}</span></div>
+              <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:9px"><span style="color:#6B6E8C">Exchange rate</span><span style="font-weight:700">1:1 (₦ → ₦)</span></div>
+              <div style="display:flex; justify-content:space-between; font-size:14px; padding-top:10px; border-top:1px solid #ECEDF4"><span style="font-weight:700">You receive</span><span style="font-family:Sora,sans-serif; font-weight:800; color:#0E7A59">{{ wNet }}</span></div>
+            </div>
+            <div style="font-size:11.5px; color:#9A9DBA; line-height:1.6; margin-bottom:14px">Typically arrives within 24 hours. Compliance checks may add time on first withdrawals to a new account.</div>
+            <div style="flex:1"></div>
+            <button onClick="{{ wToPin }}" style="border:none; background:#FF6A3D; color:#FFFFFF; font-family:Sora,sans-serif; font-size:14.5px; font-weight:700; padding:15px; border-radius:13px; cursor:pointer; width:100%" style-hover="background:#E5552B">Confirm — enter PIN</button>
+          </sc-if>
+
+          <sc-if value="{{ w3 }}" hint-placeholder-val="{{ false }}">
+            <div style="text-align:center; margin:12px 0 18px 0">
+              <div style="font-family:Sora,sans-serif; font-size:17px; font-weight:800; margin-bottom:6px">Enter withdrawal PIN</div>
+              <div style="font-size:12.5px; color:#6B6E8C">Protects every payout · demo PIN 2468</div>
+            </div>
+            <div style="display:flex; justify-content:center; gap:12px; margin-bottom:10px">
+              <sc-for list="{{ pinDots }}" as="d" hint-placeholder-count="4">
+                <span style="width:16px; height:16px; border-radius:50%; background:{{ d.bg }}; border:2px solid {{ d.border }}"></span>
+              </sc-for>
+            </div>
+            <sc-if value="{{ wPinErr }}" hint-placeholder-val="{{ false }}">
+              <div style="text-align:center; font-size:12.5px; font-weight:600; color:#E5484D; margin-bottom:6px">Wrong PIN — 2 attempts left before a 30-minute lock</div>
+            </sc-if>
+            <div style="flex:1"></div>
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:8px">
+              <sc-for list="{{ keypad }}" as="k" hint-placeholder-count="12">
+                <button onClick="{{ k.tap }}" style="border:1px solid #E3E4EE; background:{{ k.bg }}; font-family:Sora,sans-serif; font-size:18px; font-weight:700; padding:16px; border-radius:12px; cursor:pointer; color:#171A3A">{{ k.label }}</button>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <!-- ===== WITHDRAW RESULT ===== -->
+      <sc-if value="{{ vWDone }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1; overflow-y:auto; padding:24px; display:flex; flex-direction:column">
+          <div style="flex:1; display:flex; flex-direction:column; justify-content:center; text-align:center">
+            <div style="width:64px; height:64px; border-radius:50%; background:{{ wResBg }}; color:{{ wResFg }}; font-size:28px; display:flex; align-items:center; justify-content:center; margin:0 auto 16px auto">{{ wResIcon }}</div>
+            <h2 style="font-family:Sora,sans-serif; font-size:22px; font-weight:800; margin:0 0 8px 0">{{ wResTitle }}</h2>
+            <p style="font-size:13.5px; color:#4A4D6B; line-height:1.65; margin:0 0 20px 0">{{ wResDesc }}</p>
+            <div style="background:#FFFFFF; border:1px solid #E3E4EE; border-radius:14px; padding:14px 16px; text-align:left; margin-bottom:8px">
+              <div style="display:flex; justify-content:space-between; font-size:12.5px; margin-bottom:8px"><span style="color:#6B6E8C">Status</span><span style="font-weight:700; color:{{ wResStColor }}">● {{ wResStatus }}</span></div>
+              <div style="display:flex; justify-content:space-between; font-size:12.5px; margin-bottom:8px"><span style="color:#6B6E8C">{{ wResBalLabel }}</span><span style="font-weight:700">{{ balance }}</span></div>
+              <div style="display:flex; justify-content:space-between; font-size:12.5px"><span style="color:#6B6E8C">Receipt</span><a href="#" style="font-weight:700; font-size:12.5px">Download PDF</a></div>
+            </div>
+            <sc-if value="{{ wFailed }}" hint-placeholder-val="{{ false }}">
+              <div style="background:#FDF6F6; border:1px solid #F3D2D3; border-radius:12px; padding:12px 15px; font-size:12px; color:#8A3033; line-height:1.55; text-align:left">The bank rejected this transfer (account name mismatch). Your money was reversed to your withdrawable balance — nothing was lost. Check the account details and try again.</div>
+            </sc-if>
+          </div>
+          <div style="font-size:11px; color:#9A9DBA; text-align:center; margin-bottom:8px">Demo: simulate the bank's response</div>
+          <div style="display:flex; gap:8px; margin-bottom:8px">
+            <button onClick="{{ wSetProcessing }}" style="flex:1; border:1px solid #E3E4EE; background:#FFFFFF; color:#4A4D6B; font-family:'Albert Sans',sans-serif; font-size:12px; font-weight:700; padding:11px 4px; border-radius:10px; cursor:pointer">Processing</button>
+            <button onClick="{{ wSetComplete }}" style="flex:1; border:none; background:#16A67A; color:#FFFFFF; font-family:'Albert Sans',sans-serif; font-size:12px; font-weight:700; padding:11px 4px; border-radius:10px; cursor:pointer">Completed</button>
+            <button onClick="{{ wSetFailed }}" style="flex:1; border:none; background:#E5484D; color:#FFFFFF; font-family:'Albert Sans',sans-serif; font-size:12px; font-weight:700; padding:11px 4px; border-radius:10px; cursor:pointer">Failed</button>
+          </div>
+          <button onClick="{{ wFinish }}" style="border:none; background:#FF6A3D; color:#FFFFFF; font-family:Sora,sans-serif; font-size:14.5px; font-weight:700; padding:15px; border-radius:13px; cursor:pointer; width:100%" style-hover="background:#E5552B">Back to wallet</button>
+        </div>
+      </sc-if>
+
+      <!-- ===== BILLS FLOW ===== -->
+      <sc-if value="{{ vBills }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1; overflow-y:auto; padding:18px; display:flex; flex-direction:column">
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px">
+            <button onClick="{{ bBack }}" style="border:none; background:#F4F5FA; width:32px; height:32px; border-radius:10px; cursor:pointer; font-size:15px">←</button>
+            <span style="font-family:Sora,sans-serif; font-weight:700; font-size:15px">{{ bTitle }}</span>
+          </div>
+
+          <sc-if value="{{ b1 }}" hint-placeholder-val="{{ true }}">
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
+              <sc-for list="{{ bServices }}" as="sv" hint-placeholder-count="6">
+                <button onClick="{{ sv.pick }}" style="border:1px solid #E3E4EE; background:#FFFFFF; border-radius:14px; padding:18px 10px; cursor:pointer; font-family:'Albert Sans',sans-serif; text-align:center">
+                  <div style="font-size:22px; margin-bottom:6px">{{ sv.icon }}</div>
+                  <div style="font-size:12.5px; font-weight:700; color:#171A3A">{{ sv.name }}</div>
+                </button>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ b2 }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:12px; color:#6B6E8C; margin-bottom:6px">Provider</div>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px">
+              <sc-for list="{{ bProviders }}" as="pv" hint-placeholder-count="3">
+                <button onClick="{{ pv.pick }}" style="display:flex; justify-content:space-between; align-items:center; border:{{ pv.border }}; background:#FFFFFF; border-radius:12px; padding:13px 16px; cursor:pointer; font-family:'Albert Sans',sans-serif">
+                  <span style="font-size:13.5px; font-weight:700; color:#171A3A">{{ pv.name }}</span>
+                  <span style="width:16px; height:16px; border-radius:50%; border:{{ pv.dot }}; box-sizing:border-box"></span>
+                </button>
+              </sc-for>
+            </div>
+            <div style="font-size:12px; color:#6B6E8C; margin-bottom:6px">{{ bCustLabel }}</div>
+            <input value="{{ bCust }}" onChange="{{ setBCust }}" placeholder="{{ bCustPh }}" inputMode="numeric" style="width:100%; box-sizing:border-box; border:1px solid #D7D9E6; border-radius:12px; padding:14px; font-family:'Albert Sans',sans-serif; font-size:15px; margin-bottom:10px; background:#FFFFFF">
+            <sc-if value="{{ bVerified }}" hint-placeholder-val="{{ false }}">
+              <div style="background:#EDF7F3; border:1px solid #CDEBDF; border-radius:12px; padding:11px 14px; font-size:12.5px; font-weight:700; color:#0E7A59; margin-bottom:12px">✓ {{ bCustName }}</div>
+            </sc-if>
+            <div style="flex:1"></div>
+            <button onClick="{{ bToAmount }}" style="border:none; background:{{ b2BtnBg }}; color:#FFFFFF; font-family:Sora,sans-serif; font-size:14.5px; font-weight:700; padding:15px; border-radius:13px; cursor:pointer; width:100%">Continue</button>
+          </sc-if>
+
+          <sc-if value="{{ b3 }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:12px; color:#6B6E8C; margin-bottom:6px">Choose amount</div>
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:16px">
+              <sc-for list="{{ bAmounts }}" as="ba" hint-placeholder-count="6">
+                <button onClick="{{ ba.pick }}" style="border:{{ ba.border }}; background:{{ ba.bg }}; color:{{ ba.fg }}; font-family:Sora,sans-serif; font-size:13.5px; font-weight:800; padding:14px 4px; border-radius:11px; cursor:pointer">{{ ba.label }}</button>
+              </sc-for>
+            </div>
+            <div style="background:#FFFFFF; border:1px solid #E3E4EE; border-radius:14px; padding:14px 16px; margin-bottom:14px">
+              <div style="display:flex; justify-content:space-between; font-size:12.5px; margin-bottom:8px"><span style="color:#6B6E8C">Pay with</span><span style="font-weight:700">Taskryse wallet ({{ balance }})</span></div>
+              <div style="display:flex; justify-content:space-between; font-size:12.5px; margin-bottom:8px"><span style="color:#6B6E8C">Fee</span><span style="font-weight:700; color:#0E7A59">Free</span></div>
+              <div style="display:flex; justify-content:space-between; font-size:13.5px; padding-top:8px; border-top:1px solid #ECEDF4"><span style="font-weight:700">Total</span><span style="font-family:Sora,sans-serif; font-weight:800">{{ bAmtFmt }}</span></div>
+            </div>
+            <div style="flex:1"></div>
+            <button onClick="{{ bToPin }}" style="border:none; background:{{ b3BtnBg }}; color:#FFFFFF; font-family:Sora,sans-serif; font-size:14.5px; font-weight:700; padding:15px; border-radius:13px; cursor:pointer; width:100%">Pay with PIN</button>
+          </sc-if>
+
+          <sc-if value="{{ b4 }}" hint-placeholder-val="{{ false }}">
+            <div style="text-align:center; margin:12px 0 18px 0">
+              <div style="font-family:Sora,sans-serif; font-size:17px; font-weight:800; margin-bottom:6px">Confirm with PIN</div>
+              <div style="font-size:12.5px; color:#6B6E8C">{{ bAmtFmt }} · {{ bProviderName }} · demo PIN 2468</div>
+            </div>
+            <div style="display:flex; justify-content:center; gap:12px; margin-bottom:10px">
+              <sc-for list="{{ bPinDots }}" as="d" hint-placeholder-count="4">
+                <span style="width:16px; height:16px; border-radius:50%; background:{{ d.bg }}; border:2px solid {{ d.border }}"></span>
+              </sc-for>
+            </div>
+            <sc-if value="{{ bPinErr }}" hint-placeholder-val="{{ false }}">
+              <div style="text-align:center; font-size:12.5px; font-weight:600; color:#E5484D; margin-bottom:6px">Wrong PIN — try 2468</div>
+            </sc-if>
+            <div style="flex:1"></div>
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:8px">
+              <sc-for list="{{ bKeypad }}" as="k" hint-placeholder-count="12">
+                <button onClick="{{ k.tap }}" style="border:1px solid #E3E4EE; background:{{ k.bg }}; font-family:Sora,sans-serif; font-size:18px; font-weight:700; padding:16px; border-radius:12px; cursor:pointer; color:#171A3A">{{ k.label }}</button>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ b5 }}" hint-placeholder-val="{{ false }}">
+            <div style="flex:1; display:flex; flex-direction:column; justify-content:center; text-align:center">
+              <div style="width:64px; height:64px; border-radius:50%; background:{{ bResBg }}; color:{{ bResFg }}; font-size:28px; display:flex; align-items:center; justify-content:center; margin:0 auto 16px auto">{{ bResIcon }}</div>
+              <h2 style="font-family:Sora,sans-serif; font-size:22px; font-weight:800; margin:0 0 8px 0">{{ bResTitle }}</h2>
+              <p style="font-size:13.5px; color:#4A4D6B; line-height:1.65; margin:0 0 18px 0">{{ bAmtFmt }} {{ bServiceName }} · {{ bProviderName }}<br>for <strong>{{ bCustName }}</strong></p>
+              <div style="background:#FFFFFF; border:1px solid #E3E4EE; border-radius:14px; padding:14px 16px; text-align:left">
+                <div style="display:flex; justify-content:space-between; font-size:12.5px; margin-bottom:8px"><span style="color:#6B6E8C">Token / reference</span><span style="font-weight:700">{{ bResRef }}</span></div>
+                <div style="display:flex; justify-content:space-between; font-size:12.5px; margin-bottom:8px"><span style="color:#6B6E8C">Status</span><span style="font-weight:700; color:{{ bResStColor }}">● {{ bResStatus }}</span></div>
+                <div style="display:flex; justify-content:space-between; font-size:12.5px; margin-bottom:8px"><span style="color:#6B6E8C">{{ bResBalLabel }}</span><span style="font-weight:700">{{ balance }}</span></div>
+                <div style="display:flex; justify-content:space-between; font-size:12.5px"><span style="color:#6B6E8C">Receipt</span><a href="#" style="font-weight:700; font-size:12.5px">Download PDF</a></div>
+              </div>
+              <sc-if value="{{ bRefunded }}" hint-placeholder-val="{{ false }}">
+                <div style="background:#FDF6F6; border:1px solid #F3D2D3; border-radius:12px; padding:12px 15px; font-size:12px; color:#8A3033; line-height:1.55; text-align:left; margin-top:10px">The provider didn't confirm this top-up, so the payment was reversed and {{ bAmtFmt }} refunded to your wallet. No token was issued.</div>
+              </sc-if>
+            </div>
+            <div style="font-size:11px; color:#9A9DBA; text-align:center; margin:12px 0 8px 0">Demo: simulate the provider's response</div>
+            <div style="display:flex; gap:8px; margin-bottom:8px">
+              <button onClick="{{ bSetSuccess }}" style="flex:1; border:none; background:#16A67A; color:#FFFFFF; font-family:'Albert Sans',sans-serif; font-size:12px; font-weight:700; padding:11px 4px; border-radius:10px; cursor:pointer">Successful</button>
+              <button onClick="{{ bSetPending }}" style="flex:1; border:1px solid #E3E4EE; background:#FFFFFF; color:#4A4D6B; font-family:'Albert Sans',sans-serif; font-size:12px; font-weight:700; padding:11px 4px; border-radius:10px; cursor:pointer">Pending</button>
+              <button onClick="{{ bSetRefunded }}" style="flex:1; border:none; background:#E5484D; color:#FFFFFF; font-family:'Albert Sans',sans-serif; font-size:12px; font-weight:700; padding:11px 4px; border-radius:10px; cursor:pointer">Reversed</button>
+            </div>
+            <button onClick="{{ bFinish }}" style="border:none; background:#FF6A3D; color:#FFFFFF; font-family:Sora,sans-serif; font-size:14.5px; font-weight:700; padding:15px; border-radius:13px; cursor:pointer; width:100%" style-hover="background:#E5552B">Back to wallet</button>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <!-- ===== RYSE LEVEL ===== -->
+      <sc-if value="{{ vRyse }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1; overflow-y:auto; padding:18px">
+          <div style="background:#171A3A; border-radius:18px; padding:20px; color:#FFFFFF; margin-bottom:14px; text-align:center">
+            <div style="display:inline-flex; align-items:flex-end; gap:3px; margin-bottom:10px">
+              <span style="width:10px; height:10px; background:#FFC857; border-radius:2px"></span>
+              <span style="width:10px; height:17px; background:#FF8A3D; border-radius:2px"></span>
+              <span style="width:10px; height:25px; background:#FF6A3D; border-radius:2px"></span>
+            </div>
+            <div style="font-family:Sora,sans-serif; font-size:20px; font-weight:800">Skilled Ryser</div>
+            <div style="font-size:12px; color:#B9BCD9; margin-bottom:12px">Level 3 of 5 · since May 2026</div>
+            <div style="height:7px; background:rgba(255,255,255,0.12); border-radius:999px; overflow:hidden; margin-bottom:8px"><div style="height:100%; width:64%; background:linear-gradient(90deg,#FFC857,#FF6A3D); border-radius:999px"></div></div>
+            <div style="font-size:12px; color:#B9BCD9">64% to <strong style="color:#FFC857">Pro Ryser</strong></div>
+          </div>
+          <div style="font-family:Sora,sans-serif; font-size:14px; font-weight:700; margin-bottom:8px">Path to Pro Ryser</div>
+          <div style="background:#FFFFFF; border:1px solid #E3E4EE; border-radius:14px; padding:16px; margin-bottom:14px">
+            <sc-for list="{{ reqs }}" as="rq" hint-placeholder-count="4">
+              <div style="margin-bottom:12px">
+                <div style="display:flex; justify-content:space-between; font-size:12.5px; margin-bottom:5px">
+                  <span style="font-weight:700">{{ rq.label }}</span><span style="color:{{ rq.color }}; font-weight:700">{{ rq.value }}</span>
+                </div>
+                <div style="height:5px; background:#EEEFF5; border-radius:999px; overflow:hidden"><div style="height:100%; width:{{ rq.pct }}; background:{{ rq.bar }}; border-radius:999px"></div></div>
+              </div>
+            </sc-for>
+            <div style="font-size:11.5px; color:#9A9DBA; line-height:1.55">Progression is earned by approved work only — never by spending or referrals.</div>
+          </div>
+          <div style="font-family:Sora,sans-serif; font-size:14px; font-weight:700; margin-bottom:8px">Pro Ryser unlocks</div>
+          <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px">
+            <sc-for list="{{ unlocks }}" as="ul" hint-placeholder-count="3">
+              <div style="display:flex; gap:10px; background:#FFFFFF; border:1px solid #E3E4EE; border-radius:12px; padding:12px 14px; font-size:12.5px; color:#4A4D6B; line-height:1.5"><span>{{ ul.icon }}</span><span><strong style="color:#171A3A">{{ ul.t }}</strong> — {{ ul.d }}</span></div>
+            </sc-for>
+          </div>
+          <div style="font-family:Sora,sans-serif; font-size:14px; font-weight:700; margin-bottom:8px">Badges</div>
+          <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:8px">
+            <sc-for list="{{ badges }}" as="bd" hint-placeholder-count="8">
+              <div style="background:#FFFFFF; border:1px solid #E3E4EE; border-radius:12px; padding:12px 4px; text-align:center; opacity:{{ bd.op }}">
+                <div style="font-size:20px; margin-bottom:4px">{{ bd.icon }}</div>
+                <div style="font-size:9.5px; font-weight:700; color:#4A4D6B">{{ bd.name }}</div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ===== LEARN ===== -->
+      <sc-if value="{{ vLearn }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1; overflow-y:auto; padding:18px">
+          <div style="font-family:Sora,sans-serif; font-size:18px; font-weight:800; margin-bottom:4px">Learning &amp; qualifications</div>
+          <div style="font-size:12.5px; color:#6B6E8C; margin-bottom:14px">Passing qualifications permanently unlocks task categories.</div>
+          <div style="font-family:Sora,sans-serif; font-size:13.5px; font-weight:700; margin-bottom:8px">Continue learning</div>
+          <sc-for list="{{ courses }}" as="co" hint-placeholder-count="2">
+            <div style="background:#FFFFFF; border:1px solid #E3E4EE; border-radius:14px; padding:14px 16px; margin-bottom:8px">
+              <div style="display:flex; justify-content:space-between; gap:8px; margin-bottom:8px">
+                <span style="font-size:13.5px; font-weight:700; line-height:1.4">{{ co.name }}</span>
+                <span style="font-size:11px; font-weight:700; color:#6B6E8C; white-space:nowrap">{{ co.len }}</span>
+              </div>
+              <div style="height:5px; background:#EEEFF5; border-radius:999px; overflow:hidden; margin-bottom:6px"><div style="height:100%; width:{{ co.pct }}; background:#FF6A3D; border-radius:999px"></div></div>
+              <div style="display:flex; justify-content:space-between; align-items:center">
+                <span style="font-size:11.5px; color:#6B6E8C">{{ co.pct }} complete</span>
+                <span style="font-size:11.5px; font-weight:700; color:#0E7A59">{{ co.unlock }}</span>
+              </div>
+            </div>
+          </sc-for>
+          <div style="font-family:Sora,sans-serif; font-size:13.5px; font-weight:700; margin:14px 0 8px 0">Qualification history</div>
+          <sc-for list="{{ quals }}" as="qh" hint-placeholder-count="4">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; background:#FFFFFF; border:1px solid #E3E4EE; border-radius:12px; padding:13px 15px; margin-bottom:8px">
+              <div>
+                <div style="font-size:13px; font-weight:700">{{ qh.name }}</div>
+                <div style="font-size:11px; color:#6B6E8C">{{ qh.meta }}</div>
+              </div>
+              <span style="background:{{ qh.bg }}; color:{{ qh.fg }}; font-size:10.5px; font-weight:800; padding:5px 10px; border-radius:999px; white-space:nowrap">{{ qh.st }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+    </div>
+  </div>
+
+  <!-- Notes -->
+  <div style="flex:1 1 280px; min-width:250px; max-width:340px; display:flex; flex-direction:column; gap:14px">
+    <div style="background:#171A3A; border-radius:16px; padding:22px; color:#FFFFFF">
+      <div style="font-family:Sora,sans-serif; font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#FFC857; margin-bottom:12px">Phase 5 · Money &amp; growth</div>
+      <div style="font-size:13.5px; color:#B9BCD9; line-height:1.7">Full ₦ withdrawal flow with fees shown before confirming and a PIN keypad; bill payments with customer verification; itemised receipts; Ryse Level progression with real requirements; learning &amp; qualification history.</div>
+    </div>
+    <div style="background:#FFFFFF; border:1px solid #E3E4EE; border-radius:16px; padding:22px">
+      <div style="font-family:Sora,sans-serif; font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#6B6E8C; margin-bottom:12px">Try these</div>
+      <div style="font-size:13.5px; color:#4A4D6B; line-height:1.85">· Withdraw ₦50,000 (PIN 2468) — balance updates<br>· Try a wrong PIN first<br>· Try withdrawing more than your balance<br>· Pay Bills → Airtime → MTN → any 11-digit number<br>· Tap a transaction for its full receipt<br>· Check Ryse &amp; Learn tabs</div>
+    </div>
+    <div style="background:#FFFFFF; border:1px solid #E3E4EE; border-radius:16px; padding:22px">
+      <div style="font-family:Sora,sans-serif; font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#6B6E8C; margin-bottom:10px">The journey so far</div>
+      <div style="font-size:13.5px; line-height:1.9"><a href="Taskryse Onboarding.dc.html" style="font-weight:700">Phase 2 · Onboarding</a><br><a href="Taskryse App.dc.html" style="font-weight:700">Phase 3 · App &amp; marketplace</a><br><a href="Taskryse Workspace.dc.html" style="font-weight:700">Phase 4 · Task workspace</a></div>
+    </div>
+  </div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    view: "home", balance: 86400, receipt: null,
+    wStep: 1, wAcct: 0, wAmt: "", wAmtErr: "", wPin: "", wPinErr: false, wResult: "processing", lastWdAmt: 0,
+    bStep: 1, bService: null, bProvider: 0, bCust: "", bAmtIdx: null, bPin: "", bPinErr: false, bResult: "success", lastBillAmt: 0,
+    txs: [
+      { title: "AI response evaluation", meta: "Task payment · TXN-88102 · today", amt: "+₦1,800", st: "Approved", ok: true, type: "Task payment", task: "AI response evaluation — English", fee: "₦0", gross: "₦1,800" },
+      { title: "Image annotation — street scenes", meta: "Task payment · TXN-88071 · 21 Jul", amt: "+₦900", st: "Approved", ok: true, type: "Task payment", task: "Image annotation — street scenes", fee: "₦0", gross: "₦900" },
+      { title: "Withdrawal to GTBank ····2841", meta: "TXN-87904 · 19 Jul", amt: "−₦10,000", st: "Completed", ok: true, type: "Withdrawal", task: "—", fee: "₦150", gross: "₦10,000" },
+      { title: "MTN airtime · 0803····421", meta: "BIL-4402 · 17 Jul", amt: "−₦1,000", st: "Successful", ok: true, type: "Bill payment", task: "—", fee: "₦0", gross: "₦1,000" },
+      { title: "Riser plan renewal", meta: "SUB-2210 · 15 Jul", amt: "−₦6,000", st: "Paid", ok: true, type: "Subscription", task: "—", fee: "₦0", gross: "₦6,000" }
+    ]
+  };
+  ngn(n) { return "₦" + n.toLocaleString("en-NG"); }
+  keypadFor(cur, set, done) {
+    return ["1","2","3","4","5","6","7","8","9","⌫","0","✓"].map(label => ({
+      label, bg: label === "✓" ? "#FF6A3D" : label === "⌫" ? "#F4F5FA" : "#FFFFFF",
+      tap: () => {
+        if (label === "⌫") set(cur.slice(0, -1));
+        else if (label === "✓") done();
+        else if (cur.length < 4) set(cur + label);
+      }
+    }));
+  }
+  renderVals() {
+    const st = this.state;
+    const wAmtN = parseInt(st.wAmt.replace(/\D/g, "") || "0", 10);
+    const wFee = 150;
+    const wValid = wAmtN >= 1000 && wAmtN <= st.balance && wAmtN <= 500000;
+    const accounts = [
+      { name: "GTBank ····2841", tag: "Adaeze Nwosu" },
+      { name: "OPay wallet ····7733", tag: "Mobile money" }
+    ];
+    const services = [
+      { icon: "📱", name: "Airtime" }, { icon: "📶", name: "Mobile data" },
+      { icon: "⚡", name: "Electricity" }, { icon: "📺", name: "Cable TV" },
+      { icon: "🌐", name: "Internet" }, { icon: "🎓", name: "Education" }
+    ];
+    const providersMap = {
+      "Airtime": ["MTN", "Airtel", "Glo", "9mobile"], "Mobile data": ["MTN", "Airtel", "Glo"],
+      "Electricity": ["Ikeja Electric", "EKEDC", "AEDC"], "Cable TV": ["DSTV", "GOtv", "StarTimes"],
+      "Internet": ["Spectranet", "FibreOne", "Starlink"], "Education": ["WAEC", "JAMB", "NECO"]
+    };
+    const amounts = [500, 1000, 2000, 5000, 10000, 20000];
+    const bAmtN = st.bAmtIdx !== null ? amounts[st.bAmtIdx] : 0;
+    const bProviders = st.bService ? providersMap[st.bService] : [];
+    const bCustOk = st.bCust.replace(/\D/g, "").length >= 10;
+    const rc = st.receipt !== null ? st.txs[st.receipt] : null;
+    const isElec = st.bService === "Electricity";
+    const pinDotsFor = (pin) => [0,1,2,3].map(i => ({
+      bg: pin.length > i ? "#171A3A" : "#FFFFFF",
+      border: pin.length > i ? "#171A3A" : "#C3C5D6"
+    }));
+    return {
+      sections: [
+        { key: "home", label: "💼 Wallet" }, { key: "ryse", label: "📈 Ryse Level" }, { key: "learn", label: "🎓 Learn" }
+      ].map(x => ({ label: x.label, go: () => this.setState({ view: x.key, receipt: null }),
+        bg: (st.view === x.key || (x.key === "home" && ["withdraw","wdone","bills","receipt"].includes(st.view))) ? "#171A3A" : "#F4F5FA",
+        fg: (st.view === x.key || (x.key === "home" && ["withdraw","wdone","bills","receipt"].includes(st.view))) ? "#FFFFFF" : "#6B6E8C" })),
+      vHome: st.view === "home", vWithdraw: st.view === "withdraw", vWDone: st.view === "wdone",
+      vBills: st.view === "bills", vRyse: st.view === "ryse", vLearn: st.view === "learn",
+      vReceipt: st.view === "receipt",
+      balance: this.ngn(st.balance),
+      startWithdraw: () => this.setState({ view: "withdraw", wStep: 1, wAmt: "", wAmtErr: "", wPin: "", wPinErr: false }),
+      startBills: () => this.setState({ view: "bills", bStep: 1, bService: null, bCust: "", bAmtIdx: null, bPin: "", bPinErr: false }),
+      txs: st.txs.map((tx, i) => ({ ...tx,
+        amtColor: tx.amt.startsWith("+") ? "#0E7A59" : "#171A3A",
+        stColor: tx.ok ? "#0E7A59" : "#B8860B",
+        open: () => this.setState({ view: "receipt", receipt: i }) })),
+      closeReceipt: () => this.setState({ view: "home", receipt: null }),
+      rAmt: rc ? rc.amt : "", rAmtColor: rc && rc.amt.startsWith("+") ? "#0E7A59" : "#171A3A",
+      rSt: rc ? "● " + rc.st : "", rStColor: "#0E7A59",
+      rRows: rc ? [
+        { k: "Type", v: rc.type }, { k: "Related task", v: rc.task },
+        { k: "Gross amount", v: rc.gross }, { k: "Fee", v: rc.fee },
+        { k: "Exchange rate", v: "1:1 (₦)" }, { k: "Reference", v: rc.meta.split("·")[1] ? rc.meta.split("·")[1].trim() : "—" },
+        { k: "Date", v: rc.meta.split("·").pop().trim() }
+      ] : [],
+      // Withdraw
+      wStepN: st.wStep, w1: st.wStep === 1, w2: st.wStep === 2, w3: st.wStep === 3,
+      wBack: () => st.wStep === 1 ? this.setState({ view: "home" }) : this.setState({ wStep: st.wStep - 1, wPin: "", wPinErr: false }),
+      wAccounts: accounts.map((a, i) => ({ ...a, pick: () => this.setState({ wAcct: i }),
+        border: st.wAcct === i ? "2px solid #FF6A3D" : "1px solid #E1E2EC" })),
+      wAmt: st.wAmt,
+      setWAmt: (e) => this.setState({ wAmt: e.target.value.replace(/\D/g, ""), wAmtErr: "" }),
+      wMax: () => this.setState({ wAmt: String(st.balance), wAmtErr: "" }),
+      wAmtBorder: st.wAmtErr ? "2px solid #E5484D" : "1px solid #D7D9E6",
+      wAmtErr: st.wAmtErr !== "", wAmtErrMsg: st.wAmtErr,
+      wFeeFlat: wFee,
+      wNextBg: wValid ? "#FF6A3D" : "#C3C5D6",
+      wToConfirm: () => {
+        if (wAmtN < 1000) return this.setState({ wAmtErr: "Minimum withdrawal is ₦1,000." });
+        if (wAmtN > st.balance) return this.setState({ wAmtErr: "That's more than your withdrawable balance (" + this.ngn(st.balance) + ")." });
+        if (wAmtN > 500000) return this.setState({ wAmtErr: "Daily limit is ₦500,000." });
+        this.setState({ wStep: 2 });
+      },
+      wAcctLabel: accounts[st.wAcct].name,
+      wAmtFmt: this.ngn(wAmtN), wNet: this.ngn(Math.max(0, wAmtN - wFee)),
+      wToPin: () => this.setState({ wStep: 3, wPin: "", wPinErr: false }),
+      pinDots: pinDotsFor(st.wPin),
+      wPinErr: st.wPinErr,
+      keypad: this.keypadFor(st.wPin, (v) => this.setState({ wPin: v, wPinErr: false }), () => {
+        if (st.wPin === "2468") {
+          this.setState({ view: "wdone", wResult: "processing", lastWdAmt: wAmtN, balance: st.balance - wAmtN,
+            txs: [{ title: "Withdrawal to " + accounts[st.wAcct].name, meta: "TXN-88214 · just now", amt: "−" + this.ngn(wAmtN), st: "Processing", ok: false, type: "Withdrawal", task: "—", fee: "₦" + wFee, gross: this.ngn(wAmtN) }, ...st.txs] });
+        } else this.setState({ wPinErr: true, wPin: "" });
+      }),
+      wFailed: st.wResult === "failed",
+      wResIcon: st.wResult === "completed" ? "✓" : st.wResult === "failed" ? "✕" : "⏳",
+      wResBg: st.wResult === "completed" ? "#EDF7F3" : st.wResult === "failed" ? "#FDF6F6" : "#FFF8EC",
+      wResFg: st.wResult === "completed" ? "#16A67A" : st.wResult === "failed" ? "#E5484D" : "#B8860B",
+      wResTitle: st.wResult === "completed" ? "Withdrawal completed" : st.wResult === "failed" ? "Withdrawal failed — reversed" : "Withdrawal submitted",
+      wResDesc: st.wResult === "completed"
+        ? this.ngn(Math.max(0, (st.lastWdAmt||0) - wFee)) + " has arrived at " + accounts[st.wAcct].name + ". Reference TXN-88214."
+        : st.wResult === "failed"
+        ? "The transfer to " + accounts[st.wAcct].name + " could not be completed. The full amount has been returned to your wallet."
+        : this.ngn(Math.max(0, (st.lastWdAmt||0) - wFee)) + " is on its way to " + accounts[st.wAcct].name + ". Reference TXN-88214 · typically within 24 hours.",
+      wResStatus: st.wResult === "completed" ? "Completed" : st.wResult === "failed" ? "Failed · reversed" : "Processing",
+      wResStColor: st.wResult === "completed" ? "#0E7A59" : st.wResult === "failed" ? "#B33A3E" : "#B8860B",
+      wResBalLabel: st.wResult === "failed" ? "Balance (refunded)" : "New balance",
+      wSetProcessing: () => this.setState({ wResult: "processing" }),
+      wSetComplete: () => this.setState({ wResult: st.wResult === "failed" ? st.wResult : "completed" }),
+      wSetFailed: () => { if (st.wResult !== "failed") this.setState({ wResult: "failed", balance: st.balance + (st.lastWdAmt||0),
+        txs: st.txs.map((t, i) => i === 0 && t.type === "Withdrawal" ? { ...t, st: "Failed · reversed", ok: false } : t) }); },
+      wFinish: () => this.setState({ view: "home", wResult: "processing" }),
+      // Bills
+      bTitle: st.bStep === 1 ? "Pay bills" : (st.bService || "Pay bills"),
+      b1: st.bStep === 1, b2: st.bStep === 2, b3: st.bStep === 3, b4: st.bStep === 4, b5: st.bStep === 5,
+      bBack: () => st.bStep === 1 ? this.setState({ view: "home" }) : this.setState({ bStep: st.bStep - 1, bPin: "", bPinErr: false }),
+      bServices: services.map(s => ({ ...s, pick: () => this.setState({ bService: s.name, bStep: 2, bProvider: 0, bCust: "", bAmtIdx: null }) })),
+      bProviders: bProviders.map((name, i) => ({ name, pick: () => this.setState({ bProvider: i }),
+        border: st.bProvider === i ? "2px solid #FF6A3D" : "1px solid #E1E2EC",
+        dot: st.bProvider === i ? "5px solid #FF6A3D" : "2px solid #C3C5D6" })),
+      bCustLabel: isElec ? "Meter number" : st.bService === "Cable TV" ? "Smartcard number" : "Phone number",
+      bCustPh: isElec ? "45021-88976-3" : "0801 234 5678",
+      bCust: st.bCust, setBCust: (e) => this.setState({ bCust: e.target.value }),
+      bVerified: bCustOk,
+      bCustName: isElec ? "NWOSU RESIDENCE · Prepaid" : "ADAEZE NWOSU",
+      b2BtnBg: bCustOk ? "#FF6A3D" : "#C3C5D6",
+      bToAmount: () => { if (bCustOk) this.setState({ bStep: 3 }); },
+      bAmounts: amounts.map((a, i) => ({ label: this.ngn(a), pick: () => this.setState({ bAmtIdx: i }),
+        border: st.bAmtIdx === i ? "2px solid #FF6A3D" : "1px solid #E1E2EC",
+        bg: st.bAmtIdx === i ? "#FFF8F4" : "#FFFFFF", fg: st.bAmtIdx === i ? "#E5552B" : "#171A3A" })),
+      bAmtFmt: this.ngn(bAmtN),
+      b3BtnBg: st.bAmtIdx !== null && bAmtN <= st.balance ? "#FF6A3D" : "#C3C5D6",
+      bToPin: () => { if (st.bAmtIdx !== null && bAmtN <= st.balance) this.setState({ bStep: 4, bPin: "", bPinErr: false }); },
+      bPinDots: pinDotsFor(st.bPin),
+      bPinErr: st.bPinErr,
+      bKeypad: this.keypadFor(st.bPin, (v) => this.setState({ bPin: v, bPinErr: false }), () => {
+        if (st.bPin === "2468") {
+          this.setState({ bStep: 5, bResult: "success", lastBillAmt: bAmtN, balance: st.balance - bAmtN,
+            txs: [{ title: (bProviders[st.bProvider] || "") + " " + (st.bService || "").toLowerCase() + " · " + st.bCust.slice(0,4) + "····", meta: "BIL-4471 · just now", amt: "−" + this.ngn(bAmtN), st: "Successful", ok: true, type: "Bill payment", task: "—", fee: "₦0", gross: this.ngn(bAmtN) }, ...st.txs] });
+        } else this.setState({ bPinErr: true, bPin: "" });
+      }),
+      bResIcon: st.bResult === "pending" ? "⏳" : st.bResult === "refunded" ? "↩" : "✓",
+      bResBg: st.bResult === "pending" ? "#FFF8EC" : st.bResult === "refunded" ? "#FDF6F6" : "#EDF7F3",
+      bResFg: st.bResult === "pending" ? "#B8860B" : st.bResult === "refunded" ? "#E5484D" : "#16A67A",
+      bResTitle: st.bResult === "pending" ? "Payment pending" : st.bResult === "refunded" ? "Reversed &amp; refunded" : "Payment successful",
+      bResRef: st.bResult === "refunded" ? "— (reversed)" : "BIL-4471-2098",
+      bResStatus: st.bResult === "pending" ? "Pending confirmation" : st.bResult === "refunded" ? "Reversed" : "Successful",
+      bResStColor: st.bResult === "pending" ? "#B8860B" : st.bResult === "refunded" ? "#B33A3E" : "#0E7A59",
+      bResBalLabel: st.bResult === "refunded" ? "Balance (refunded)" : "New balance",
+      bRefunded: st.bResult === "refunded",
+      bSetSuccess: () => this.setState({ bResult: "success" }),
+      bSetPending: () => this.setState({ bResult: "pending" }),
+      bSetRefunded: () => { if (st.bResult !== "refunded") this.setState({ bResult: "refunded", balance: st.balance + (st.lastBillAmt||0),
+        txs: st.txs.map((t, i) => i === 0 && t.type === "Bill payment" ? { ...t, st: "Reversed", ok: false } : t) }); },
+      bServiceName: st.bService ? st.bService.toLowerCase() : "",
+      bProviderName: bProviders[st.bProvider] || "",
+      bFinish: () => this.setState({ view: "home", bResult: "success" }),
+      // Ryse
+      reqs: [
+        { label: "Approved tasks", value: "38 / 60", pct: "63%", color: "#B8860B", bar: "#FFC857" },
+        { label: "Quality score", value: "96% · target 92%", pct: "100%", color: "#0E7A59", bar: "#16A67A" },
+        { label: "On-time rate", value: "94% · target 90%", pct: "100%", color: "#0E7A59", bar: "#16A67A" },
+        { label: "Qualifications passed", value: "3 / 5", pct: "60%", color: "#B8860B", bar: "#FFC857" }
+      ],
+      unlocks: [
+        { icon: "🔓", t: "Expert task eligibility", d: "model-safety and expert-review categories" },
+        { icon: "⚡", t: "Priority access", d: "see new tasks 2 hours before other levels" },
+        { icon: "🎯", t: "Sponsored opportunities", d: "invitations from verified sponsors" }
+      ],
+      badges: [
+        { icon: "🥇", name: "First approval", op: "1" }, { icon: "🔥", name: "7-day streak", op: "1" },
+        { icon: "🎧", name: "Audio pro", op: "1" }, { icon: "💯", name: "Perfect week", op: "1" },
+        { icon: "🚀", name: "50 approvals", op: "0.35" }, { icon: "🌍", name: "3 languages", op: "0.35" },
+        { icon: "🛡", name: "Safety cert", op: "0.35" }, { icon: "👑", name: "Elite Ryser", op: "0.35" }
+      ],
+      courses: [
+        { name: "Transcription quality masterclass", len: "6 lessons · 45 min", pct: "67%", unlock: "Unlocks: advanced audio tasks" },
+        { name: "AI safety evaluation basics", len: "4 lessons · 30 min", pct: "25%", unlock: "Unlocks: model-safety qualification" }
+      ],
+      quals: [
+        { name: "Yorùbá transcription", meta: "Passed · 92% · 12 Jul 2026", st: "Passed", bg: "#EDF7F3", fg: "#0E7A59" },
+        { name: "AI response evaluation", meta: "Passed · 88% · 28 Jun 2026", st: "Passed", bg: "#EDF7F3", fg: "#0E7A59" },
+        { name: "Image annotation", meta: "Passed · 95% · 15 Jun 2026", st: "Passed", bg: "#EDF7F3", fg: "#0E7A59" },
+        { name: "Model-safety evaluation", meta: "Failed 71% · retake in 3 days", st: "Retake soon", bg: "#FFF8EC", fg: "#B8860B" }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

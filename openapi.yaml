@@ -1,0 +1,107 @@
+openapi: 3.0.3
+info:
+  title: Taskryse API
+  version: 1.0.0
+  description: >
+    Backend contract for Taskryse. Money in minor units (kobo/cents).
+    Core rule: plans grant ELIGIBILITY only; earnings come from APPROVED work
+    against FUNDED sponsor escrow; promo credits are non-withdrawable.
+servers:
+  - url: /api/v1
+security:
+  - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth: { type: http, scheme: bearer, bearerFormat: JWT }
+  schemas:
+    Error: { type: object, properties: { code: {type: string}, message: {type: string} } }
+    Money: { type: object, properties: { minor: {type: integer}, currency: {type: string} } }
+    Task:
+      type: object
+      properties:
+        id: {type: string}
+        title: {type: string}
+        categoryId: {type: string}
+        difficulty: {type: string, enum: [BEGINNER, INTERMEDIATE, EXPERT]}
+        payMinor: {type: integer}
+        currency: {type: string}
+        deadline: {type: string, format: date-time}
+        totalSlots: {type: integer}
+        slotsTaken: {type: integer}
+        requiresQualification: {type: boolean}
+        eligibility: {type: string, enum: [ELIGIBLE, QUALIFICATION_REQUIRED, PLAN_LOCKED], description: computed per caller}
+    Wallet:
+      type: object
+      properties:
+        totalEarnedMinor: {type: integer}
+        approvedMinor: {type: integer}
+        pendingMinor: {type: integer}
+        withdrawableMinor: {type: integer}
+        promoCreditMinor: {type: integer, description: never withdrawable}
+        currency: {type: string}
+paths:
+  /auth/register: { post: { summary: Register (email/phone), security: [], responses: { '201': { description: created } } } }
+  /auth/otp/verify: { post: { summary: Verify OTP, security: [], responses: { '200': { description: ok } } } }
+  /auth/login: { post: { summary: Login, security: [], responses: { '200': { description: token } } } }
+  /auth/reset: { post: { summary: Reset password, security: [], responses: { '200': { description: ok } } } }
+  /kyc: { post: { summary: Submit KYC docs, responses: { '201': { description: pending } } } }
+  /kyc/liveness: { post: { summary: Liveness/selfie check, responses: { '200': { description: ok } } } }
+  /payout-methods: { post: { summary: Add payout method, responses: { '201': { description: created } } } }
+  /assessments/intro: { post: { summary: Intro assessment -> recommended plan, responses: { '200': { description: ok } } } }
+  /plans: { get: { summary: List plans, security: [], responses: { '200': { description: ok } } } }
+  /subscriptions:
+    post: { summary: Subscribe (checkout). MUST NOT create any earnings., responses: { '201': { description: created } } }
+  /subscriptions/{id}/upgrade: { post: { parameters: [{name: id, in: path, required: true, schema: {type: string}}], responses: { '200': { description: ok } } } }
+  /subscriptions/{id}/cancel: { post: { parameters: [{name: id, in: path, required: true, schema: {type: string}}], responses: { '200': { description: ok } } } }
+  /coupons/validate: { post: { summary: Validate coupon, responses: { '200': { description: ok } } } }
+  /tasks:
+    get:
+      summary: Marketplace. Returns per-caller eligibility.
+      parameters:
+        - {name: category, in: query, schema: {type: string}}
+        - {name: difficulty, in: query, schema: {type: string}}
+        - {name: minPay, in: query, schema: {type: integer}}
+        - {name: country, in: query, schema: {type: string}}
+        - {name: qualification, in: query, schema: {type: boolean}}
+      responses: { '200': { description: ok, content: { application/json: { schema: { type: array, items: { $ref: '#/components/schemas/Task' } } } } } }
+  /tasks/{id}: { get: { parameters: [{name: id, in: path, required: true, schema: {type: string}}], responses: { '200': { description: ok, content: { application/json: { schema: { $ref: '#/components/schemas/Task' } } } } } } }
+  /tasks/{id}/accept: { post: { summary: Accept task (checks eligibility, slots, plan), parameters: [{name: id, in: path, required: true, schema: {type: string}}], responses: { '201': { description: assignment created }, '409': { description: not eligible / slots full } } } }
+  /qualifications/{id}/attempt: { post: { parameters: [{name: id, in: path, required: true, schema: {type: string}}], responses: { '200': { description: scored } } } }
+  /assignments/{id}/autosave: { patch: { parameters: [{name: id, in: path, required: true, schema: {type: string}}], responses: { '200': { description: saved } } } }
+  /assignments/{id}/submit: { post: { summary: Submit -> pending earnings (not withdrawable), parameters: [{name: id, in: path, required: true, schema: {type: string}}], responses: { '200': { description: under_review } } } }
+  /review-queue: { get: { summary: Reviewer/sponsor queue (no payment amounts for reviewers), responses: { '200': { description: ok } } } }
+  /submissions/{id}/approve: { post: { summary: Approve -> move pending to withdrawable IF escrow funded, parameters: [{name: id, in: path, required: true, schema: {type: string}}], responses: { '200': { description: approved } } } }
+  /submissions/{id}/revision: { post: { parameters: [{name: id, in: path, required: true, schema: {type: string}}], responses: { '200': { description: revision_requested } } } }
+  /submissions/{id}/reject: { post: { parameters: [{name: id, in: path, required: true, schema: {type: string}}], responses: { '200': { description: rejected } } } }
+  /submissions/{id}/flag: { post: { summary: Flag fraud -> hold + admin risk, parameters: [{name: id, in: path, required: true, schema: {type: string}}], responses: { '200': { description: flagged } } } }
+  /submissions/{id}/appeal: { post: { summary: Appeal -> independent second reviewer, parameters: [{name: id, in: path, required: true, schema: {type: string}}], responses: { '201': { description: appeal opened } } } }
+  /wallet: { get: { responses: { '200': { description: ok, content: { application/json: { schema: { $ref: '#/components/schemas/Wallet' } } } } } } }
+  /transactions: { get: { responses: { '200': { description: ledger entries } } } }
+  /withdrawals:
+    post:
+      summary: Withdraw. Requires PIN + OTP. Deduct withdrawable, apply fee. States processing->completed|failed_reversed.
+      responses: { '201': { description: created }, '402': { description: insufficient withdrawable }, '403': { description: pin/otp failed } }
+  /withdrawals/{id}: { get: { parameters: [{name: id, in: path, required: true, schema: {type: string}}], responses: { '200': { description: status } } } }
+  /bills/verify-customer: { post: { summary: Verify meter/phone/smartcard, responses: { '200': { description: customer name } } } }
+  /bills/pay: { post: { summary: Pay from withdrawable. States successful|pending|reversed_refunded, responses: { '201': { description: created } } } }
+  /ryse-level: { get: { summary: Derived level + progress (never from spend/referrals), responses: { '200': { description: ok } } } }
+  /learning: { get: { responses: { '200': { description: courses + qualification history } } } }
+  /referrals: { post: { summary: Create referral (promo credit reward only), responses: { '201': { description: created } } } }
+  /sponsored: { get: { responses: { '200': { description: labelled sponsored campaigns } } } }
+  /orgs: { post: { summary: Create organisation, responses: { '201': { description: created } } } }
+  /orgs/verify: { post: { summary: Business verification, responses: { '200': { description: pending } } } }
+  /campaigns: { post: { summary: Create task/campaign, responses: { '201': { description: created } } } }
+  /campaigns/{id}/fund: { post: { summary: Fund escrow, parameters: [{name: id, in: path, required: true, schema: {type: string}}], responses: { '200': { description: funded } } } }
+  /campaigns/{id}/analytics: { get: { parameters: [{name: id, in: path, required: true, schema: {type: string}}], responses: { '200': { description: ok } } } }
+  /tickets: { get: { responses: { '200': { description: list } } }, post: { summary: Open ticket/dispute, responses: { '201': { description: created } } } }
+  /admin/kyc-queue: { get: { responses: { '200': { description: ok } } } }
+  /admin/kyc/{id}/decision: { post: { parameters: [{name: id, in: path, required: true, schema: {type: string}}], responses: { '200': { description: audit-logged } } } }
+  /admin/withdrawals: { get: { responses: { '200': { description: held payouts } } } }
+  /admin/withdrawals/{id}/release: { post: { parameters: [{name: id, in: path, required: true, schema: {type: string}}], responses: { '200': { description: released } } } }
+  /admin/withdrawals/{id}/hold: { post: { parameters: [{name: id, in: path, required: true, schema: {type: string}}], responses: { '200': { description: held } } } }
+  /admin/fraud: { get: { responses: { '200': { description: cases } } } }
+  /admin/fraud/{id}/freeze: { post: { parameters: [{name: id, in: path, required: true, schema: {type: string}}], responses: { '200': { description: frozen } } } }
+  /admin/plans: { get: { responses: { '200': { description: ok } } }, post: { summary: Create/update plan (eligibility only), responses: { '200': { description: audit-logged } } } }
+  /admin/countries: { get: { responses: { '200': { description: config } } }, post: { responses: { '200': { description: audit-logged } } } }
+  /admin/roles: { get: { responses: { '200': { description: members+scopes } } }, post: { responses: { '200': { description: audit-logged } } } }
+  /admin/audit-log: { get: { summary: Immutable log of privileged actions, responses: { '200': { description: ok } } } }

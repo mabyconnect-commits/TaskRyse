@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Albert+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#FAFAFC; font-family:'Albert Sans',sans-serif; color:#171A3A; }
+  a { color:#FF6A3D; text-decoration:none; }
+  a:hover { color:#E5552B; }
+</style>
+</helmet>
+
+<div style="overflow-x:hidden">
+<!-- Nav -->
+<nav style="background:#FFFFFF; border-bottom:1px solid #ECEDF4; position:sticky; top:0; z-index:50">
+  <div style="max-width:1120px; margin:0 auto; padding:10px 20px; min-height:48px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px 20px">
+    <a href="Taskryse Home.dc.html"><img src="assets/taskryse-logo.png" alt="Taskryse" style="height:30px; width:auto"></a>
+    <div style="display:flex; gap:6px; overflow-x:auto; flex-wrap:wrap">
+      <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
+        <button onClick="{{ t.go }}" style="border:none; cursor:pointer; white-space:nowrap; font-family:'Albert Sans',sans-serif; font-size:13px; font-weight:700; padding:8px 14px; border-radius:999px; background:{{ t.bg }}; color:{{ t.fg }}">{{ t.label }}</button>
+      </sc-for>
+    </div>
+    <a href="Taskryse Auth.dc.html" style="background:#FF6A3D; color:#FFFFFF; font-size:13.5px; font-weight:700; padding:9px 18px; border-radius:10px" style-hover="background:#E5552B; color:#FFFFFF">Start Your Ryse</a>
+  </div>
+</nav>
+
+<!-- ===== CATEGORIES ===== -->
+<sc-if value="{{ vCat }}" hint-placeholder-val="{{ true }}">
+  <div style="max-width:1120px; margin:0 auto; padding:clamp(44px,7vw,72px) 20px 64px 20px">
+    <div style="font-family:Sora,sans-serif; font-size:13px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#FF6A3D; margin-bottom:12px">Explore tasks</div>
+    <h1 style="font-family:Sora,sans-serif; font-size:clamp(30px,5.5vw,42px); font-weight:800; letter-spacing:-0.02em; margin:0 0 14px 0">Real work across three families</h1>
+    <p style="font-size:17px; color:#4A4D6B; line-height:1.6; max-width:620px; margin:0 0 40px 0">Availability varies by category, plan, country and demand. Payment shown is per approved unit or task.</p>
+    <sc-for list="{{ catFamilies }}" as="fam" hint-placeholder-count="3">
+      <div style="margin-bottom:36px">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:16px">
+          <span style="width:34px; height:34px; border-radius:10px; background:{{ fam.bg }}; color:{{ fam.fg }}; display:flex; align-items:center; justify-content:center; font-size:17px">{{ fam.icon }}</span>
+          <span style="font-family:Sora,sans-serif; font-size:20px; font-weight:800">{{ fam.name }}</span>
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px">
+          <sc-for list="{{ fam.items }}" as="it" hint-placeholder-count="6">
+            <div style="background:#FFFFFF; border:1px solid #ECEDF4; border-radius:13px; padding:15px 17px" style-hover="border-color:#FF6A3D; box-shadow:0 6px 18px rgba(23,26,58,0.07)">
+              <div style="font-size:13.5px; font-weight:700; margin-bottom:4px">{{ it.name }}</div>
+              <div style="font-size:12px; color:#6B6E8C; margin-bottom:8px; line-height:1.45">{{ it.desc }}</div>
+              <div style="font-size:12px; font-weight:700; color:#171A3A">{{ it.pay }}</div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+</sc-if>
+
+<!-- ===== COUNTRIES ===== -->
+<sc-if value="{{ vCountry }}" hint-placeholder-val="{{ false }}">
+  <div style="max-width:1120px; margin:0 auto; padding:clamp(44px,7vw,72px) 20px 64px 20px">
+    <div style="font-family:Sora,sans-serif; font-size:13px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#FF6A3D; margin-bottom:12px">Supported countries</div>
+    <h1 style="font-family:Sora,sans-serif; font-size:clamp(30px,5.5vw,42px); font-weight:800; letter-spacing:-0.02em; margin:0 0 14px 0">Local payouts, growing coverage</h1>
+    <p style="font-size:17px; color:#4A4D6B; line-height:1.6; max-width:620px; margin:0 0 40px 0">Withdraw in your local currency via bank transfer, mobile money or digital wallets. More countries added regularly.</p>
+    <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:14px">
+      <sc-for list="{{ countries }}" as="c" hint-placeholder-count="7">
+        <div style="background:#FFFFFF; border:1px solid #ECEDF4; border-radius:14px; padding:18px 20px">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px">
+            <span style="font-size:26px">{{ c.flag }}</span>
+            <span style="background:{{ c.stBg }}; color:{{ c.stFg }}; font-size:10.5px; font-weight:700; padding:3px 9px; border-radius:999px">{{ c.status }}</span>
+          </div>
+          <div style="font-size:14.5px; font-weight:700">{{ c.name }}</div>
+          <div style="font-size:12.5px; color:#6B6E8C; margin-bottom:8px">{{ c.currency }}</div>
+          <div style="font-size:11.5px; color:#4A4D6B; line-height:1.5">{{ c.methods }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</sc-if>
+
+<!-- ===== TRUST ===== -->
+<sc-if value="{{ vTrust }}" hint-placeholder-val="{{ false }}">
+  <div style="max-width:1120px; margin:0 auto; padding:clamp(44px,7vw,72px) 20px 64px 20px">
+    <div style="font-family:Sora,sans-serif; font-size:13px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#16A67A; margin-bottom:12px">Trust &amp; safety</div>
+    <h1 style="font-family:Sora,sans-serif; font-size:clamp(30px,5.5vw,42px); font-weight:800; letter-spacing:-0.02em; margin:0 0 14px 0">Built to be legitimate, not a scheme</h1>
+    <p style="font-size:17px; color:#4A4D6B; line-height:1.6; max-width:640px; margin:0 0 40px 0">Every safeguard exists so contributors get paid for genuine work and sponsors get genuine results.</p>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:16px; margin-bottom:32px">
+      <sc-for list="{{ trustCards }}" as="tc" hint-placeholder-count="4">
+        <div style="background:#FFFFFF; border:1px solid #ECEDF4; border-radius:16px; padding:24px">
+          <div style="width:40px; height:40px; border-radius:11px; background:#EDF7F3; color:#16A67A; display:flex; align-items:center; justify-content:center; font-size:19px; margin-bottom:14px">{{ tc.icon }}</div>
+          <div style="font-family:Sora,sans-serif; font-size:16px; font-weight:700; margin-bottom:8px">{{ tc.title }}</div>
+          <div style="font-size:14px; color:#4A4D6B; line-height:1.6">{{ tc.desc }}</div>
+        </div>
+      </sc-for>
+    </div>
+    <div style="background:#171A3A; border-radius:18px; padding:28px 32px; color:#FFFFFF">
+      <div style="font-family:Sora,sans-serif; font-size:16px; font-weight:700; margin-bottom:10px">What Taskryse is not</div>
+      <div style="font-size:14px; color:#B9BCD9; line-height:1.7">Not an investment platform, not crypto trading, not a betting site, and not a recruitment scheme. You never deposit money to earn, returns are never guaranteed, and no one earns from recruiting others. A plan unlocks eligibility; approved work earns.</div>
+    </div>
+  </div>
+</sc-if>
+
+<!-- ===== ABOUT ===== -->
+<sc-if value="{{ vAbout }}" hint-placeholder-val="{{ false }}">
+  <div style="max-width:820px; margin:0 auto; padding:clamp(44px,7vw,72px) 20px 64px 20px">
+    <div style="font-family:Sora,sans-serif; font-size:13px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#FF6A3D; margin-bottom:12px">About</div>
+    <h1 style="font-family:Sora,sans-serif; font-size:clamp(30px,5.5vw,42px); font-weight:800; letter-spacing:-0.02em; margin:0 0 20px 0">Turning digital skill into opportunity across Africa</h1>
+    <p style="font-size:17px; color:#4A4D6B; line-height:1.7; margin:0 0 18px 0">Taskryse connects people with legitimate AI, data and professional tasks from businesses and research organisations — and pays them in their local currency for work that passes review.</p>
+    <p style="font-size:16px; color:#4A4D6B; line-height:1.7; margin:0 0 32px 0">The name captures the journey: <strong>complete</strong> real tasks, <strong>grow</strong> verifiable skills and a strong contributor reputation, and <strong>rise</strong> to better opportunities. Nigeria-first, built to scale across the continent.</p>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:16px; margin-bottom:32px">
+      <sc-for list="{{ aboutStats }}" as="s" hint-placeholder-count="4">
+        <div style="background:#FFFFFF; border:1px solid #ECEDF4; border-radius:14px; padding:20px; text-align:center">
+          <div style="font-family:Sora,sans-serif; font-size:26px; font-weight:800; color:#FF6A3D">{{ s.v }}</div>
+          <div style="font-size:12.5px; color:#6B6E8C; margin-top:4px">{{ s.l }}</div>
+        </div>
+      </sc-for>
+    </div>
+    <div style="background:#FFF8EC; border:1px solid #F2E2BC; border-radius:14px; padding:18px 22px; font-size:14px; color:#7A5A12; line-height:1.65">Our commitment: transparent payments, real work only, and language that never over-promises. Earnings depend on completed, approved submissions — never on a purchase.</div>
+  </div>
+</sc-if>
+
+<!-- Footer -->
+<footer style="background:#0F1128; color:#8B8FB3">
+  <div style="max-width:1120px; margin:0 auto; padding:32px 20px; font-size:13px; line-height:1.7; text-align:center">
+    <a href="Taskryse Index.dc.html" style="font-weight:700">Master index</a> · <a href="Taskryse Legal.dc.html" style="color:#8B8FB3" style-hover="color:#FFC857">Legal &amp; policies</a> · © 2026 Taskryse
+  </div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { view: "cat" };
+  renderVals() {
+    const st = this.state;
+    return {
+      tabs: [["cat","Task categories"],["country","Supported countries"],["trust","Trust & safety"],["about","About"]].map(([k, label]) => ({
+        label, go: () => this.setState({ view: k }),
+        bg: st.view === k ? "#171A3A" : "#F4F5FA", fg: st.view === k ? "#FFFFFF" : "#6B6E8C" })),
+      vCat: st.view === "cat", vCountry: st.view === "country", vTrust: st.view === "trust", vAbout: st.view === "about",
+      catFamilies: [
+        { name: "AI & data work", icon: "🤖", bg: "#FFF1EA", fg: "#E5552B", items: [
+          { name: "AI response evaluation", desc: "Rate model answers on a rubric", pay: "₦850–1,800" },
+          { name: "Data labelling", desc: "Tag and categorise datasets", pay: "₦600–1,200" },
+          { name: "Image annotation", desc: "Bounding boxes & segmentation", pay: "₦700–1,500" },
+          { name: "Audio transcription", desc: "Verbatim speech to text", pay: "₦1,200–3,200" },
+          { name: "Speech recording", desc: "Record phrases in your language", pay: "₦1,500–2,400" },
+          { name: "Model-safety testing", desc: "Flag policy violations", pay: "₦2,000–2,800" }
+        ] },
+        { name: "Professional tasks", icon: "💼", bg: "#F0F4FF", fg: "#2B5FCC", items: [
+          { name: "Writing & editing", desc: "Content and copy work", pay: "₦1,500–4,000" },
+          { name: "Research", desc: "Structured desk research", pay: "₦2,000–5,000" },
+          { name: "Software & app testing", desc: "Scripted flows, bug reports", pay: "₦2,500–4,500" },
+          { name: "Design review", desc: "Evaluate UI and product", pay: "₦1,800–3,500" },
+          { name: "Surveys & market research", desc: "Structured questionnaires", pay: "₦800–1,500" },
+          { name: "Fact checking", desc: "Verify claims against sources", pay: "₦1,500–2,500" }
+        ] },
+        { name: "Sponsored opportunities", icon: "📣", bg: "#FFF8EC", fg: "#B8860B", items: [
+          { name: "Brand surveys", desc: "Feedback for verified brands", pay: "₦800–1,200" },
+          { name: "Product discovery", desc: "Try and rate new products", pay: "₦1,000–2,000" },
+          { name: "Verified product trials", desc: "Multi-day structured trials", pay: "₦3,000–4,500" },
+          { name: "Campaign feedback", desc: "Rate ads and creative", pay: "₦700–1,200" },
+          { name: "Usability studies", desc: "Think-aloud task sessions", pay: "₦2,500–4,000" }
+        ] }
+      ],
+      countries: [
+        { flag: "🇳🇬", name: "Nigeria", currency: "Nigerian naira (₦)", status: "Live", stBg: "#EDF7F3", stFg: "#0E7A59", methods: "Bank transfer · USSD · OPay, Kuda, PalmPay" },
+        { flag: "🇬🇭", name: "Ghana", currency: "Ghanaian cedi (₵)", status: "Live", stBg: "#EDF7F3", stFg: "#0E7A59", methods: "Bank transfer · MTN MoMo · Vodafone Cash" },
+        { flag: "🇰🇪", name: "Kenya", currency: "Kenyan shilling (Sh)", status: "Live", stBg: "#EDF7F3", stFg: "#0E7A59", methods: "Bank transfer · M-Pesa" },
+        { flag: "🇿🇦", name: "South Africa", currency: "South African rand (R)", status: "Live", stBg: "#EDF7F3", stFg: "#0E7A59", methods: "Bank transfer · digital wallets" },
+        { flag: "🌍", name: "USD payouts", currency: "US dollars ($)", status: "Live", stBg: "#EDF7F3", stFg: "#0E7A59", methods: "PayPal where available" },
+        { flag: "🇪🇬", name: "Egypt", currency: "Egyptian pound (£)", status: "Soon", stBg: "#FFF8EC", stFg: "#B8860B", methods: "Bank transfer · mobile wallets" },
+        { flag: "🇬🇧", name: "UK & EU", currency: "GBP £ · EUR €", status: "Live", stBg: "#EDF7F3", stFg: "#0E7A59", methods: "Bank transfer · PayPal" }
+      ],
+      trustCards: [
+        { icon: "🪪", title: "Verified identities", desc: "Every contributor completes KYC with a liveness check. Sponsors are verified as real businesses before posting." },
+        { icon: "🔒", title: "Escrow-backed payments", desc: "Sponsors fund campaigns into escrow up front. Approved work releases payment; rejected or fraudulent work never does." },
+        { icon: "🛡", title: "Fraud detection", desc: "Automated signals flag multi-accounting, answer patterns and anomalies for human review — protecting honest contributors." },
+        { icon: "⚖", title: "Fair reviews & appeals", desc: "Submissions are graded on published rubrics. Every rejection can be appealed to an independent reviewer." }
+      ],
+      aboutStats: [
+        { v: "48K+", l: "Active contributors" }, { v: "7", l: "Payout currencies" },
+        { v: "86.9%", l: "Approval rate" }, { v: "₦18.4M", l: "Paid out weekly" }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

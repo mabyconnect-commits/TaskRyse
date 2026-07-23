@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Albert+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#F4F5F9; font-family:'Albert Sans',sans-serif; color:#171A3A; }
+  a { color:#FF6A3D; text-decoration:none; }
+  a:hover { color:#E5552B; }
+  input:focus, select:focus, textarea:focus { outline:2px solid #FF6A3D; outline-offset:1px; }
+  *::-webkit-scrollbar { width:9px; height:9px; }
+  *::-webkit-scrollbar-thumb { background:#D3D5E2; border-radius:999px; }
+@media (max-width:760px){
+  .tr-shell{flex-direction:column}
+  .tr-side{width:auto !important;flex-direction:row !important;overflow-x:auto;border-right:none !important;border-bottom:1px solid #E6E7F0;gap:6px !important;padding:10px 12px !important}
+  .tr-side .tr-hd{display:none}
+  .tr-side>button{width:auto !important;flex:0 0 auto}
+  .tr-main{padding:20px 16px !important}
+  .tr-two{grid-template-columns:1fr !important}
+  .tr-table{overflow-x:auto !important}
+  .tr-table>div{min-width:600px}
+}
+</style>
+</helmet>
+
+<div style="min-height:100vh; display:flex; flex-direction:column">
+<!-- Top bar -->
+<div style="background:#171A3A; color:#FFFFFF; padding:0 24px; min-height:60px; padding-top:8px; padding-bottom:8px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px">
+  <div style="display:flex; align-items:center; gap:16px">
+    <div style="background:#FFFFFF; border-radius:8px; padding:5px 9px; display:flex; align-items:center"><img src="assets/taskryse-logo.png" alt="Taskryse" style="height:20px; width:auto"></div>
+    <span style="font-family:Sora,sans-serif; font-size:13px; font-weight:700; color:#B9BCD9; border-left:1px solid rgba(255,255,255,0.15); padding-left:16px">Business Portal</span>
+  </div>
+  <div style="display:flex; align-items:center; gap:10px">
+    <button onClick="{{ toggleRole }}" style="border:1px solid rgba(255,255,255,0.2); background:rgba(255,255,255,0.08); color:#FFFFFF; font-family:'Albert Sans',sans-serif; font-size:12.5px; font-weight:700; padding:8px 14px; border-radius:9px; cursor:pointer">Viewing as: {{ roleLabel }} · switch</button>
+    <span style="width:34px; height:34px; border-radius:50%; background:#377DFF; color:#FFFFFF; display:flex; align-items:center; justify-content:center; font-family:Sora,sans-serif; font-weight:700; font-size:13px">MA</span>
+  </div>
+</div>
+
+<div class="tr-shell" style="flex:1; display:flex; min-height:0">
+  <!-- Sidebar -->
+  <div class="tr-side" style="width:230px; flex-shrink:0; background:#FFFFFF; border-right:1px solid #E6E7F0; padding:18px 12px; display:flex; flex-direction:column; gap:2px">
+    <div class="tr-hd" style="font-family:Sora,sans-serif; font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#9A9DBA; padding:6px 12px 10px 12px">{{ navHeading }}</div>
+    <sc-for list="{{ nav }}" as="n" hint-placeholder-count="6">
+      <button onClick="{{ n.go }}" style="display:flex; align-items:center; gap:11px; width:100%; text-align:left; border:none; cursor:pointer; background:{{ n.bg }}; border-radius:10px; padding:10px 12px; font-family:'Albert Sans',sans-serif">
+        <span style="font-size:15px; width:20px; text-align:center; opacity:{{ n.op }}">{{ n.icon }}</span>
+        <span style="font-size:13.5px; font-weight:{{ n.weight }}; color:{{ n.fg }}">{{ n.label }}</span>
+        <sc-if value="{{ n.badge }}" hint-placeholder-val="{{ false }}"><span style="margin-left:auto; background:#FF6A3D; color:#FFFFFF; font-size:10.5px; font-weight:800; padding:1px 7px; border-radius:999px">{{ n.badgeN }}</span></sc-if>
+      </button>
+    </sc-for>
+    <div style="margin-top:auto; padding:12px; font-size:11.5px; color:#9A9DBA; line-height:1.5">{{ orgFooter }}</div>
+  </div>
+
+  <!-- Main -->
+  <div class="tr-main" style="flex:1; min-width:0; overflow-y:auto; padding:28px 32px">
+
+    <!-- ============ BUSINESS: OVERVIEW ============ -->
+    <sc-if value="{{ bOverview }}" hint-placeholder-val="{{ true }}">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:14px; margin-bottom:22px">
+        <div>
+          <h1 style="font-family:Sora,sans-serif; font-size:26px; font-weight:800; margin:0 0 4px 0">Meridian AI Labs</h1>
+          <div style="font-size:13.5px; color:#6B6E8C">Verified business ✓ · 3 active campaigns · escrow ₦2,140,000</div>
+        </div>
+        <button onClick="{{ goCreate }}" style="border:none; background:#FF6A3D; color:#FFFFFF; font-family:Sora,sans-serif; font-size:13.5px; font-weight:700; padding:12px 22px; border-radius:11px; cursor:pointer" style-hover="background:#E5552B">+ Post a task</button>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:14px; margin-bottom:24px">
+        <sc-for list="{{ bStats }}" as="s" hint-placeholder-count="4">
+          <div style="background:#FFFFFF; border:1px solid #E6E7F0; border-radius:14px; padding:18px 20px">
+            <div style="font-size:12.5px; color:#6B6E8C; margin-bottom:6px">{{ s.label }}</div>
+            <div style="font-family:Sora,sans-serif; font-size:24px; font-weight:800; color:{{ s.color }}">{{ s.value }}</div>
+            <div style="font-size:11.5px; color:#9A9DBA; margin-top:4px">{{ s.sub }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="font-family:Sora,sans-serif; font-size:16px; font-weight:700; margin-bottom:12px">Active campaigns</div>
+      <div class="tr-table" style="background:#FFFFFF; border:1px solid #E6E7F0; border-radius:16px; overflow:hidden">
+        <div style="display:grid; grid-template-columns:2.4fr 1fr 1fr 1fr 1.1fr; background:#FAFAFC; border-bottom:1px solid #E6E7F0; padding:12px 20px; font-size:11.5px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:#6B6E8C">
+          <span>Campaign</span><span style="text-align:center">Status</span><span style="text-align:center">Submitted</span><span style="text-align:center">Approval</span><span style="text-align:right">Action</span>
+        </div>
+        <sc-for list="{{ campaigns }}" as="c" hint-placeholder-count="3">
+          <div style="display:grid; grid-template-columns:2.4fr 1fr 1fr 1fr 1.1fr; align-items:center; border-bottom:1px solid #F0F1F7; padding:15px 20px">
+            <div>
+              <div style="font-size:14px; font-weight:700">{{ c.name }}</div>
+              <div style="font-size:12px; color:#6B6E8C">{{ c.meta }}</div>
+            </div>
+            <div style="text-align:center"><span style="background:{{ c.stBg }}; color:{{ c.stFg }}; font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px">{{ c.status }}</span></div>
+            <div style="text-align:center; font-size:13.5px; font-weight:700">{{ c.subs }}</div>
+            <div style="text-align:center; font-size:13.5px; font-weight:700; color:#0E7A59">{{ c.rate }}</div>
+            <div style="text-align:right"><button onClick="{{ c.review }}" style="border:1px solid #D7D9E6; background:#FFFFFF; font-family:'Albert Sans',sans-serif; font-size:12.5px; font-weight:700; padding:7px 14px; border-radius:9px; cursor:pointer; color:#171A3A">Review {{ c.queueN }}</button></div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <!-- ============ BUSINESS: CREATE TASK ============ -->
+    <sc-if value="{{ bCreate }}" hint-placeholder-val="{{ false }}">
+      <div style="max-width:720px">
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:6px">
+          <button onClick="{{ goOverview }}" style="border:none; background:#FFFFFF; border:1px solid #E6E7F0; width:34px; height:34px; border-radius:10px; cursor:pointer; font-size:15px">←</button>
+          <h1 style="font-family:Sora,sans-serif; font-size:24px; font-weight:800; margin:0">Post a task</h1>
+        </div>
+        <div style="font-size:13px; color:#6B6E8C; margin:0 0 20px 46px">Step {{ createStep }} of 4 · {{ createStepName }}</div>
+        <div style="display:flex; gap:6px; margin-bottom:24px">
+          <sc-for list="{{ createBars }}" as="cb" hint-placeholder-count="4">
+            <div style="flex:1; height:5px; border-radius:999px; background:{{ cb }}"></div>
+          </sc-for>
+        </div>
+
+        <div style="background:#FFFFFF; border:1px solid #E6E7F0; border-radius:16px; padding:26px 28px">
+          <!-- Step 1 -->
+          <sc-if value="{{ cs1 }}" hint-placeholder-val="{{ true }}">
+            <div style="font-family:Sora,sans-serif; font-size:16px; font-weight:700; margin-bottom:16px">Task basics</div>
+            <label style="display:block; font-size:12.5px; font-weight:700; margin-bottom:6px">Task title</label>
+            <input value="{{ f_title }}" onChange="{{ set_title }}" placeholder="e.g. AI response evaluation — English (Nigeria)" style="width:100%; box-sizing:border-box; border:1px solid #D7D9E6; border-radius:10px; padding:12px 14px; font-family:'Albert Sans',sans-serif; font-size:14px; margin-bottom:16px">
+            <label style="display:block; font-size:12.5px; font-weight:700; margin-bottom:6px">Category</label>
+            <select onChange="{{ set_cat }}" style="width:100%; box-sizing:border-box; border:1px solid #D7D9E6; border-radius:10px; padding:12px 14px; font-family:'Albert Sans',sans-serif; font-size:14px; background:#FFFFFF; margin-bottom:16px">
+              <option>AI response evaluation</option><option>Data labelling</option><option>Audio transcription</option><option>Software testing</option><option>Survey (sponsored)</option>
+            </select>
+            <label style="display:block; font-size:12.5px; font-weight:700; margin-bottom:6px">Instructions for contributors</label>
+            <textarea value="{{ f_instr }}" onChange="{{ set_instr }}" placeholder="Describe exactly what to do, with examples and a clear rubric…" style="width:100%; box-sizing:border-box; border:1px solid #D7D9E6; border-radius:10px; padding:12px 14px; font-family:'Albert Sans',sans-serif; font-size:14px; min-height:110px; resize:vertical"></textarea>
+          </sc-if>
+          <!-- Step 2 -->
+          <sc-if value="{{ cs2 }}" hint-placeholder-val="{{ false }}">
+            <div style="font-family:Sora,sans-serif; font-size:16px; font-weight:700; margin-bottom:16px">Eligibility &amp; qualification</div>
+            <label style="display:block; font-size:12.5px; font-weight:700; margin-bottom:8px">Countries</label>
+            <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:18px">
+              <sc-for list="{{ countryChips }}" as="cc" hint-placeholder-count="5">
+                <button onClick="{{ cc.toggle }}" style="border:{{ cc.border }}; background:{{ cc.bg }}; color:{{ cc.fg }}; font-family:'Albert Sans',sans-serif; font-size:12.5px; font-weight:600; padding:8px 14px; border-radius:999px; cursor:pointer">{{ cc.name }}</button>
+              </sc-for>
+            </div>
+            <label style="display:block; font-size:12.5px; font-weight:700; margin-bottom:8px">Minimum Ryse Level</label>
+            <div style="display:flex; gap:8px; margin-bottom:18px; flex-wrap:wrap">
+              <sc-for list="{{ levelChips }}" as="lc" hint-placeholder-count="5">
+                <button onClick="{{ lc.pick }}" style="border:{{ lc.border }}; background:{{ lc.bg }}; color:{{ lc.fg }}; font-family:'Albert Sans',sans-serif; font-size:12px; font-weight:700; padding:8px 12px; border-radius:9px; cursor:pointer">{{ lc.name }}</button>
+              </sc-for>
+            </div>
+            <button onClick="{{ toggleQual }}" style="display:flex; align-items:center; gap:12px; width:100%; text-align:left; border:{{ qualBorder }}; background:#FFFFFF; border-radius:12px; padding:14px 16px; cursor:pointer; font-family:'Albert Sans',sans-serif">
+              <span style="width:20px; height:20px; border-radius:6px; border:{{ qualBox }}; background:{{ qualBoxBg }}; color:#FFFFFF; font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0">{{ qualMark }}</span>
+              <span><span style="display:block; font-size:13.5px; font-weight:700">Require a qualification test</span><span style="display:block; font-size:12px; color:#6B6E8C">Contributors must pass a scored test before accepting</span></span>
+            </button>
+          </sc-if>
+          <!-- Step 3 -->
+          <sc-if value="{{ cs3 }}" hint-placeholder-val="{{ false }}">
+            <div style="font-family:Sora,sans-serif; font-size:16px; font-weight:700; margin-bottom:16px">Reward &amp; scale</div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px">
+              <div>
+                <label style="display:block; font-size:12.5px; font-weight:700; margin-bottom:6px">Pay per approved task (₦)</label>
+                <input value="{{ f_pay }}" onChange="{{ set_pay }}" placeholder="1800" inputMode="numeric" style="width:100%; box-sizing:border-box; border:1px solid #D7D9E6; border-radius:10px; padding:12px 14px; font-family:'Albert Sans',sans-serif; font-size:14px">
+              </div>
+              <div>
+                <label style="display:block; font-size:12.5px; font-weight:700; margin-bottom:6px">Number of slots</label>
+                <input value="{{ f_slots }}" onChange="{{ set_slots }}" placeholder="100" inputMode="numeric" style="width:100%; box-sizing:border-box; border:1px solid #D7D9E6; border-radius:10px; padding:12px 14px; font-family:'Albert Sans',sans-serif; font-size:14px">
+              </div>
+            </div>
+            <label style="display:block; font-size:12.5px; font-weight:700; margin-bottom:6px">Review method</label>
+            <div style="display:flex; gap:8px; margin-bottom:20px; flex-wrap:wrap">
+              <sc-for list="{{ reviewChips }}" as="rc" hint-placeholder-count="2">
+                <button onClick="{{ rc.pick }}" style="border:{{ rc.border }}; background:{{ rc.bg }}; color:{{ rc.fg }}; font-family:'Albert Sans',sans-serif; font-size:12.5px; font-weight:700; padding:9px 16px; border-radius:9px; cursor:pointer">{{ rc.name }}</button>
+              </sc-for>
+            </div>
+            <div style="background:#FAFAFC; border:1px solid #E6E7F0; border-radius:12px; padding:16px 18px">
+              <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:8px"><span style="color:#6B6E8C">Reward pool ({{ f_slots_d }} × ₦{{ f_pay_d }})</span><span style="font-weight:700">{{ poolFmt }}</span></div>
+              <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:8px"><span style="color:#6B6E8C">Platform fee (12%)</span><span style="font-weight:700">{{ feeFmt }}</span></div>
+              <div style="display:flex; justify-content:space-between; font-size:14.5px; padding-top:10px; border-top:1px solid #E6E7F0"><span style="font-weight:700">Total to fund into escrow</span><span style="font-family:Sora,sans-serif; font-weight:800">{{ totalFmt }}</span></div>
+            </div>
+          </sc-if>
+          <!-- Step 4 -->
+          <sc-if value="{{ cs4 }}" hint-placeholder-val="{{ false }}">
+            <div style="text-align:center; padding:20px 0">
+              <div style="width:60px; height:60px; border-radius:50%; background:#EDF7F3; color:#16A67A; font-size:26px; display:flex; align-items:center; justify-content:center; margin:0 auto 16px auto">✓</div>
+              <div style="font-family:Sora,sans-serif; font-size:20px; font-weight:800; margin-bottom:8px">Campaign funded &amp; live</div>
+              <p style="font-size:13.5px; color:#4A4D6B; line-height:1.6; max-width:400px; margin:0 auto 8px auto">“{{ f_title_d }}” is now visible to eligible contributors. {{ totalFmt }} is held in escrow and releases only for work you approve.</p>
+              <div style="font-size:12.5px; color:#9A9DBA">Money never leaves escrow for rejected or fraudulent work.</div>
+            </div>
+          </sc-if>
+
+          <div style="display:flex; justify-content:space-between; margin-top:24px">
+            <button onClick="{{ createBack }}" style="border:1px solid #D7D9E6; background:#FFFFFF; color:#171A3A; font-family:Sora,sans-serif; font-size:13.5px; font-weight:700; padding:12px 22px; border-radius:11px; cursor:pointer; visibility:{{ createBackVis }}">Back</button>
+            <button onClick="{{ createNext }}" style="border:none; background:#FF6A3D; color:#FFFFFF; font-family:Sora,sans-serif; font-size:13.5px; font-weight:700; padding:12px 26px; border-radius:11px; cursor:pointer" style-hover="background:#E5552B">{{ createNextLabel }}</button>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ============ REVIEW QUEUE (business + reviewer share) ============ -->
+    <sc-if value="{{ showQueue }}" hint-placeholder-val="{{ false }}">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:6px">
+        <sc-if value="{{ isBusiness }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ goOverview }}" style="border:none; background:#FFFFFF; border:1px solid #E6E7F0; width:34px; height:34px; border-radius:10px; cursor:pointer; font-size:15px">←</button>
+        </sc-if>
+        <h1 style="font-family:Sora,sans-serif; font-size:24px; font-weight:800; margin:0">{{ queueTitle }}</h1>
+      </div>
+      <div style="font-size:13px; color:#6B6E8C; margin:0 0 20px 0">{{ queueSub }}</div>
+
+      <div class="tr-two" style="display:grid; grid-template-columns:320px 1fr; gap:20px; align-items:start">
+        <!-- Queue list -->
+        <div style="background:#FFFFFF; border:1px solid #E6E7F0; border-radius:14px; overflow:hidden">
+          <div style="padding:12px 16px; background:#FAFAFC; border-bottom:1px solid #E6E7F0; font-size:12px; font-weight:700; color:#6B6E8C">{{ queueCount }} awaiting review</div>
+          <sc-for list="{{ queue }}" as="q" hint-placeholder-count="4">
+            <button onClick="{{ q.open }}" style="display:block; width:100%; text-align:left; border:none; border-bottom:1px solid #F0F1F7; background:{{ q.bg }}; padding:13px 16px; cursor:pointer; font-family:'Albert Sans',sans-serif; border-left:{{ q.accent }}">
+              <div style="display:flex; justify-content:space-between; gap:8px; margin-bottom:3px">
+                <span style="font-size:13px; font-weight:700; color:#171A3A">{{ q.contributor }}</span>
+                <span style="font-size:11px; color:#9A9DBA">{{ q.ago }}</span>
+              </div>
+              <div style="font-size:11.5px; color:#6B6E8C; margin-bottom:5px">{{ q.task }}</div>
+              <span style="background:{{ q.flagBg }}; color:{{ q.flagFg }}; font-size:10px; font-weight:700; padding:2px 8px; border-radius:999px">{{ q.flag }}</span>
+            </button>
+          </sc-for>
+        </div>
+
+        <!-- Grading panel -->
+        <div style="background:#FFFFFF; border:1px solid #E6E7F0; border-radius:14px; padding:24px">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:12px; margin-bottom:16px">
+            <div>
+              <div style="font-family:Sora,sans-serif; font-size:17px; font-weight:800">{{ cur_contributor }}</div>
+              <div style="font-size:12.5px; color:#6B6E8C">{{ cur_task }} · submitted {{ cur_ago }}</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-size:11.5px; color:#6B6E8C">Contributor rating</div>
+              <div style="font-family:Sora,sans-serif; font-size:15px; font-weight:800; color:#0E7A59">{{ cur_rating }}</div>
+            </div>
+          </div>
+
+          <!-- Auto checks -->
+          <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px">
+            <sc-for list="{{ cur_autochecks }}" as="ac" hint-placeholder-count="3">
+              <span style="display:inline-flex; align-items:center; gap:6px; background:{{ ac.bg }}; color:{{ ac.fg }}; font-size:11.5px; font-weight:700; padding:5px 12px; border-radius:999px">{{ ac.mark }} {{ ac.label }}</span>
+            </sc-for>
+          </div>
+
+          <!-- Evidence -->
+          <div style="font-size:12.5px; font-weight:700; margin-bottom:8px">Submitted evidence</div>
+          <div style="background:#FAFAFC; border:1px solid #E6E7F0; border-radius:12px; padding:16px; margin-bottom:18px">
+            <sc-for list="{{ cur_evidence }}" as="ev" hint-placeholder-count="3">
+              <div style="display:flex; justify-content:space-between; gap:12px; font-size:13px; padding:6px 0; border-bottom:1px solid #F0F1F7">
+                <span style="color:#6B6E8C">{{ ev.q }}</span><span style="font-weight:700; text-align:right">{{ ev.a }}</span>
+              </div>
+            </sc-for>
+          </div>
+
+          <!-- Rubric -->
+          <div style="font-size:12.5px; font-weight:700; margin-bottom:8px">Quality rubric</div>
+          <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:18px">
+            <sc-for list="{{ rubric }}" as="rb" hint-placeholder-count="3">
+              <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; border:1px solid #E6E7F0; border-radius:10px; padding:11px 14px">
+                <span style="font-size:13px; color:#4A4D6B">{{ rb.label }}</span>
+                <div style="display:flex; gap:6px">
+                  <button onClick="{{ rb.pass }}" style="border:{{ rb.passBorder }}; background:{{ rb.passBg }}; color:{{ rb.passFg }}; font-size:11.5px; font-weight:700; padding:6px 12px; border-radius:8px; cursor:pointer; font-family:'Albert Sans',sans-serif">Pass</button>
+                  <button onClick="{{ rb.fail }}" style="border:{{ rb.failBorder }}; background:{{ rb.failBg }}; color:{{ rb.failFg }}; font-size:11.5px; font-weight:700; padding:6px 12px; border-radius:8px; cursor:pointer; font-family:'Albert Sans',sans-serif">Fail</button>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+
+          <textarea value="{{ reviewNote }}" onChange="{{ setReviewNote }}" placeholder="Add a note for the contributor (required for revision or rejection)…" style="width:100%; box-sizing:border-box; border:1px solid #D7D9E6; border-radius:10px; padding:12px 14px; font-family:'Albert Sans',sans-serif; font-size:13.5px; min-height:70px; resize:vertical; margin-bottom:16px"></textarea>
+
+          <sc-if value="{{ decided }}" hint-placeholder-val="{{ false }}">
+            <div style="background:{{ decBg }}; border:1px solid {{ decBorder }}; border-radius:11px; padding:13px 16px; font-size:13px; font-weight:700; color:{{ decFg }}; margin-bottom:16px">{{ decMsg }}</div>
+          </sc-if>
+
+          <div style="display:flex; gap:10px; flex-wrap:wrap">
+            <button onClick="{{ doApprove }}" style="flex:1; min-width:120px; border:none; background:#16A67A; color:#FFFFFF; font-family:Sora,sans-serif; font-size:13.5px; font-weight:700; padding:13px; border-radius:11px; cursor:pointer">✓ Approve &amp; pay</button>
+            <button onClick="{{ doRevise }}" style="flex:1; min-width:120px; border:none; background:#F5A623; color:#FFFFFF; font-family:Sora,sans-serif; font-size:13.5px; font-weight:700; padding:13px; border-radius:11px; cursor:pointer">↻ Request revision</button>
+            <button onClick="{{ doReject }}" style="flex:1; min-width:120px; border:none; background:#E5484D; color:#FFFFFF; font-family:Sora,sans-serif; font-size:13.5px; font-weight:700; padding:13px; border-radius:11px; cursor:pointer">✕ Reject</button>
+            <button onClick="{{ doFlag }}" style="border:1px solid #E6E7F0; background:#FFFFFF; color:#B33A3E; font-family:Sora,sans-serif; font-size:13.5px; font-weight:700; padding:13px 16px; border-radius:11px; cursor:pointer">⚑ Flag fraud</button>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ============ ANALYTICS ============ -->
+    <sc-if value="{{ bAnalytics }}" hint-placeholder-val="{{ false }}">
+      <h1 style="font-family:Sora,sans-serif; font-size:24px; font-weight:800; margin:0 0 4px 0">Campaign analytics</h1>
+      <div style="font-size:13px; color:#6B6E8C; margin-bottom:22px">Yorùbá speech dataset · last 14 days</div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:14px; margin-bottom:24px">
+        <sc-for list="{{ aStats }}" as="s" hint-placeholder-count="4">
+          <div style="background:#FFFFFF; border:1px solid #E6E7F0; border-radius:14px; padding:18px 20px">
+            <div style="font-size:12.5px; color:#6B6E8C; margin-bottom:6px">{{ s.label }}</div>
+            <div style="font-family:Sora,sans-serif; font-size:22px; font-weight:800; color:{{ s.color }}">{{ s.value }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="background:#FFFFFF; border:1px solid #E6E7F0; border-radius:16px; padding:24px">
+        <div style="font-family:Sora,sans-serif; font-size:15px; font-weight:700; margin-bottom:18px">Daily submissions</div>
+        <div style="display:flex; align-items:flex-end; gap:8px; height:180px">
+          <sc-for list="{{ chart }}" as="ch" hint-placeholder-count="14">
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; height:100%; justify-content:flex-end">
+              <div style="width:100%; background:linear-gradient(180deg,#FF8A3D,#FF6A3D); border-radius:5px 5px 0 0; height:{{ ch.h }}"></div>
+              <span style="font-size:9.5px; color:#9A9DBA">{{ ch.d }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ============ REVIEWER: ESCALATIONS ============ -->
+    <sc-if value="{{ rEscalations }}" hint-placeholder-val="{{ false }}">
+      <h1 style="font-family:Sora,sans-serif; font-size:24px; font-weight:800; margin:0 0 4px 0">Escalations</h1>
+      <div style="font-size:13px; color:#6B6E8C; margin-bottom:20px">Cases you routed for a second decision. You never grade the same submission twice.</div>
+      <div style="display:flex; flex-direction:column; gap:12px">
+        <sc-for list="{{ escalations }}" as="e" hint-placeholder-count="3">
+          <div style="background:#FFFFFF; border:1px solid #E6E7F0; border-radius:14px; padding:18px 20px">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap; margin-bottom:8px">
+              <div><div style="font-family:Sora,sans-serif; font-size:15px; font-weight:700">{{ e.title }}</div><div style="font-size:12px; color:#6B6E8C">{{ e.meta }}</div></div>
+              <span style="background:{{ e.tagBg }}; color:{{ e.tagFg }}; font-size:11px; font-weight:700; padding:4px 11px; border-radius:999px">{{ e.tag }}</span>
+            </div>
+            <div style="font-size:13px; color:#4A4D6B; line-height:1.55">{{ e.note }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <!-- ============ REVIEWER: PERFORMANCE ============ -->
+    <sc-if value="{{ rPerformance }}" hint-placeholder-val="{{ false }}">
+      <h1 style="font-family:Sora,sans-serif; font-size:24px; font-weight:800; margin:0 0 4px 0">My performance</h1>
+      <div style="font-size:13px; color:#6B6E8C; margin-bottom:22px">Quality metrics judged on concordance, not speed alone.</div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(175px,1fr)); gap:14px; margin-bottom:24px">
+        <sc-for list="{{ rPerf }}" as="p" hint-placeholder-count="4">
+          <div style="background:#FFFFFF; border:1px solid #E6E7F0; border-radius:14px; padding:18px 20px">
+            <div style="font-size:12.5px; color:#6B6E8C; margin-bottom:6px">{{ p.label }}</div>
+            <div style="font-family:Sora,sans-serif; font-size:22px; font-weight:800; color:{{ p.color }}">{{ p.value }}</div>
+            <div style="font-size:11.5px; color:#9A9DBA; margin-top:4px">{{ p.sub }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="background:#FFFFFF; border:1px solid #E6E7F0; border-radius:16px; padding:24px">
+        <div style="font-family:Sora,sans-serif; font-size:15px; font-weight:700; margin-bottom:18px">Reviews per day</div>
+        <div style="display:flex; align-items:flex-end; gap:10px; height:150px">
+          <sc-for list="{{ rPerfBars }}" as="b" hint-placeholder-count="7">
+            <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; height:100%; justify-content:flex-end">
+              <div style="width:100%; background:linear-gradient(180deg,#20B486,#16A67A); border-radius:5px 5px 0 0; height:{{ b.h }}"></div>
+              <span style="font-size:9.5px; color:#9A9DBA">{{ b.d }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-if>
+
+  </div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    role: "business", view: "overview", createStep: 1,
+    f: { title: "", cat: "AI response evaluation", instr: "", pay: "", slots: "", qual: true, review: 0, countries: [0], level: 1 },
+    curIdx: 0, rubric: [null, null, null], reviewNote: "", decision: null
+  };
+  ngn(n) { return "₦" + (n || 0).toLocaleString("en-NG"); }
+  renderVals() {
+    const st = this.state, f = st.f;
+    const isBusiness = st.role === "business";
+    const pay = parseInt(f.pay || "0", 10) || 0, slots = parseInt(f.slots || "0", 10) || 0;
+    const pool = pay * slots, fee = Math.round(pool * 0.12);
+    const countryList = ["Nigeria", "Ghana", "Kenya", "South Africa", "Global"];
+    const levelList = ["Any", "New", "Active", "Skilled", "Pro"];
+    const reviewList = ["Taskryse reviewers", "My own team"];
+    const createNames = ["Task basics", "Eligibility & qualification", "Reward & scale", "Funded"];
+
+    const queueDefs = [
+      { contributor: "Adaeze N.", task: "AI response evaluation", ago: "4m", rating: "96% quality", flag: "Auto-checks passed", flagBg: "#EDF7F3", flagFg: "#0E7A59",
+        autochecks: [["✓","Attention checks passed",true],["✓","No duplicate submission",true],["✓","Response time normal",true]],
+        evidence: [{ q: "Item 1 winner", a: "Answer B · Excellent" }, { q: "Item 2 winner", a: "Answer A · Good" }, { q: "Item 3 winner", a: "Answer A · Good" }] },
+      { contributor: "Chidi O.", task: "AI response evaluation", ago: "12m", rating: "89% quality", flag: "Fast completion", flagBg: "#FFF8EC", flagFg: "#B8860B",
+        autochecks: [["✓","Attention checks passed",true],["✓","No duplicate submission",true],["!","Response time fast (−40%)",false]],
+        evidence: [{ q: "Item 1 winner", a: "Answer A · Good" }, { q: "Item 2 winner", a: "Answer A · Fair" }, { q: "Item 3 winner", a: "Answer B · Poor" }] },
+      { contributor: "Blessing A.", task: "Audio transcription", ago: "31m", rating: "93% quality", flag: "Auto-checks passed", flagBg: "#EDF7F3", flagFg: "#0E7A59",
+        autochecks: [["✓","Audio quality good",true],["✓","No silence padding",true],["✓","Language matches",true]],
+        evidence: [{ q: "Clip 1", a: "Transcribed · 42 words" }, { q: "Clip 2", a: "Transcribed · 38 words" }, { q: "Tone marks", a: "Included" }] },
+      { contributor: "Tunde F.", task: "AI response evaluation", ago: "48m", rating: "71% quality", flag: "⚑ Pattern flag", flagBg: "#FDF6F6", flagFg: "#B33A3E",
+        autochecks: [["!","Identical answer pattern",false],["✓","No duplicate account",true],["!","Response time very fast",false]],
+        evidence: [{ q: "Item 1 winner", a: "Answer A · Good" }, { q: "Item 2 winner", a: "Answer A · Good" }, { q: "Item 3 winner", a: "Answer A · Good" }] }
+    ];
+    const cur = queueDefs[st.curIdx];
+
+    const businessNav = [
+      { key: "overview", icon: "▦", label: "Overview" },
+      { key: "create", icon: "＋", label: "Post a task" },
+      { key: "queue", icon: "☑", label: "Review queue", badge: true, badgeN: "4" },
+      { key: "analytics", icon: "📊", label: "Analytics" },
+      { key: "team", icon: "👥", label: "Team & verification" },
+      { key: "invoices", icon: "🧾", label: "Invoices" }
+    ];
+    const reviewerNav = [
+      { key: "queue", icon: "☑", label: "Review queue", badge: true, badgeN: "4" },
+      { key: "escalations", icon: "⚑", label: "Escalations" },
+      { key: "performance", icon: "📊", label: "My performance" }
+    ];
+    const navList = isBusiness ? businessNav : reviewerNav;
+    const activeView = isBusiness ? st.view : (["queue","escalations","performance"].includes(st.view) ? st.view : "queue");
+
+    const decMap = {
+      approve: { msg: "✓ Approved — " + this.ngn(1800) + " released to " + cur.contributor + " from escrow.", bg: "#EDF7F3", border: "#CDEBDF", fg: "#0E7A59" },
+      revise: { msg: "↻ Revision requested — " + cur.contributor + " has 24 hours to resubmit. Note sent.", bg: "#FFF8EC", border: "#F2E2BC", fg: "#7A5A12" },
+      reject: { msg: "✕ Rejected — escrow not charged. " + cur.contributor + " can appeal within 7 days.", bg: "#FDF6F6", border: "#F3D2D3", fg: "#B33A3E" },
+      flag: { msg: "⚑ Flagged for fraud review — sent to admin risk team. Submission held.", bg: "#FDF6F6", border: "#F3D2D3", fg: "#B33A3E" }
+    };
+    const dec = st.decision ? decMap[st.decision] : null;
+
+    const go = (v) => this.setState({ view: v, decision: null, rubric: [null,null,null], reviewNote: "" });
+
+    return {
+      roleLabel: isBusiness ? "Business" : "Reviewer",
+      toggleRole: () => this.setState({ role: isBusiness ? "reviewer" : "business", view: "overview", decision: null }),
+      navHeading: isBusiness ? "Meridian AI Labs" : "Reviewer console",
+      orgFooter: isBusiness ? "Escrow ₦2,140,000 · 3 verified team members" : "Reviewer · 1,284 graded · 97% concordance",
+      nav: navList.map(n => ({ ...n,
+        go: () => go(n.key),
+        bg: activeView === n.key ? "#FFF1EA" : "transparent",
+        fg: activeView === n.key ? "#E5552B" : "#4A4D6B",
+        weight: activeView === n.key ? 700 : 600,
+        op: activeView === n.key ? "1" : "0.6",
+        badge: !!n.badge, badgeN: n.badgeN })),
+
+      bOverview: isBusiness && st.view === "overview",
+      bCreate: isBusiness && st.view === "create",
+      bAnalytics: isBusiness && st.view === "analytics",
+      showQueue: activeView === "queue",
+      rEscalations: !isBusiness && activeView === "escalations",
+      rPerformance: !isBusiness && activeView === "performance",
+      escalations: [
+        { title: "Contested rejection — appeal", meta: "Chidi O. · AI evaluation · rejected by reviewer #204", tag: "Appeal", tagBg: "#FFF8EC", tagFg: "#B8860B", note: "Contributor states rubric §2.1 was misread. Second independent reviewer required." },
+        { title: "Suspected fraud pattern", meta: "Tunde F. · identical answer sequence x12", tag: "Fraud", tagBg: "#FDF6F6", tagFg: "#B33A3E", note: "Auto-flagged. Escalated to admin risk team — submission held pending decision." },
+        { title: "Rubric ambiguity", meta: "Audio transcription · tone-mark rule unclear", tag: "Policy", tagBg: "#F0F4FF", tagFg: "#2B5FCC", note: "Three reviewers disagree on tone-mark scoring. Needs sponsor clarification before grading resumes." }
+      ],
+      rPerf: [
+        { label: "Submissions graded", value: "1,284", sub: "last 30 days" },
+        { label: "Concordance", value: "97%", sub: "agreement with second review", color: "#0E7A59" },
+        { label: "Avg. time / review", value: "2m 40s", sub: "target under 5m" },
+        { label: "Overturned on appeal", value: "1.2%", sub: "well below 5% threshold", color: "#0E7A59" }
+      ],
+      rPerfBars: [72,80,68,90,85,95,88].map((h, i) => ({ h: h + "%", d: ["M","T","W","T","F","S","S"][i] })),
+      isBusiness,
+      goCreate: () => this.setState({ view: "create", createStep: 1 }),
+      goOverview: () => go("overview"),
+
+      bStats: [
+        { label: "Escrow balance", value: "₦2.14M", color: "#171A3A", sub: "across 3 campaigns" },
+        { label: "Awaiting review", value: "4", color: "#B8860B", sub: "oldest 48m ago" },
+        { label: "Approved this week", value: "312", color: "#0E7A59", sub: "86.9% approval rate" },
+        { label: "Avg. review time", value: "3.2h", color: "#171A3A", sub: "well under 48h target" }
+      ],
+      campaigns: [
+        { name: "AI response evaluation — English", meta: "AI data · 42 slots left", status: "Live", stBg: "#EDF7F3", stFg: "#0E7A59", subs: "168", rate: "88%", queueN: "2" },
+        { name: "Yorùbá speech dataset", meta: "Audio · qualification required", status: "Live", stBg: "#EDF7F3", stFg: "#0E7A59", subs: "1,284", rate: "87%", queueN: "1" },
+        { name: "Prompt safety review", meta: "AI data · paused for top-up", status: "Paused", stBg: "#FFF8EC", stFg: "#B8860B", subs: "94", rate: "91%", queueN: "1" }
+      ].map(c => ({ ...c, review: () => go("queue") })),
+
+      // create wizard
+      createStep: st.createStep, createStepName: createNames[st.createStep - 1],
+      createBars: [1,2,3,4].map(i => i <= st.createStep ? "#FF6A3D" : "#E6E7F0"),
+      cs1: st.createStep === 1, cs2: st.createStep === 2, cs3: st.createStep === 3, cs4: st.createStep === 4,
+      f_title: f.title, set_title: (e) => this.setState({ f: { ...f, title: e.target.value } }),
+      set_cat: (e) => this.setState({ f: { ...f, cat: e.target.value } }),
+      f_instr: f.instr, set_instr: (e) => this.setState({ f: { ...f, instr: e.target.value } }),
+      countryChips: countryList.map((name, i) => { const on = f.countries.includes(i);
+        return { name, toggle: () => this.setState({ f: { ...f, countries: on ? f.countries.filter(x=>x!==i) : [...f.countries, i] } }),
+          border: on ? "1.5px solid #FF6A3D" : "1.5px solid #E1E2EC", bg: on ? "#FFF1EA" : "#FFFFFF", fg: on ? "#E5552B" : "#4A4D6B" }; }),
+      levelChips: levelList.map((name, i) => ({ name, pick: () => this.setState({ f: { ...f, level: i } }),
+        border: f.level === i ? "2px solid #FF6A3D" : "1px solid #E1E2EC", bg: f.level === i ? "#FFF1EA" : "#FFFFFF", fg: f.level === i ? "#E5552B" : "#4A4D6B" })),
+      toggleQual: () => this.setState({ f: { ...f, qual: !f.qual } }),
+      qualBorder: f.qual ? "2px solid #16A67A" : "1px solid #E1E2EC",
+      qualBox: f.qual ? "none" : "2px solid #C3C5D6", qualBoxBg: f.qual ? "#16A67A" : "#FFFFFF", qualMark: f.qual ? "✓" : "",
+      f_pay: f.pay, set_pay: (e) => this.setState({ f: { ...f, pay: e.target.value.replace(/\D/g,"") } }),
+      f_slots: f.slots, set_slots: (e) => this.setState({ f: { ...f, slots: e.target.value.replace(/\D/g,"") } }),
+      f_pay_d: (pay||0).toLocaleString("en-NG"), f_slots_d: slots || 0,
+      reviewChips: reviewList.map((name, i) => ({ name, pick: () => this.setState({ f: { ...f, review: i } }),
+        border: f.review === i ? "2px solid #FF6A3D" : "1px solid #E1E2EC", bg: f.review === i ? "#FFF1EA" : "#FFFFFF", fg: f.review === i ? "#E5552B" : "#4A4D6B" })),
+      poolFmt: this.ngn(pool), feeFmt: this.ngn(fee), totalFmt: this.ngn(pool + fee),
+      f_title_d: f.title || "Untitled task",
+      createBackVis: st.createStep > 1 && st.createStep < 4 ? "visible" : "hidden",
+      createBack: () => this.setState({ createStep: Math.max(1, st.createStep - 1) }),
+      createNextLabel: st.createStep === 3 ? "Fund " + this.ngn(pool + fee) : st.createStep === 4 ? "Back to overview" : "Continue",
+      createNext: () => {
+        if (st.createStep === 4) return go("overview");
+        this.setState({ createStep: st.createStep + 1 });
+      },
+
+      // queue / grading
+      queueTitle: isBusiness ? "Review queue" : "Your review queue",
+      queueSub: isBusiness ? "Approve, request revisions or reject submissions. Approved work releases payment from your escrow." : "Grade against the rubric. You never see payment amounts — decisions are judged on quality alone.",
+      queueCount: queueDefs.length, 
+      queue: queueDefs.map((q, i) => ({ ...q,
+        open: () => this.setState({ curIdx: i, decision: null, rubric: [null,null,null], reviewNote: "" }),
+        bg: st.curIdx === i ? "#FFF8F4" : "#FFFFFF",
+        accent: st.curIdx === i ? "3px solid #FF6A3D" : "3px solid transparent" })),
+      cur_contributor: cur.contributor, cur_task: cur.task, cur_ago: cur.ago + " ago", cur_rating: cur.rating,
+      cur_autochecks: cur.autochecks.map(([mark, label, ok]) => ({ mark, label, bg: ok ? "#EDF7F3" : "#FFF8EC", fg: ok ? "#0E7A59" : "#B8860B" })),
+      cur_evidence: cur.evidence,
+      rubric: ["Followed instructions and rubric", "Accuracy of ratings", "No spam or low-effort answers"].map((label, i) => {
+        const v = st.rubric[i];
+        return { label,
+          pass: () => { const r = [...st.rubric]; r[i] = "pass"; this.setState({ rubric: r }); },
+          fail: () => { const r = [...st.rubric]; r[i] = "fail"; this.setState({ rubric: r }); },
+          passBorder: v === "pass" ? "none" : "1px solid #E1E2EC", passBg: v === "pass" ? "#16A67A" : "#FFFFFF", passFg: v === "pass" ? "#FFFFFF" : "#6B6E8C",
+          failBorder: v === "fail" ? "none" : "1px solid #E1E2EC", failBg: v === "fail" ? "#E5484D" : "#FFFFFF", failFg: v === "fail" ? "#FFFFFF" : "#6B6E8C" };
+      }),
+      reviewNote: st.reviewNote, setReviewNote: (e) => this.setState({ reviewNote: e.target.value }),
+      decided: !!dec,
+      decMsg: dec ? dec.msg : "", decBg: dec ? dec.bg : "#FFF", decBorder: dec ? dec.border : "#FFF", decFg: dec ? dec.fg : "#000",
+      doApprove: () => this.setState({ decision: "approve" }),
+      doRevise: () => this.setState({ decision: "revise" }),
+      doReject: () => this.setState({ decision: "reject" }),
+      doFlag: () => this.setState({ decision: "flag" }),
+
+      // analytics
+      aStats: [
+        { label: "Total submissions", value: "1,284", color: "#171A3A" },
+        { label: "Approved", value: "1,116", color: "#0E7A59" },
+        { label: "Approval rate", value: "86.9%", color: "#171A3A" },
+        { label: "Escrow spent", value: "₦3.57M", color: "#171A3A" }
+      ],
+      chart: [40,55,48,70,62,80,58,90,72,85,95,68,88,100].map((h, i) => ({ h: h + "%", d: (i + 10) + "" }))
+    };
+  }
+}
+</script>
+</body>
+</html>

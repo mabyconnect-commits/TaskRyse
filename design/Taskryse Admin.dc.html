@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Albert+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#F4F5F9; font-family:'Albert Sans',sans-serif; color:#171A3A; }
+  a { color:#FF6A3D; text-decoration:none; }
+  a:hover { color:#E5552B; }
+  input:focus, select:focus, textarea:focus { outline:2px solid #FF6A3D; outline-offset:1px; }
+  *::-webkit-scrollbar { width:9px; height:9px; }
+  *::-webkit-scrollbar-thumb { background:#D3D5E2; border-radius:999px; }
+@media (max-width:760px){
+  .tr-shell{flex-direction:column}
+  .tr-side{width:auto !important;flex-direction:row !important;overflow-x:auto;border-right:none !important;border-bottom:1px solid #E6E7F0;gap:6px !important;padding:10px 12px !important}
+  .tr-side .tr-hd{display:none}
+  .tr-side>button{width:auto !important;flex:0 0 auto}
+  .tr-main{padding:20px 16px !important}
+  .tr-two{grid-template-columns:1fr !important}
+  .tr-table{overflow-x:auto !important}
+  .tr-table>div{min-width:600px}
+}
+</style>
+</helmet>
+
+<div style="min-height:100vh; display:flex; flex-direction:column">
+<!-- Top bar -->
+<div style="background:#0F1128; color:#FFFFFF; padding:0 24px; min-height:60px; padding-top:8px; padding-bottom:8px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px">
+  <div style="display:flex; align-items:center; gap:16px">
+    <div style="background:#FFFFFF; border-radius:8px; padding:5px 9px; display:flex; align-items:center"><img src="assets/taskryse-logo.png" alt="Taskryse" style="height:20px; width:auto"></div>
+    <span style="font-family:Sora,sans-serif; font-size:13px; font-weight:700; color:#B9BCD9; border-left:1px solid rgba(255,255,255,0.15); padding-left:16px">{{ portalName }}</span>
+  </div>
+  <div style="display:flex; align-items:center; gap:10px">
+    <button onClick="{{ toggleRole }}" style="border:1px solid rgba(255,255,255,0.2); background:rgba(255,255,255,0.08); color:#FFFFFF; font-family:'Albert Sans',sans-serif; font-size:12.5px; font-weight:700; padding:8px 14px; border-radius:9px; cursor:pointer">Viewing as: {{ roleLabel }} · switch</button>
+    <span style="width:34px; height:34px; border-radius:50%; background:{{ avatarBg }}; color:#FFFFFF; display:flex; align-items:center; justify-content:center; font-family:Sora,sans-serif; font-weight:700; font-size:13px">{{ avatarInit }}</span>
+  </div>
+</div>
+
+<div class="tr-shell" style="flex:1; display:flex; min-height:0">
+  <!-- Sidebar -->
+  <div class="tr-side" style="width:230px; flex-shrink:0; background:#FFFFFF; border-right:1px solid #E6E7F0; padding:18px 12px; display:flex; flex-direction:column; gap:2px; overflow-y:auto">
+    <div class="tr-hd" style="font-family:Sora,sans-serif; font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#9A9DBA; padding:6px 12px 10px 12px">{{ navHeading }}</div>
+    <sc-for list="{{ nav }}" as="n" hint-placeholder-count="8">
+      <button onClick="{{ n.go }}" style="display:flex; align-items:center; gap:11px; width:100%; text-align:left; border:none; cursor:pointer; background:{{ n.bg }}; border-radius:10px; padding:10px 12px; font-family:'Albert Sans',sans-serif">
+        <span style="font-size:14px; width:20px; text-align:center; opacity:{{ n.op }}">{{ n.icon }}</span>
+        <span style="font-size:13px; font-weight:{{ n.weight }}; color:{{ n.fg }}">{{ n.label }}</span>
+        <sc-if value="{{ n.badge }}" hint-placeholder-val="{{ false }}"><span style="margin-left:auto; background:{{ n.badgeBg }}; color:#FFFFFF; font-size:10px; font-weight:800; padding:1px 7px; border-radius:999px">{{ n.badgeN }}</span></sc-if>
+      </button>
+    </sc-for>
+  </div>
+
+  <!-- Main -->
+  <div class="tr-main" style="flex:1; min-width:0; overflow-y:auto; padding:28px 32px">
+
+    <!-- ============ SUPPORT: INBOX ============ -->
+    <sc-if value="{{ sInbox }}" hint-placeholder-val="{{ true }}">
+      <h1 style="font-family:Sora,sans-serif; font-size:24px; font-weight:800; margin:0 0 4px 0">Support inbox</h1>
+      <div style="font-size:13px; color:#6B6E8C; margin-bottom:20px">Tickets, task disputes, payment &amp; withdrawal issues. AI assistant handles tier-1; these are handovers.</div>
+      <div class="tr-two" style="display:grid; grid-template-columns:340px 1fr; gap:20px; align-items:start">
+        <!-- Ticket list -->
+        <div style="background:#FFFFFF; border:1px solid #E6E7F0; border-radius:14px; overflow:hidden">
+          <div style="display:flex; gap:4px; padding:10px 12px; background:#FAFAFC; border-bottom:1px solid #E6E7F0">
+            <sc-for list="{{ ticketFilters }}" as="tf" hint-placeholder-count="3">
+              <button onClick="{{ tf.pick }}" style="border:none; cursor:pointer; font-family:'Albert Sans',sans-serif; font-size:11.5px; font-weight:700; padding:6px 12px; border-radius:8px; background:{{ tf.bg }}; color:{{ tf.fg }}">{{ tf.label }}</button>
+            </sc-for>
+          </div>
+          <sc-for list="{{ tickets }}" as="t" hint-placeholder-count="5">
+            <button onClick="{{ t.open }}" style="display:block; width:100%; text-align:left; border:none; border-bottom:1px solid #F0F1F7; background:{{ t.bg }}; padding:13px 16px; cursor:pointer; font-family:'Albert Sans',sans-serif; border-left:{{ t.accent }}">
+              <div style="display:flex; justify-content:space-between; gap:8px; margin-bottom:3px">
+                <span style="font-size:13px; font-weight:700; color:#171A3A">{{ t.subject }}</span>
+                <span style="font-size:10.5px; color:#9A9DBA; white-space:nowrap">{{ t.ago }}</span>
+              </div>
+              <div style="font-size:11.5px; color:#6B6E8C; margin-bottom:6px">{{ t.user }} · {{ t.id }}</div>
+              <div style="display:flex; gap:6px">
+                <span style="background:{{ t.catBg }}; color:{{ t.catFg }}; font-size:10px; font-weight:700; padding:2px 8px; border-radius:999px">{{ t.cat }}</span>
+                <span style="background:{{ t.prBg }}; color:{{ t.prFg }}; font-size:10px; font-weight:700; padding:2px 8px; border-radius:999px">{{ t.priority }}</span>
+              </div>
+            </button>
+          </sc-for>
+        </div>
+        <!-- Ticket detail -->
+        <div style="background:#FFFFFF; border:1px solid #E6E7F0; border-radius:14px; overflow:hidden; display:flex; flex-direction:column">
+          <div style="padding:18px 22px; border-bottom:1px solid #E6E7F0">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap">
+              <div>
+                <div style="font-family:Sora,sans-serif; font-size:16px; font-weight:800">{{ cur_subject }}</div>
+                <div style="font-size:12px; color:#6B6E8C; margin-top:2px">{{ cur_id }} · {{ cur_cat }} · opened {{ cur_ago }}</div>
+              </div>
+              <span style="background:{{ cur_stBg }}; color:{{ cur_stFg }}; font-size:11.5px; font-weight:700; padding:5px 12px; border-radius:999px">{{ cur_status }}</span>
+            </div>
+          </div>
+          <!-- context strip -->
+          <div style="display:flex; gap:16px; flex-wrap:wrap; padding:14px 22px; background:#FAFAFC; border-bottom:1px solid #E6E7F0; font-size:12px">
+            <div><span style="color:#9A9DBA">User</span> <strong>{{ cur_user }}</strong></div>
+            <div><span style="color:#9A9DBA">KYC</span> <strong style="color:#0E7A59">Verified</strong></div>
+            <div><span style="color:#9A9DBA">Ryse</span> <strong>{{ cur_ryse }}</strong></div>
+            <div><span style="color:#9A9DBA">Wallet</span> <strong>{{ cur_wallet }}</strong></div>
+          </div>
+          <!-- thread -->
+          <div style="flex:1; padding:20px 22px; display:flex; flex-direction:column; gap:14px; max-height:300px; overflow-y:auto">
+            <sc-for list="{{ thread }}" as="m" hint-placeholder-count="3">
+              <div style="align-self:{{ m.align }}; max-width:78%">
+                <div style="font-size:10.5px; color:#9A9DBA; margin-bottom:4px; text-align:{{ m.textAlign }}">{{ m.who }} · {{ m.time }}</div>
+                <div style="background:{{ m.bg }}; color:{{ m.fg }}; border:{{ m.border }}; border-radius:14px; padding:11px 15px; font-size:13px; line-height:1.55">{{ m.text }}</div>
+              </div>
+            </sc-for>
+          </div>
+          <!-- reply -->
+          <div style="padding:14px 22px; border-top:1px solid #E6E7F0">
+            <sc-if value="{{ replied }}" hint-placeholder-val="{{ false }}">
+              <div style="background:#EDF7F3; border:1px solid #CDEBDF; border-radius:10px; padding:10px 14px; font-size:12.5px; font-weight:700; color:#0E7A59; margin-bottom:10px">✓ Reply sent · ticket marked {{ resolveMode }}</div>
+            </sc-if>
+            <div style="display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap">
+              <sc-for list="{{ cannedReplies }}" as="cr" hint-placeholder-count="3">
+                <button onClick="{{ cr.use }}" style="border:1px solid #E1E2EC; background:#FAFAFC; color:#4A4D6B; font-family:'Albert Sans',sans-serif; font-size:11.5px; font-weight:600; padding:6px 12px; border-radius:999px; cursor:pointer">{{ cr.label }}</button>
+              </sc-for>
+            </div>
+            <textarea value="{{ replyText }}" onChange="{{ setReply }}" placeholder="Type your reply…" style="width:100%; box-sizing:border-box; border:1px solid #D7D9E6; border-radius:10px; padding:11px 14px; font-family:'Albert Sans',sans-serif; font-size:13px; min-height:60px; resize:vertical; margin-bottom:10px"></textarea>
+            <div style="display:flex; gap:8px; flex-wrap:wrap">
+              <button onClick="{{ sendResolve }}" style="border:none; background:#16A67A; color:#FFFFFF; font-family:Sora,sans-serif; font-size:12.5px; font-weight:700; padding:11px 18px; border-radius:10px; cursor:pointer">Send &amp; resolve</button>
+              <button onClick="{{ sendReply }}" style="border:1px solid #D7D9E6; background:#FFFFFF; color:#171A3A; font-family:Sora,sans-serif; font-size:12.5px; font-weight:700; padding:11px 18px; border-radius:10px; cursor:pointer">Send reply</button>
+              <button onClick="{{ escalate }}" style="border:1px solid #F3D2D3; background:#FDF6F6; color:#B33A3E; font-family:Sora,sans-serif; font-size:12.5px; font-weight:700; padding:11px 18px; border-radius:10px; cursor:pointer">Escalate to admin</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ============ ADMIN: OVERVIEW ============ -->
+    <sc-if value="{{ aOverview }}" hint-placeholder-val="{{ false }}">
+      <h1 style="font-family:Sora,sans-serif; font-size:24px; font-weight:800; margin:0 0 4px 0">Platform overview</h1>
+      <div style="font-size:13px; color:#6B6E8C; margin-bottom:22px">Live operational health · Nigeria region</div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(175px,1fr)); gap:14px; margin-bottom:22px">
+        <sc-for list="{{ adminStats }}" as="s" hint-placeholder-count="6">
+          <div style="background:#FFFFFF; border:1px solid #E6E7F0; border-radius:14px; padding:18px 20px">
+            <div style="font-size:12px; color:#6B6E8C; margin-bottom:6px">{{ s.label }}</div>
+            <div style="font-family:Sora,sans-serif; font-size:23px; font-weight:800; color:{{ s.color }}">{{ s.value }}</div>
+            <div style="font-size:11.5px; color:{{ s.deltaColor }}; margin-top:4px">{{ s.delta }}</div>
+          </div>
+        </sc-for>
+      </div>
+      <div class="tr-two" style="display:grid; grid-template-columns:1.4fr 1fr; gap:18px; align-items:start">
+        <div style="background:#FFFFFF; border:1px solid #E6E7F0; border-radius:16px; padding:22px">
+          <div style="font-family:Sora,sans-serif; font-size:15px; font-weight:700; margin-bottom:16px">Needs attention</div>
+          <sc-for list="{{ attention }}" as="at" hint-placeholder-count="4">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; padding:12px 0; border-bottom:1px solid #F0F1F7">
+              <div style="display:flex; gap:12px; align-items:center">
+                <span style="width:34px; height:34px; border-radius:10px; background:{{ at.iconBg }}; color:{{ at.iconFg }}; display:flex; align-items:center; justify-content:center; font-size:15px">{{ at.icon }}</span>
+                <div><div style="font-size:13.5px; font-weight:700">{{ at.title }}</div><div style="font-size:11.5px; color:#6B6E8C">{{ at.sub }}</div></div>
+              </div>
+              <button onClick="{{ at.go }}" style="border:1px solid #D7D9E6; background:#FFFFFF; font-family:'Albert Sans',sans-serif; font-size:12px; font-weight:700; padding:7px 14px; border-radius:9px; cursor:pointer; color:#171A3A">Open</button>
+            </div>
+          </sc-for>
+        </div>
+        <div style="background:#FFFFFF; border:1px solid #E6E7F0; border-radius:16px; padding:22px">
+          <div style="font-family:Sora,sans-serif; font-size:15px; font-weight:700; margin-bottom:16px">Payout volume (7 days)</div>
+          <div style="display:flex; align-items:flex-end; gap:7px; height:150px">
+            <sc-for list="{{ payoutChart }}" as="pc" hint-placeholder-count="7">
+              <div style="flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; height:100%; justify-content:flex-end">
+                <div style="width:100%; background:linear-gradient(180deg,#377DFF,#2B5FCC); border-radius:5px 5px 0 0; height:{{ pc.h }}"></div>
+                <span style="font-size:9.5px; color:#9A9DBA">{{ pc.d }}</span>
+              </div>
+            </sc-for>
+          </div>
+          <div style="text-align:center; font-size:12px; color:#6B6E8C; margin-top:12px">₦18.4M paid out this week</div>
+        </div>
+      </div>
+    </sc-if>
+
+    <!-- ============ ADMIN: KYC QUEUE ============ -->
+    <sc-if value="{{ aKyc }}" hint-placeholder-val="{{ false }}">
+      <h1 style="font-family:Sora,sans-serif; font-size:24px; font-weight:800; margin:0 0 4px 0">KYC verification queue</h1>
+      <div style="font-size:13px; color:#6B6E8C; margin-bottom:20px">Approve or reject identity submissions. Every decision is written to the audit log.</div>
+      <div class="tr-table" style="background:#FFFFFF; border:1px solid #E6E7F0; border-radius:16px; overflow:hidden">
+        <div style="display:grid; grid-template-columns:1.6fr 1.2fr 1fr 1fr 1.4fr; background:#FAFAFC; border-bottom:1px solid #E6E7F0; padding:12px 20px; font-size:11.5px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:#6B6E8C">
+          <span>Applicant</span><span>ID type</span><span style="text-align:center">Liveness</span><span style="text-align:center">Risk</span><span style="text-align:right">Decision</span>
+        </div>
+        <sc-for list="{{ kycQueue }}" as="k" hint-placeholder-count="4">
+          <div style="display:grid; grid-template-columns:1.6fr 1.2fr 1fr 1fr 1.4fr; align-items:center; border-bottom:1px solid #F0F1F7; padding:14px 20px">
+            <div><div style="font-size:13.5px; font-weight:700">{{ k.name }}</div><div style="font-size:11.5px; color:#6B6E8C">{{ k.country }} · {{ k.ago }}</div></div>
+            <div style="font-size:13px">{{ k.idType }}</div>
+            <div style="text-align:center"><span style="background:{{ k.liveBg }}; color:{{ k.liveFg }}; font-size:11px; font-weight:700; padding:3px 10px; border-radius:999px">{{ k.live }}</span></div>
+            <div style="text-align:center"><span style="background:{{ k.riskBg }}; color:{{ k.riskFg }}; font-size:11px; font-weight:700; padding:3px 10px; border-radius:999px">{{ k.risk }}</span></div>
+            <div style="text-align:right; display:flex; gap:6px; justify-content:flex-end">
+              <sc-if value="{{ k.pending }}" hint-placeholder-val="{{ true }}">
+                <button onClick="{{ k.approve }}" style="border:none; background:#16A67A; color:#FFFFFF; font-family:'Albert Sans',sans-serif; font-size:11.5px; font-weight:700; padding:7px 13px; border-radius:8px; cursor:pointer">Approve</button>
+                <button onClick="{{ k.reject }}" style="border:none; background:#FDF6F6; color:#E5484D; font-family:'Albert Sans',sans-serif; font-size:11.5px; font-weight:700; padding:7px 13px; border-radius:8px; cursor:pointer">Reject</button>
+              </sc-if>
+              <sc-if value="{{ k.doneFlag }}" hint-placeholder-val="{{ false }}">
+                <span style="font-size:12px; font-weight:700; color:{{ k.doneColor }}">{{ k.doneLabel }}</span>
+              </sc-if>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <!-- ============ ADMIN: WITHDRAWALS ============ -->
+    <sc-if value="{{ aPayouts }}" hint-placeholder-val="{{ false }}">
+      <h1 style="font-family:Sora,sans-serif; font-size:24px; font-weight:800; margin:0 0 4px 0">Withdrawal management</h1>
+      <div style="font-size:13px; color:#6B6E8C; margin-bottom:20px">Payouts held for compliance review. Approving releases to the payment rail.</div>
+      <div class="tr-table" style="background:#FFFFFF; border:1px solid #E6E7F0; border-radius:16px; overflow:hidden">
+        <div style="display:grid; grid-template-columns:1.4fr 1fr 1.2fr 1fr 1.3fr; background:#FAFAFC; border-bottom:1px solid #E6E7F0; padding:12px 20px; font-size:11.5px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:#6B6E8C">
+          <span>Contributor</span><span style="text-align:right">Amount</span><span>Destination</span><span style="text-align:center">Check</span><span style="text-align:right">Action</span>
+        </div>
+        <sc-for list="{{ payouts }}" as="p" hint-placeholder-count="4">
+          <div style="display:grid; grid-template-columns:1.4fr 1fr 1.2fr 1fr 1.3fr; align-items:center; border-bottom:1px solid #F0F1F7; padding:14px 20px">
+            <div><div style="font-size:13.5px; font-weight:700">{{ p.name }}</div><div style="font-size:11.5px; color:#6B6E8C">{{ p.id }}</div></div>
+            <div style="text-align:right; font-family:Sora,sans-serif; font-size:14px; font-weight:800">{{ p.amount }}</div>
+            <div style="font-size:12.5px; color:#4A4D6B">{{ p.dest }}</div>
+            <div style="text-align:center"><span style="background:{{ p.checkBg }}; color:{{ p.checkFg }}; font-size:11px; font-weight:700; padding:3px 10px; border-radius:999px">{{ p.check }}</span></div>
+            <div style="text-align:right; display:flex; gap:6px; justify-content:flex-end">
+              <sc-if value="{{ p.pending }}" hint-placeholder-val="{{ true }}">
+                <button onClick="{{ p.release }}" style="border:none; background:#16A67A; color:#FFFFFF; font-family:'Albert Sans',sans-serif; font-size:11.5px; font-weight:700; padding:7px 13px; border-radius:8px; cursor:pointer">Release</button>
+                <button onClick="{{ p.hold }}" style="border:none; background:#FFF8EC; color:#B8860B; font-family:'Albert Sans',sans-serif; font-size:11.5px; font-weight:700; padding:7px 13px; border-radius:8px; cursor:pointer">Hold</button>
+              </sc-if>
+              <sc-if value="{{ p.doneFlag }}" hint-placeholder-val="{{ false }}">
+                <span style="font-size:12px; font-weight:700; color:{{ p.doneColor }}">{{ p.doneLabel }}</span>
+              </sc-if>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <!-- ============ ADMIN: FRAUD ============ -->
+    <sc-if value="{{ aFraud }}" hint-placeholder-val="{{ false }}">
+      <h1 style="font-family:Sora,sans-serif; font-size:24px; font-weight:800; margin:0 0 4px 0">Fraud &amp; risk</h1>
+      <div style="font-size:13px; color:#6B6E8C; margin-bottom:20px">Automated signals surfaced for human review. Freezing an account holds pending earnings pending investigation.</div>
+      <div style="display:flex; flex-direction:column; gap:12px">
+        <sc-for list="{{ fraudCases }}" as="fc" hint-placeholder-count="3">
+          <div style="background:#FFFFFF; border:1px solid #E6E7F0; border-left:4px solid {{ fc.accent }}; border-radius:14px; padding:18px 20px">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap; margin-bottom:10px">
+              <div>
+                <div style="font-family:Sora,sans-serif; font-size:15px; font-weight:700">{{ fc.title }}</div>
+                <div style="font-size:12px; color:#6B6E8C">{{ fc.meta }}</div>
+              </div>
+              <span style="background:{{ fc.sevBg }}; color:{{ fc.sevFg }}; font-size:11px; font-weight:700; padding:4px 11px; border-radius:999px">{{ fc.severity }}</span>
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:14px">
+              <sc-for list="{{ fc.signals }}" as="sig" hint-placeholder-count="3">
+                <span style="background:#FAFAFC; border:1px solid #E6E7F0; color:#4A4D6B; font-size:11.5px; font-weight:600; padding:5px 11px; border-radius:8px">{{ sig }}</span>
+              </sc-for>
+            </div>
+            <div style="display:flex; gap:8px; flex-wrap:wrap">
+              <button onClick="{{ fc.freeze }}" style="border:none; background:#E5484D; color:#FFFFFF; font-family:'Albert Sans',sans-serif; font-size:12px; font-weight:700; padding:9px 16px; border-radius:9px; cursor:pointer">Freeze account</button>
+              <button onClick="{{ fc.clear }}" style="border:1px solid #D7D9E6; background:#FFFFFF; color:#171A3A; font-family:'Albert Sans',sans-serif; font-size:12px; font-weight:700; padding:9px 16px; border-radius:9px; cursor:pointer">Clear — false positive</button>
+              <sc-if value="{{ fc.resolved }}" hint-placeholder-val="{{ false }}"><span style="align-self:center; font-size:12px; font-weight:700; color:{{ fc.resColor }}">{{ fc.resLabel }}</span></sc-if>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <!-- ============ ADMIN: CONFIG ============ -->
+    <sc-if value="{{ aConfig }}" hint-placeholder-val="{{ false }}">
+      <h1 style="font-family:Sora,sans-serif; font-size:24px; font-weight:800; margin:0 0 4px 0">Countries, currencies &amp; fees</h1>
+      <div style="font-size:13px; color:#6B6E8C; margin-bottom:20px">Regional configuration. Changes are versioned and audit-logged.</div>
+      <div class="tr-table" style="background:#FFFFFF; border:1px solid #E6E7F0; border-radius:16px; overflow:hidden">
+        <div style="display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr 0.8fr; background:#FAFAFC; border-bottom:1px solid #E6E7F0; padding:12px 20px; font-size:11.5px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:#6B6E8C">
+          <span>Country</span><span>Currency</span><span style="text-align:right">Withdrawal fee</span><span style="text-align:right">FX to USD</span><span style="text-align:center">Live</span>
+        </div>
+        <sc-for list="{{ config }}" as="c" hint-placeholder-count="5">
+          <div style="display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr 0.8fr; align-items:center; border-bottom:1px solid #F0F1F7; padding:14px 20px">
+            <div style="font-size:13.5px; font-weight:700">{{ c.flag }} {{ c.country }}</div>
+            <div style="font-size:13px">{{ c.currency }}</div>
+            <div style="text-align:right; font-size:13px; font-weight:700">{{ c.fee }}</div>
+            <div style="text-align:right; font-size:13px">{{ c.fx }}</div>
+            <div style="text-align:center"><button onClick="{{ c.toggle }}" style="border:none; cursor:pointer; width:40px; height:22px; border-radius:999px; background:{{ c.tgBg }}; position:relative; transition:background 0.2s"><span style="position:absolute; top:2px; left:{{ c.tgLeft }}; width:18px; height:18px; border-radius:50%; background:#FFFFFF; transition:left 0.2s"></span></button></div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <!-- ============ ADMIN: PLAN MANAGEMENT ============ -->
+    <sc-if value="{{ aPlans }}" hint-placeholder-val="{{ false }}">
+      <h1 style="font-family:Sora,sans-serif; font-size:24px; font-weight:800; margin:0 0 4px 0">Plan management</h1>
+      <div style="font-size:13px; color:#6B6E8C; margin-bottom:20px">Pricing and access per plan. Price changes apply to new subscribers only; existing subscribers keep their rate until renewal.</div>
+      <div class="tr-table" style="background:#FFFFFF; border:1px solid #E6E7F0; border-radius:16px; overflow:hidden">
+        <div style="display:grid; grid-template-columns:1.2fr 1fr 1fr 1.2fr 1fr 0.7fr; background:#FAFAFC; border-bottom:1px solid #E6E7F0; padding:12px 20px; font-size:11.5px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:#6B6E8C">
+          <span>Plan</span><span style="text-align:right">Price (₦/mo)</span><span style="text-align:center">Apps</span><span>Categories</span><span style="text-align:center">Subscribers</span><span style="text-align:center">Live</span>
+        </div>
+        <sc-for list="{{ plans }}" as="p" hint-placeholder-count="4">
+          <div style="display:grid; grid-template-columns:1.2fr 1fr 1fr 1.2fr 1fr 0.7fr; align-items:center; border-bottom:1px solid #F0F1F7; padding:14px 20px">
+            <div style="font-size:13.5px; font-weight:700">{{ p.name }}</div>
+            <div style="text-align:right; font-family:Sora,sans-serif; font-size:14px; font-weight:800">{{ p.price }}</div>
+            <div style="text-align:center; font-size:13px">{{ p.apps }}</div>
+            <div style="font-size:12px; color:#4A4D6B">{{ p.cats }}</div>
+            <div style="text-align:center; font-size:13px; font-weight:700">{{ p.subs }}</div>
+            <div style="text-align:center"><button onClick="{{ p.toggle }}" style="border:none; cursor:pointer; width:40px; height:22px; border-radius:999px; background:{{ p.tgBg }}; position:relative"><span style="position:absolute; top:2px; left:{{ p.tgLeft }}; width:18px; height:18px; border-radius:50%; background:#FFFFFF; transition:left 0.2s"></span></button></div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="background:#FFF8EC; border:1px solid #F2E2BC; border-radius:12px; padding:14px 18px; font-size:12.5px; color:#7A5A12; line-height:1.6; margin-top:16px">Plan configuration controls eligibility only. It can never be linked to promised earnings, returns or task guarantees anywhere in the product.</div>
+    </sc-if>
+
+    <!-- ============ ADMIN: CONTENT ============ -->
+    <sc-if value="{{ aContent }}" hint-placeholder-val="{{ false }}">
+      <h1 style="font-family:Sora,sans-serif; font-size:24px; font-weight:800; margin:0 0 4px 0">Content management</h1>
+      <div style="font-size:13px; color:#6B6E8C; margin-bottom:20px">Public pages, announcements and legal documents. Legal changes are versioned and require a second approver.</div>
+      <div class="tr-table" style="background:#FFFFFF; border:1px solid #E6E7F0; border-radius:16px; overflow:hidden">
+        <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr; background:#FAFAFC; border-bottom:1px solid #E6E7F0; padding:12px 20px; font-size:11.5px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:#6B6E8C">
+          <span>Document</span><span style="text-align:center">Type</span><span style="text-align:center">Status</span><span style="text-align:right">Updated</span>
+        </div>
+        <sc-for list="{{ content }}" as="c" hint-placeholder-count="5">
+          <div style="display:grid; grid-template-columns:2fr 1fr 1fr 1fr; align-items:center; border-bottom:1px solid #F0F1F7; padding:14px 20px">
+            <div style="font-size:13.5px; font-weight:700">{{ c.title }}</div>
+            <div style="text-align:center; font-size:12px; color:#6B6E8C">{{ c.type }}</div>
+            <div style="text-align:center"><span style="background:{{ c.stBg }}; color:{{ c.stFg }}; font-size:11px; font-weight:700; padding:3px 10px; border-radius:999px">{{ c.status }}</span></div>
+            <div style="text-align:right; font-size:12px; color:#6B6E8C">{{ c.updated }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <!-- ============ ADMIN: ROLES ============ -->
+    <sc-if value="{{ aRoles }}" hint-placeholder-val="{{ false }}">
+      <h1 style="font-family:Sora,sans-serif; font-size:24px; font-weight:800; margin:0 0 4px 0">Roles &amp; access</h1>
+      <div style="font-size:13px; color:#6B6E8C; margin-bottom:20px">Team members and permission scopes. Every scope change is written to the audit log.</div>
+      <div class="tr-table" style="background:#FFFFFF; border:1px solid #E6E7F0; border-radius:16px; overflow:hidden">
+        <div style="display:grid; grid-template-columns:1.6fr 1.2fr 1.6fr 0.8fr; background:#FAFAFC; border-bottom:1px solid #E6E7F0; padding:12px 20px; font-size:11.5px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:#6B6E8C">
+          <span>Member</span><span>Role</span><span>Scopes</span><span style="text-align:right">Status</span>
+        </div>
+        <sc-for list="{{ roles }}" as="r" hint-placeholder-count="4">
+          <div style="display:grid; grid-template-columns:1.6fr 1.2fr 1.6fr 0.8fr; align-items:center; border-bottom:1px solid #F0F1F7; padding:14px 20px">
+            <div><div style="font-size:13.5px; font-weight:700">{{ r.name }}</div><div style="font-size:11.5px; color:#6B6E8C">{{ r.email }}</div></div>
+            <div><span style="background:{{ r.roleBg }}; color:{{ r.roleFg }}; font-size:11px; font-weight:700; padding:3px 10px; border-radius:999px">{{ r.role }}</span></div>
+            <div style="font-size:12px; color:#4A4D6B">{{ r.scopes }}</div>
+            <div style="text-align:right; font-size:12px; font-weight:700; color:#0E7A59">Active</div>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <!-- ============ ADMIN: AUDIT LOG ============ -->
+    <sc-if value="{{ aAudit }}" hint-placeholder-val="{{ false }}">
+      <h1 style="font-family:Sora,sans-serif; font-size:24px; font-weight:800; margin:0 0 4px 0">Audit log</h1>
+      <div style="font-size:13px; color:#6B6E8C; margin-bottom:20px">Every privileged action, immutable and timestamped.</div>
+      <div style="background:#FFFFFF; border:1px solid #E6E7F0; border-radius:16px; overflow:hidden">
+        <sc-for list="{{ auditLog }}" as="a" hint-placeholder-count="7">
+          <div style="display:flex; gap:14px; align-items:center; border-bottom:1px solid #F0F1F7; padding:13px 20px">
+            <span style="width:30px; height:30px; border-radius:8px; background:{{ a.iconBg }}; color:{{ a.iconFg }}; display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0">{{ a.icon }}</span>
+            <div style="flex:1; min-width:0">
+              <div style="font-size:13px; font-weight:600; color:#171A3A"><strong>{{ a.actor }}</strong> {{ a.action }}</div>
+              <div style="font-size:11.5px; color:#9A9DBA">{{ a.target }}</div>
+            </div>
+            <span style="font-size:11.5px; color:#9A9DBA; white-space:nowrap">{{ a.time }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+
+  </div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    role: "support", view: "inbox",
+    ticketFilter: "open", curTicket: 0, replyText: "", replied: false, resolveMode: "resolved",
+    kyc: {}, payoutState: {}, fraudState: {}, configLive: [true, true, true, true, false], planLive: [true, true, true, true]
+  };
+  renderVals() {
+    const st = this.state;
+    const isSupport = st.role === "support";
+    const go = (v) => this.setState({ view: v });
+
+    const ticketDefs = [
+      { subject: "Withdrawal stuck on processing", user: "Adaeze Nwosu", id: "TK-4471", ago: "8m", cat: "Withdrawal", catBg: "#F0F4FF", catFg: "#2B5FCC", priority: "High", prBg: "#FDF6F6", prFg: "#B33A3E", status: "Open", ryse: "Skilled Ryser", wallet: "₦86,400",
+        thread: [
+          { who: "Adaeze", text: "I withdrew ₦50,000 to GTBank 3 hours ago and it still says processing. Is something wrong?", me: false, time: "3:41 PM" },
+          { who: "System", text: "First withdrawal to this account — flagged for standard compliance check.", me: false, time: "3:41 PM", sys: true }
+        ] },
+      { subject: "Task rejected unfairly — appeal", user: "Chidi Okeke", id: "TK-4470", ago: "22m", cat: "Task dispute", catBg: "#FFF8EC", catFg: "#B8860B", priority: "Normal", prBg: "#F4F5FA", prFg: "#6B6E8C", status: "Open", ryse: "Active Ryser", wallet: "₦12,200",
+        thread: [ { who: "Chidi", text: "My transcription was rejected but I followed every instruction. I already appealed — can someone look?", me: false, time: "3:20 PM" } ] },
+      { subject: "Can't complete liveness check", user: "Blessing Ade", id: "TK-4468", ago: "1h", cat: "KYC", catBg: "#EDF7F3", catFg: "#0E7A59", priority: "Normal", prBg: "#F4F5FA", prFg: "#6B6E8C", status: "Open", ryse: "New Ryser", wallet: "₦0",
+        thread: [ { who: "Blessing", text: "The selfie step keeps failing. My camera works fine in other apps.", me: false, time: "2:52 PM" } ] },
+      { subject: "Double charged for plan", user: "Tunde Fola", id: "TK-4465", ago: "2h", cat: "Payment", catBg: "#F0F4FF", catFg: "#2B5FCC", priority: "High", prBg: "#FDF6F6", prFg: "#B33A3E", status: "Open", ryse: "Pro Ryser", wallet: "₦140,800",
+        thread: [ { who: "Tunde", text: "I was charged ₦6,000 twice for my Riser renewal on the 15th.", me: false, time: "1:30 PM" } ] },
+      { subject: "How do promo credits work?", user: "Ngozi Ede", id: "TK-4460", ago: "4h", cat: "General", catBg: "#F4F5FA", catFg: "#6B6E8C", priority: "Low", prBg: "#F4F5FA", prFg: "#6B6E8C", status: "Open", ryse: "Active Ryser", wallet: "₦4,900",
+        thread: [ { who: "Ngozi", text: "Can I withdraw my ₦500 promo credit to my bank?", me: false, time: "11:05 AM" } ] }
+    ];
+    const cur = ticketDefs[st.curTicket];
+
+    const supportNav = [
+      { key: "inbox", icon: "✉", label: "Ticket inbox", badge: true, badgeN: "5", badgeBg: "#FF6A3D" },
+      { key: "disputes", icon: "⚖", label: "Disputes", badge: true, badgeN: "2", badgeBg: "#F5A623" },
+      { key: "resolved", icon: "✓", label: "Resolved" }
+    ];
+    const adminNav = [
+      { key: "overview", icon: "▦", label: "Overview" },
+      { key: "kyc", icon: "🪪", label: "KYC queue", badge: true, badgeN: "4", badgeBg: "#FF6A3D" },
+      { key: "payouts", icon: "💸", label: "Withdrawals", badge: true, badgeN: "4", badgeBg: "#F5A623" },
+      { key: "fraud", icon: "⚑", label: "Fraud & risk", badge: true, badgeN: "3", badgeBg: "#E5484D" },
+      { key: "config", icon: "🌍", label: "Countries & FX" },
+      { key: "plans", icon: "💠", label: "Plan management" },
+      { key: "content", icon: "📝", label: "Content" },
+      { key: "roles", icon: "🔑", label: "Roles & access" },
+      { key: "audit", icon: "📜", label: "Audit log" }
+    ];
+    const nav = isSupport ? supportNav : adminNav;
+    const activeView = isSupport ? "inbox" : (["overview","kyc","payouts","fraud","config","plans","content","roles","audit"].includes(st.view) ? st.view : "overview");
+
+    const thread = [...cur.thread];
+    if (st.replied) thread.push({ who: "You (Support)", text: st.replyText || "Thanks — I've looked into this and it's now sorted. Let me know if anything else comes up.", me: true, time: "now" });
+
+    const kycDefs = [
+      { id: 1, name: "Fatima Bello", country: "Nigeria", ago: "6m", idType: "NIN slip", live: "Passed", liveOk: true, risk: "Low", riskLevel: "low" },
+      { id: 2, name: "Kwame Mensah", country: "Ghana", ago: "18m", idType: "Passport", live: "Passed", liveOk: true, risk: "Low", riskLevel: "low" },
+      { id: 3, name: "James Otieno", country: "Kenya", ago: "40m", idType: "National ID", live: "Retry x2", liveOk: false, risk: "Medium", riskLevel: "med" },
+      { id: 4, name: "Anonymous User", country: "Nigeria", ago: "1h", idType: "Driver's licence", live: "Passed", liveOk: true, risk: "High — dup face", riskLevel: "high" }
+    ];
+    const payoutDefs = [
+      { id: 1, name: "Adaeze Nwosu", ref: "WD-88214", amount: "₦49,850", dest: "GTBank ····2841", check: "Passed", checkOk: true },
+      { id: 2, name: "Chidi Okeke", ref: "WD-88210", amount: "₦12,050", dest: "OPay ····7733", check: "Passed", checkOk: true },
+      { id: 3, name: "Samuel Eze", ref: "WD-88209", amount: "₦198,000", dest: "Access ····1120", check: "Large amount", checkOk: false },
+      { id: 4, name: "New Account", ref: "WD-88205", amount: "₦75,000", dest: "Kuda ····9981", check: "First payout", checkOk: false }
+    ];
+    const fraudDefs = [
+      { id: 1, title: "Suspected multi-accounting", meta: "3 accounts · same device fingerprint", severity: "High", sev: "high", accent: "#E5484D",
+        signals: ["Same device ID across 3 accounts", "Sequential bank accounts", "Referral loop detected"] },
+      { id: 2, title: "Answer-pattern anomaly", meta: "Tunde F. · AI evaluation tasks", severity: "Medium", sev: "med", accent: "#F5A623",
+        signals: ["Identical answer sequence x12", "Response time −60% vs peers", "Failed 2 attention checks"] },
+      { id: 3, title: "Rapid withdrawal after signup", meta: "New account · 2h old", severity: "Medium", sev: "med", accent: "#F5A623",
+        signals: ["Withdrawal 20m after first approval", "VPN egress", "Mismatched payout name"] }
+    ];
+    const configDefs = [
+      { flag: "🇳🇬", country: "Nigeria", currency: "NGN ₦", fee: "₦150 flat", fx: "₦1,540" },
+      { flag: "🇬🇭", country: "Ghana", currency: "GHS ₵", fee: "₵2.00", fx: "₵15.8" },
+      { flag: "🇰🇪", country: "Kenya", currency: "KES Sh", fee: "Sh30", fx: "Sh129" },
+      { flag: "🇿🇦", country: "South Africa", currency: "ZAR R", fee: "R6.00", fx: "R18.4" },
+      { flag: "🇪🇬", country: "Egypt", currency: "EGP £", fee: "—", fx: "£49.2" }
+    ];
+
+    return {
+      portalName: isSupport ? "Support Console" : "Admin Console",
+      roleLabel: isSupport ? "Support agent" : "Administrator",
+      avatarBg: isSupport ? "#FFC857" : "#E5484D", avatarInit: isSupport ? "SA" : "AD",
+      toggleRole: () => this.setState({ role: isSupport ? "admin" : "support", view: isSupport ? "overview" : "inbox" }),
+      navHeading: isSupport ? "Support" : "Administration",
+      nav: nav.map(n => ({ ...n, go: () => go(n.key),
+        bg: activeView === n.key ? "#FFF1EA" : "transparent",
+        fg: activeView === n.key ? "#E5552B" : "#4A4D6B",
+        weight: activeView === n.key ? 700 : 600,
+        op: activeView === n.key ? "1" : "0.6",
+        badge: !!n.badge, badgeN: n.badgeN, badgeBg: n.badgeBg })),
+
+      sInbox: isSupport,
+      aOverview: !isSupport && activeView === "overview",
+      aKyc: !isSupport && activeView === "kyc",
+      aPayouts: !isSupport && activeView === "payouts",
+      aFraud: !isSupport && activeView === "fraud",
+      aConfig: !isSupport && activeView === "config",
+      aPlans: !isSupport && activeView === "plans",
+      aContent: !isSupport && activeView === "content",
+      aRoles: !isSupport && activeView === "roles",
+      aAudit: !isSupport && activeView === "audit",
+
+      plans: [
+        { name: "Starter", price: "₦2,500", apps: "2", cats: "Core AI data", subs: "18,402" },
+        { name: "Riser", price: "₦6,000", apps: "5", cats: "+ transcription, annotation", subs: "14,118" },
+        { name: "Professional", price: "₦12,000", apps: "10", cats: "+ writing, testing", subs: "9,240" },
+        { name: "Expert", price: "₦24,000", apps: "Unltd", cats: "All + model-safety", subs: "3,860" }
+      ].map((p, i) => ({ ...p,
+        toggle: () => { const arr = [...st.planLive]; arr[i] = !arr[i]; this.setState({ planLive: arr }); },
+        tgBg: st.planLive[i] ? "#16A67A" : "#C3C5D6", tgLeft: st.planLive[i] ? "20px" : "2px" })),
+      content: [
+        { title: "Homepage hero", type: "Public page", status: "Published", stBg: "#EDF7F3", stFg: "#0E7A59", updated: "2 days ago" },
+        { title: "Launch announcement bar", type: "Banner", status: "Published", stBg: "#EDF7F3", stFg: "#0E7A59", updated: "5 days ago" },
+        { title: "Task-payment policy", type: "Legal", status: "Draft · needs approval", stBg: "#FFF8EC", stFg: "#B8860B", updated: "1 hour ago" },
+        { title: "Refund & cancellation policy", type: "Legal", status: "Published", stBg: "#EDF7F3", stFg: "#0E7A59", updated: "3 weeks ago" },
+        { title: "Community guidelines", type: "Legal", status: "Published", stBg: "#EDF7F3", stFg: "#0E7A59", updated: "1 month ago" }
+      ],
+      roles: [
+        { name: "David Okafor", email: "david@taskryse.com", role: "Administrator", roleBg: "#FDF6F6", roleFg: "#B33A3E", scopes: "Full access · payouts · KYC" },
+        { name: "Grace Adeyemi", email: "grace@taskryse.com", role: "Finance admin", roleBg: "#F0F4FF", roleFg: "#2B5FCC", scopes: "Payouts · FX · invoices" },
+        { name: "Mary Eze", email: "mary@taskryse.com", role: "Support lead", roleBg: "#FFF8EC", roleFg: "#B8860B", scopes: "Tickets · disputes · refunds" },
+        { name: "Samuel Bello", email: "samuel@taskryse.com", role: "Reviewer manager", roleBg: "#EDF7F3", roleFg: "#0E7A59", scopes: "Reviewer queue · escalations" }
+      ],
+
+      // support
+      ticketFilters: [["open","Open · 5"],["dispute","Disputes · 2"],["all","All"]].map(([k, label]) => ({
+        label, pick: () => this.setState({ ticketFilter: k }),
+        bg: st.ticketFilter === k ? "#171A3A" : "transparent", fg: st.ticketFilter === k ? "#FFFFFF" : "#6B6E8C" })),
+      tickets: ticketDefs.map((t, i) => ({ ...t,
+        open: () => this.setState({ curTicket: i, replied: false, replyText: "" }),
+        bg: st.curTicket === i ? "#FFF8F4" : "#FFFFFF",
+        accent: st.curTicket === i ? "3px solid #FF6A3D" : "3px solid transparent" })),
+      cur_subject: cur.subject, cur_id: cur.id, cur_cat: cur.cat, cur_ago: cur.ago + " ago",
+      cur_user: cur.user, cur_ryse: cur.ryse, cur_wallet: cur.wallet,
+      cur_status: st.replied ? "Resolved" : cur.status,
+      cur_stBg: st.replied ? "#EDF7F3" : "#FFF8EC", cur_stFg: st.replied ? "#0E7A59" : "#B8860B",
+      thread: thread.map(m => ({ who: m.who, text: m.text, time: m.time,
+        align: m.me ? "flex-end" : "flex-start", textAlign: m.me ? "right" : "left",
+        bg: m.me ? "#FF6A3D" : m.sys ? "#FAFAFC" : "#F4F5FA", fg: m.me ? "#FFFFFF" : "#171A3A",
+        border: m.sys ? "1px dashed #E1E2EC" : "none" })),
+      cannedReplies: [
+        { label: "Withdrawal timeline", text: "Thanks for your patience. Your withdrawal is in a standard compliance check because it's the first payout to this account. It will complete within 24 hours and you'll get a notification. No action needed on your side." },
+        { label: "Appeal received", text: "I can confirm your appeal was received and assigned to a different reviewer, who will independently re-check your submission within 72 hours. You'll be notified of the outcome." },
+        { label: "Promo credits", text: "Promo credits can be used to pay Taskryse fees and bills, but they aren't withdrawable to a bank account — they're separate from your earned balance. Your approved earnings always remain fully withdrawable." }
+      ].map(c => ({ label: c.label, use: () => this.setState({ replyText: c.text }) })),
+      replyText: st.replyText, setReply: (e) => this.setState({ replyText: e.target.value }),
+      replied: st.replied, resolveMode: st.resolveMode,
+      sendReply: () => this.setState({ replied: true, resolveMode: "in progress" }),
+      sendResolve: () => this.setState({ replied: true, resolveMode: "resolved" }),
+      escalate: () => this.setState({ replied: true, resolveMode: "escalated to admin" }),
+
+      // admin overview
+      adminStats: [
+        { label: "Active contributors", value: "48,210", color: "#171A3A", delta: "▲ 6.2% this week", deltaColor: "#0E7A59" },
+        { label: "Tasks approved today", value: "9,842", color: "#171A3A", delta: "▲ 3.1%", deltaColor: "#0E7A59" },
+        { label: "Pending KYC", value: "312", color: "#B8860B", delta: "4 high-risk", deltaColor: "#B33A3E" },
+        { label: "Withdrawals held", value: "₦2.1M", color: "#B8860B", delta: "4 need review", deltaColor: "#B8860B" },
+        { label: "Open fraud cases", value: "3", color: "#E5484D", delta: "1 high severity", deltaColor: "#B33A3E" },
+        { label: "Support backlog", value: "27", color: "#171A3A", delta: "avg 3.4h response", deltaColor: "#6B6E8C" }
+      ],
+      attention: [
+        { icon: "⚑", iconBg: "#FDF6F6", iconFg: "#E5484D", title: "High-severity fraud case", sub: "Suspected multi-accounting · 3 accounts", go: () => go("fraud") },
+        { icon: "🪪", iconBg: "#FFF8EC", iconFg: "#B8860B", title: "4 high-risk KYC submissions", sub: "Duplicate-face flag on 1", go: () => go("kyc") },
+        { icon: "💸", iconBg: "#FFF8EC", iconFg: "#B8860B", title: "Large withdrawal held", sub: "₦198,000 · Samuel Eze", go: () => go("payouts") },
+        { icon: "🌍", iconBg: "#F0F4FF", iconFg: "#2B5FCC", title: "Egypt launch pending", sub: "FX set, awaiting go-live toggle", go: () => go("config") }
+      ],
+      payoutChart: [60,75,55,85,70,95,80].map((h, i) => ({ h: h + "%", d: ["M","T","W","T","F","S","S"][i] })),
+
+      // kyc
+      kycQueue: kycDefs.map(k => {
+        const decision = st.kyc[k.id];
+        return { ...k,
+          liveBg: k.liveOk ? "#EDF7F3" : "#FFF8EC", liveFg: k.liveOk ? "#0E7A59" : "#B8860B",
+          riskBg: k.riskLevel === "low" ? "#EDF7F3" : k.riskLevel === "med" ? "#FFF8EC" : "#FDF6F6",
+          riskFg: k.riskLevel === "low" ? "#0E7A59" : k.riskLevel === "med" ? "#B8860B" : "#B33A3E",
+          pending: !decision, doneFlag: !!decision,
+          doneLabel: decision === "approve" ? "✓ Approved" : "✕ Rejected",
+          doneColor: decision === "approve" ? "#0E7A59" : "#B33A3E",
+          approve: () => this.setState({ kyc: { ...st.kyc, [k.id]: "approve" } }),
+          reject: () => this.setState({ kyc: { ...st.kyc, [k.id]: "reject" } }) };
+      }),
+      // payouts
+      payouts: payoutDefs.map(p => {
+        const d = st.payoutState[p.id];
+        return { name: p.name, id: p.ref, amount: p.amount, dest: p.dest, check: p.check,
+          checkBg: p.checkOk ? "#EDF7F3" : "#FFF8EC", checkFg: p.checkOk ? "#0E7A59" : "#B8860B",
+          pending: !d, doneFlag: !!d,
+          doneLabel: d === "release" ? "✓ Released" : "⏸ Held",
+          doneColor: d === "release" ? "#0E7A59" : "#B8860B",
+          release: () => this.setState({ payoutState: { ...st.payoutState, [p.id]: "release" } }),
+          hold: () => this.setState({ payoutState: { ...st.payoutState, [p.id]: "hold" } }) };
+      }),
+      // fraud
+      fraudCases: fraudDefs.map(f => {
+        const r = st.fraudState[f.id];
+        return { ...f,
+          sevBg: f.sev === "high" ? "#FDF6F6" : "#FFF8EC", sevFg: f.sev === "high" ? "#B33A3E" : "#B8860B",
+          resolved: !!r, resLabel: r === "freeze" ? "🔒 Account frozen · earnings held" : "✓ Cleared as false positive",
+          resColor: r === "freeze" ? "#B33A3E" : "#0E7A59",
+          freeze: () => this.setState({ fraudState: { ...st.fraudState, [f.id]: "freeze" } }),
+          clear: () => this.setState({ fraudState: { ...st.fraudState, [f.id]: "clear" } }) };
+      }),
+      // config
+      config: configDefs.map((c, i) => ({ ...c,
+        toggle: () => { const arr = [...st.configLive]; arr[i] = !arr[i]; this.setState({ configLive: arr }); },
+        tgBg: st.configLive[i] ? "#16A67A" : "#C3C5D6", tgLeft: st.configLive[i] ? "20px" : "2px" })),
+      // audit
+      auditLog: [
+        { icon: "✓", iconBg: "#EDF7F3", iconFg: "#0E7A59", actor: "admin.david", action: "approved KYC for", target: "Fatima Bello · NIN slip · FB-2201", time: "2m ago" },
+        { icon: "💸", iconBg: "#F0F4FF", iconFg: "#2B5FCC", actor: "admin.grace", action: "released withdrawal", target: "WD-88214 · ₦49,850 → GTBank", time: "14m ago" },
+        { icon: "🔒", iconBg: "#FDF6F6", iconFg: "#E5484D", actor: "admin.david", action: "froze account", target: "user #40218 · fraud case FR-118", time: "31m ago" },
+        { icon: "🌍", iconBg: "#FFF8EC", iconFg: "#B8860B", actor: "admin.grace", action: "updated FX rate", target: "NGN→USD ₦1,535 → ₦1,540", time: "1h ago" },
+        { icon: "⚖", iconBg: "#F4F5FA", iconFg: "#6B6E8C", actor: "support.mary", action: "escalated dispute", target: "TK-4470 · task rejection appeal", time: "2h ago" },
+        { icon: "💳", iconBg: "#F0F4FF", iconFg: "#2B5FCC", actor: "admin.david", action: "issued refund", target: "TK-4465 · ₦6,000 duplicate charge", time: "3h ago" },
+        { icon: "🛡", iconBg: "#EDF7F3", iconFg: "#0E7A59", actor: "system", action: "auto-flagged", target: "answer-pattern anomaly · user Tunde F.", time: "4h ago" }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

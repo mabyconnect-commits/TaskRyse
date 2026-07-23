@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Albert+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#FAFAFC; font-family:'Albert Sans',sans-serif; color:#171A3A; }
+  a { color:#FF6A3D; text-decoration:none; }
+  a:hover { color:#E5552B; }
+</style>
+</helmet>
+
+<div style="overflow-x:hidden">
+<!-- Nav -->
+<nav style="background:#FFFFFF; border-bottom:1px solid #ECEDF4; position:sticky; top:0; z-index:50">
+  <div style="max-width:1200px; margin:0 auto; padding:10px 20px; min-height:48px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px 24px">
+    <div style="display:flex; align-items:center; gap:16px 36px; flex-wrap:wrap">
+      <a href="Taskryse Home.dc.html"><img src="assets/taskryse-logo.png" alt="Taskryse" style="height:34px; width:auto"></a>
+      <div style="display:flex; gap:10px 22px; font-size:14.5px; font-weight:500; flex-wrap:wrap">
+        <a href="#" style="color:#FF6A3D; font-weight:700">How it works</a>
+        <a href="Taskryse Home.dc.html#categories" style="color:#171A3A" style-hover="color:#FF6A3D">Tasks</a>
+        <a href="Taskryse Pricing.dc.html" style="color:#171A3A" style-hover="color:#FF6A3D">Plans</a>
+        <a href="Taskryse For Business.dc.html" style="color:#171A3A" style-hover="color:#FF6A3D">For Business</a>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:14px">
+      <a href="Taskryse Auth.dc.html" style="font-size:14.5px; font-weight:600; color:#171A3A" style-hover="color:#FF6A3D">Sign in</a>
+      <a href="Taskryse Pricing.dc.html" style="background:#FF6A3D; color:#FFFFFF; font-size:14.5px; font-weight:700; padding:11px 22px; border-radius:10px" style-hover="background:#E5552B; color:#FFFFFF">Start Your Ryse</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<header style="background:#171A3A; color:#FFFFFF">
+  <div style="max-width:1200px; margin:0 auto; padding:clamp(48px,7vw,80px) 24px; text-align:center">
+    <div style="display:inline-flex; align-items:flex-end; gap:4px; margin-bottom:24px">
+      <span style="width:14px; height:12px; background:#FFC857; border-radius:3px"></span>
+      <span style="width:14px; height:21px; background:#FF8A3D; border-radius:3px"></span>
+      <span style="width:14px; height:32px; background:#FF6A3D; border-radius:3px"></span>
+    </div>
+    <h1 style="font-family:Sora,sans-serif; font-size:clamp(32px,6vw,46px); font-weight:800; margin:0 0 16px 0; letter-spacing:-0.02em">How Taskryse works</h1>
+    <p style="font-size:17px; color:#B9BCD9; max-width:600px; margin:0 auto; line-height:1.65">From creating your profile to withdrawing in naira — every step, exactly as it happens. No shortcuts, no promises, no surprises.</p>
+  </div>
+</header>
+
+<!-- Journey steps -->
+<section style="max-width:900px; margin:0 auto; padding:clamp(56px,8vw,88px) 24px 24px 24px">
+  <sc-for list="{{ journey }}" as="j" hint-placeholder-count="6">
+    <div style="display:grid; grid-template-columns:52px 1fr; gap:20px">
+      <div style="display:flex; flex-direction:column; align-items:center">
+        <div style="width:44px; height:44px; border-radius:12px; background:{{ j.bg }}; color:{{ j.fg }}; display:flex; align-items:center; justify-content:center; font-family:Sora,sans-serif; font-weight:800; font-size:17px; flex-shrink:0">{{ j.n }}</div>
+        <sc-if value="{{ j.line }}" hint-placeholder-val="{{ true }}"><div style="width:2px; flex:1; background:#ECEDF4; margin:8px 0"></div></sc-if>
+      </div>
+      <div style="padding-bottom:40px">
+        <h2 style="font-family:Sora,sans-serif; font-size:clamp(20px,4vw,24px); font-weight:800; margin:2px 0 8px 0">{{ j.title }}</h2>
+        <p style="font-size:15.5px; color:#4A4D6B; line-height:1.7; margin:0 0 16px 0">{{ j.desc }}</p>
+        <div style="background:#FFFFFF; border:1px solid #ECEDF4; border-radius:14px; padding:18px 20px">
+          <div style="font-size:12px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:{{ j.fg }}; margin-bottom:10px">{{ j.boxLabel }}</div>
+          <div style="display:flex; flex-direction:column; gap:8px">
+            <sc-for list="{{ j.points }}" as="pt" hint-placeholder-count="3">
+              <div style="display:flex; gap:10px; font-size:14px; color:#4A4D6B; line-height:1.55"><span style="color:#16A67A; font-weight:700; flex-shrink:0">✓</span><span>{{ pt }}</span></div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+  </sc-for>
+</section>
+
+<!-- What Taskryse is NOT -->
+<section style="background:#FFFFFF; border-top:1px solid #ECEDF4; border-bottom:1px solid #ECEDF4">
+  <div style="max-width:1200px; margin:0 auto; padding:clamp(56px,8vw,88px) 24px">
+    <div style="text-align:center; margin-bottom:40px">
+      <div style="font-family:Sora,sans-serif; font-size:13px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#FF6A3D; margin-bottom:12px">Read this before you join</div>
+      <h2 style="font-family:Sora,sans-serif; font-size:clamp(26px,5vw,34px); font-weight:800; margin:0">What Taskryse is — and what it is not</h2>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:20px; max-width:960px; margin:0 auto">
+      <div style="border:1px solid #CDEBDF; background:#F4FBF8; border-radius:18px; padding:28px 26px">
+        <div style="font-family:Sora,sans-serif; font-weight:800; font-size:18px; color:#0E7A59; margin-bottom:16px">Taskryse is</div>
+        <div style="display:flex; flex-direction:column; gap:11px">
+          <sc-for list="{{ isList }}" as="x" hint-placeholder-count="5">
+            <div style="display:flex; gap:10px; font-size:14.5px; color:#1E4638; line-height:1.6"><span style="color:#16A67A; font-weight:700; flex-shrink:0">✓</span><span>{{ x }}</span></div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="border:1px solid #F3D2D3; background:#FDF6F6; border-radius:18px; padding:28px 26px">
+        <div style="font-family:Sora,sans-serif; font-weight:800; font-size:18px; color:#B33A3E; margin-bottom:16px">Taskryse is not</div>
+        <div style="display:flex; flex-direction:column; gap:11px">
+          <sc-for list="{{ notList }}" as="x" hint-placeholder-count="5">
+            <div style="display:flex; gap:10px; font-size:14.5px; color:#5A2E30; line-height:1.6"><span style="color:#E5484D; font-weight:700; flex-shrink:0">✕</span><span>{{ x }}</span></div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Review timeline -->
+<section style="max-width:1200px; margin:0 auto; padding:clamp(56px,8vw,88px) 24px">
+  <div style="text-align:center; margin-bottom:40px">
+    <div style="font-family:Sora,sans-serif; font-size:13px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#FF6A3D; margin-bottom:12px">After you submit</div>
+    <h2 style="font-family:Sora,sans-serif; font-size:clamp(26px,5vw,34px); font-weight:800; margin:0 0 12px 0">Every submission gets one of three outcomes</h2>
+    <p style="font-size:15.5px; color:#4A4D6B; max-width:560px; margin:0 auto; line-height:1.6">Reviews typically complete within 48 hours. You always see who reviewed, why, and what to do next.</p>
+  </div>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:18px">
+    <sc-for list="{{ outcomes }}" as="o" hint-placeholder-count="3">
+      <div style="background:#FFFFFF; border:1px solid #ECEDF4; border-top:4px solid {{ o.color }}; border-radius:16px; padding:26px 24px">
+        <div style="display:inline-flex; align-items:center; gap:8px; background:{{ o.chipBg }}; color:{{ o.chipFg }}; font-size:12.5px; font-weight:700; padding:5px 12px; border-radius:999px; margin-bottom:14px">
+          <span style="width:7px; height:7px; border-radius:50%; background:{{ o.color }}"></span>{{ o.status }}
+        </div>
+        <div style="font-family:Sora,sans-serif; font-weight:700; font-size:17px; margin-bottom:8px">{{ o.title }}</div>
+        <div style="font-size:14px; color:#4A4D6B; line-height:1.65">{{ o.desc }}</div>
+      </div>
+    </sc-for>
+  </div>
+</section>
+
+<!-- CTA -->
+<section style="max-width:1200px; margin:0 auto; padding:0 24px clamp(56px,8vw,88px) 24px">
+  <div style="background:#171A3A; border-radius:24px; padding:clamp(32px,6vw,56px); text-align:center; color:#FFFFFF">
+    <h2 style="font-family:Sora,sans-serif; font-size:clamp(26px,5vw,34px); font-weight:800; margin:0 0 12px 0">Ready to see your eligible tasks?</h2>
+    <p style="font-size:16px; color:#B9BCD9; margin:0 auto 28px auto; max-width:480px; line-height:1.6">Create your profile and pass verification — your first eligible task categories unlock the same day.</p>
+    <div style="display:flex; justify-content:center; gap:14px; flex-wrap:wrap">
+      <a href="Taskryse Pricing.dc.html" style="background:#FF6A3D; color:#FFFFFF; font-family:Sora,sans-serif; font-size:15.5px; font-weight:700; padding:15px 30px; border-radius:12px" style-hover="background:#E5552B; color:#FFFFFF">Start Your Ryse</a>
+      <a href="Taskryse Home.dc.html#categories" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.18); color:#FFFFFF; font-family:Sora,sans-serif; font-size:15.5px; font-weight:600; padding:15px 30px; border-radius:12px" style-hover="background:rgba(255,255,255,0.14); color:#FFFFFF">Explore Tasks</a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer style="background:#0F1128; color:#B9BCD9">
+  <div style="max-width:1200px; margin:0 auto; padding:48px 24px 36px 24px">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; margin-bottom:28px">
+      <div style="font-family:Sora,sans-serif; font-weight:800; font-size:18px; color:#FFFFFF; display:flex; align-items:center; gap:10px">
+        <span style="display:inline-flex; align-items:flex-end; gap:2px"><span style="width:6px; height:7px; background:#FFC857; border-radius:1.5px"></span><span style="width:6px; height:11px; background:#FF8A3D; border-radius:1.5px"></span><span style="width:6px; height:15px; background:#FF6A3D; border-radius:1.5px"></span></span>TASKRYSE
+      </div>
+      <div style="display:flex; gap:12px 24px; flex-wrap:wrap; font-size:14px">
+        <a href="Taskryse Home.dc.html" style="color:#8B8FB3" style-hover="color:#FFC857">Home</a>
+        <a href="Taskryse Pricing.dc.html" style="color:#8B8FB3" style-hover="color:#FFC857">Plans</a>
+        <a href="Taskryse For Business.dc.html" style="color:#8B8FB3" style-hover="color:#FFC857">For Business</a>
+        <a href="Taskryse Explore.dc.html" style="color:#8B8FB3" style-hover="color:#FFC857">Trust &amp; safety</a>
+      </div>
+    </div>
+    <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:24px; font-size:13px; color:#6B6E8C; line-height:1.7">A Taskryse plan provides access to platform features, qualifications, learning resources and eligible task categories. Purchasing a plan does not guarantee tasks, earnings or fixed returns. Contributors earn only when legitimate work is completed and approved.<br><br>© 2026 Taskryse. All rights reserved.</div>
+  </div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      journey: [
+        { n: "1", bg: "#FFF1EA", fg: "#E5552B", line: true, title: "Create your profile & verify your identity",
+          desc: "Sign up with email or phone, tell us your skills, languages and availability, then complete identity verification with a government ID and a quick liveness selfie. Verification protects everyone — sponsors know work comes from real people, and you know every other contributor passed the same check.",
+          boxLabel: "What you'll need",
+          points: ["A government-issued ID (NIN slip, driver's licence, passport or voter's card)", "5–10 minutes and a phone camera for the liveness selfie", "Your bank account or mobile money details for payouts"] },
+        { n: "2", bg: "#FFF1EA", fg: "#E5552B", line: true, title: "Take the intro assessment & pick a plan",
+          desc: "A short assessment measures attention to detail, English comprehension and instruction-following. Based on your result and skills, we recommend a plan. The plan unlocks eligible task categories — it never buys tasks or earnings, and task availability varies.",
+          boxLabel: "Good to know",
+          points: ["The assessment takes about 15 minutes and can be retaken after 7 days", "Every plan has a 7-day refund window before your first task acceptance", "You can upgrade, downgrade or cancel anytime"] },
+        { n: "3", bg: "#FFF8EC", fg: "#B8860B", line: true, title: "Find eligible tasks in the marketplace",
+          desc: "The marketplace shows tasks you're eligible for first — filtered by your plan, qualifications, country, language and device. Every task card states the exact payment, estimated time, deadline and available slots before you accept.",
+          boxLabel: "On every task card",
+          points: ["Exact payment in ₦ (or a stated range) — what the card says is what approval pays", "Verified sponsor badge, difficulty and estimated duration", "Whether a qualification test is required first"] },
+        { n: "4", bg: "#FFF8EC", fg: "#B8860B", line: true, title: "Complete the work in a focused workspace",
+          desc: "Accepting a task locks your slot and starts the deadline. The workspace keeps instructions beside your work, autosaves continuously — including through network drops — and runs quality checks before you can submit.",
+          boxLabel: "Built for your phone",
+          points: ["Autosave every few seconds, offline-tolerant for unstable connections", "Quality warnings before submission, so avoidable rejections don't happen", "Pause and resume before the deadline; report a task if instructions are wrong"] },
+        { n: "5", bg: "#EDF7F3", fg: "#0E7A59", line: true, title: "Get reviewed & get paid",
+          desc: "A trained reviewer or the sponsor checks your submission against a published rubric — typically within 48 hours. Approved work moves the task's stated payment into your withdrawable balance. Rejections always come with a reason, and you can appeal to a different reviewer.",
+          boxLabel: "Your money's path",
+          points: ["Submitted → pending review → approved → withdrawable, visible at every stage", "Withdraw in ₦ to bank or mobile money; fees and FX shown before you confirm", "Withdrawals protected by PIN + OTP, typically arriving within 24 hours"] },
+        { n: "6", bg: "#EDF7F3", fg: "#0E7A59", line: false, title: "Ryse to better opportunities",
+          desc: "Approved tasks, quality score and on-time rate raise your Ryse Level — from New Ryser to Elite Ryser. Higher levels unlock harder categories, priority access and sponsored opportunities. Progression is earned by work only — never by spending or recruiting.",
+          boxLabel: "What levels unlock",
+          points: ["Harder, better-paying task categories and early access to new work", "Learning pathways and certificates that qualify you for more", "Sponsored opportunities reserved for consistent, high-quality Rysers"] }
+      ],
+      isList: [
+        "A work platform: verified people completing real digital tasks for verified sponsors",
+        "Transparent about pay — every task states its payment before you accept",
+        "Skill-based — better work unlocks better categories",
+        "Local — payouts in naira, cedi, shilling, rand and more",
+        "Reviewed — every submission is checked, and every decision can be appealed"
+      ],
+      notList: [
+        "An investment platform — there are no deposits and no returns",
+        "A guaranteed-income scheme — nobody can promise you tasks or earnings",
+        "A referral pyramid — referral rewards are fixed promotional credits, never commissions on others' payments",
+        "A betting or trading app — your balance only grows from approved work",
+        "A place where a bigger plan means bigger earnings — plans unlock access, work earns money"
+      ],
+      outcomes: [
+        { status: "Approved", color: "#16A67A", chipBg: "#EDF7F3", chipFg: "#0E7A59", title: "Payment released",
+          desc: "The task's stated payment moves to your withdrawable balance and your quality score rises. Most submissions from established Rysers end here." },
+        { status: "Revision requested", color: "#F5A623", chipBg: "#FFF8EC", chipFg: "#B8860B", title: "Fix and resubmit",
+          desc: "The reviewer tells you exactly what to change. Resubmit within the revision deadline and it re-enters review — no penalty to your quality score if the revision passes." },
+        { status: "Rejected", color: "#E5484D", chipBg: "#FDF6F6", chipFg: "#B33A3E", title: "Reason given, appeal open",
+          desc: "You see the rubric criteria that failed. If you believe the decision is wrong, appeal within 7 days — a different reviewer re-checks it independently." }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

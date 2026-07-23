@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Albert+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#FAFAFC; font-family:'Albert Sans',sans-serif; color:#171A3A; }
+  a { color:#FF6A3D; text-decoration:none; }
+  a:hover { color:#E5552B; }
+</style>
+</helmet>
+
+<div style="overflow-x:hidden">
+<!-- Announcement -->
+<sc-if value="{{ showAnnouncement }}" hint-placeholder-val="{{ true }}">
+  <div style="background:#171A3A; color:#D8DAF0; font-size:13.5px; text-align:center; padding:9px 24px">Now paying out in Nigerian naira, Ghanaian cedi, Kenyan shilling and South African rand. <a href="#payouts" style="color:#FFC857; font-weight:600">See supported countries →</a></div>
+</sc-if>
+
+<!-- Nav -->
+<nav style="background:#FFFFFF; border-bottom:1px solid #ECEDF4; position:sticky; top:0; z-index:50">
+  <div style="max-width:1200px; margin:0 auto; padding:10px 20px; min-height:48px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px 24px">
+    <div style="display:flex; align-items:center; gap:16px 36px; flex-wrap:wrap">
+      <img src="assets/taskryse-logo.png" alt="Taskryse" style="height:34px; width:auto">
+      <div style="display:flex; gap:10px 22px; font-size:14.5px; font-weight:500; flex-wrap:wrap">
+        <a href="Taskryse How It Works.dc.html" style="color:#171A3A" style-hover="color:#FF6A3D">How it works</a>
+        <a href="#categories" style="color:#171A3A" style-hover="color:#FF6A3D">Tasks</a>
+        <a href="Taskryse Pricing.dc.html" style="color:#171A3A" style-hover="color:#FF6A3D">Plans</a>
+        <a href="Taskryse For Business.dc.html" style="color:#171A3A" style-hover="color:#FF6A3D">For Business</a>
+        <a href="#payouts" style="color:#171A3A" style-hover="color:#FF6A3D">Payouts</a>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:14px">
+      <a href="Taskryse Auth.dc.html" style="font-size:14.5px; font-weight:600; color:#171A3A" style-hover="color:#FF6A3D">Sign in</a>
+      <a href="Taskryse Pricing.dc.html" style="background:#FF6A3D; color:#FFFFFF; font-size:14.5px; font-weight:700; padding:11px 22px; border-radius:10px" style-hover="background:#E5552B; color:#FFFFFF">Start Your Ryse</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<header style="background:#171A3A; color:#FFFFFF; overflow:hidden">
+  <div style="max-width:1200px; margin:0 auto; padding:clamp(48px,7vw,88px) 24px clamp(56px,8vw,96px) 24px; display:grid; grid-template-columns:repeat(auto-fit,minmax(320px,1fr)); gap:48px; align-items:center">
+    <div>
+      <div style="display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.14); border-radius:999px; padding:7px 16px; font-size:13px; font-weight:600; color:#FFC857; margin-bottom:28px">
+        <span style="width:7px; height:7px; border-radius:50%; background:#16A67A"></span>You earn only from approved work — never from joining
+      </div>
+      <h1 style="font-family:Sora,sans-serif; font-size:clamp(34px,6.5vw,52px); font-weight:800; line-height:1.08; letter-spacing:-0.02em; margin:0 0 22px 0">Turn your skills into verified opportunities.</h1>
+      <p style="font-size:19px; line-height:1.6; color:#B9BCD9; margin:0 0 36px 0; max-width:520px">Complete AI and digital tasks, develop your expertise and get paid for approved work — in your local currency.</p>
+      <div style="display:flex; gap:14px; margin-bottom:44px; flex-wrap:wrap">
+        <a href="Taskryse Pricing.dc.html" style="background:#FF6A3D; color:#FFFFFF; font-family:Sora,sans-serif; font-size:16px; font-weight:700; padding:16px 30px; border-radius:12px" style-hover="background:#E5552B; color:#FFFFFF">Start Your Ryse</a>
+        <a href="#categories" style="background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.18); color:#FFFFFF; font-family:Sora,sans-serif; font-size:16px; font-weight:600; padding:16px 30px; border-radius:12px" style-hover="background:rgba(255,255,255,0.14); color:#FFFFFF">Explore Tasks</a>
+      </div>
+      <div style="display:flex; gap:24px 36px; flex-wrap:wrap">
+        <sc-for list="{{ heroStats }}" as="hs" hint-placeholder-count="3">
+          <div>
+            <div style="font-family:Sora,sans-serif; font-size:24px; font-weight:800; color:#FFFFFF">{{ hs.v }}</div>
+            <div style="font-size:13px; color:#8B8FB3; margin-top:2px">{{ hs.l }}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <!-- Product mock -->
+    <div style="position:relative">
+      <div style="background:#FFFFFF; border-radius:18px; padding:24px; color:#171A3A; box-shadow:0 30px 80px rgba(0,0,0,0.4)">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px">
+          <div style="font-family:Sora,sans-serif; font-weight:700; font-size:15px">Recommended for you</div>
+          <span style="background:#EDF7F3; color:#0E7A59; font-size:12px; font-weight:700; padding:4px 10px; border-radius:999px">Eligible</span>
+        </div>
+        <div style="border:1px solid #ECEDF4; border-radius:14px; padding:18px; margin-bottom:12px">
+          <div style="display:flex; justify-content:space-between; margin-bottom:8px">
+            <div style="font-weight:700; font-size:15px">AI response evaluation — English (Nigeria)</div>
+          </div>
+          <div style="font-size:13px; color:#6B6E8C; margin-bottom:14px">Rate model answers for accuracy and tone · Verified sponsor ✓</div>
+          <div style="display:flex; justify-content:space-between; align-items:center">
+            <div style="display:flex; gap:8px">
+              <span style="background:#F4F5FA; font-size:12px; font-weight:600; padding:4px 10px; border-radius:999px; color:#4A4D6B">~25 min</span>
+              <span style="background:#F4F5FA; font-size:12px; font-weight:600; padding:4px 10px; border-radius:999px; color:#4A4D6B">Beginner</span>
+            </div>
+            <div style="font-family:Sora,sans-serif; font-weight:800; font-size:16px; color:#171A3A">{{ mockPay1 }}</div>
+          </div>
+        </div>
+        <div style="border:1px solid #ECEDF4; border-radius:14px; padding:18px; margin-bottom:16px">
+          <div style="font-weight:700; font-size:15px; margin-bottom:8px">Audio transcription — Yorùbá speech</div>
+          <div style="font-size:13px; color:#6B6E8C; margin-bottom:14px">Transcribe short voice clips · Qualification required</div>
+          <div style="display:flex; justify-content:space-between; align-items:center">
+            <div style="display:flex; gap:8px">
+              <span style="background:#F4F5FA; font-size:12px; font-weight:600; padding:4px 10px; border-radius:999px; color:#4A4D6B">~40 min</span>
+              <span style="background:#FFF8EC; font-size:12px; font-weight:600; padding:4px 10px; border-radius:999px; color:#B8860B">Intermediate</span>
+            </div>
+            <div style="font-family:Sora,sans-serif; font-weight:800; font-size:16px">{{ mockPay2 }}</div>
+          </div>
+        </div>
+        <div style="background:#EDF7F3; border-radius:12px; padding:14px 16px; display:flex; justify-content:space-between; align-items:center">
+          <div style="font-size:13.5px; font-weight:600; color:#0E7A59">Task approved · payment released</div>
+          <div style="font-family:Sora,sans-serif; font-weight:800; font-size:15px; color:#0E7A59">+{{ mockPay3 }}</div>
+        </div>
+      </div>
+      <div style="position:absolute; right:8px; bottom:-24px; background:#FFFFFF; border-radius:14px; padding:14px 18px; box-shadow:0 16px 48px rgba(0,0,0,0.35); display:flex; align-items:center; gap:12px; color:#171A3A">
+        <div style="display:flex; align-items:flex-end; gap:3px">
+          <div style="width:8px; height:8px; background:#FFC857; border-radius:2px"></div>
+          <div style="width:8px; height:14px; background:#FF8A3D; border-radius:2px"></div>
+          <div style="width:8px; height:20px; background:#FF6A3D; border-radius:2px"></div>
+        </div>
+        <div>
+          <div style="font-size:12px; color:#6B6E8C">Ryse Level</div>
+          <div style="font-family:Sora,sans-serif; font-weight:800; font-size:14px">Skilled Ryser</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Trust strip -->
+<div style="background:#FFFFFF; border-bottom:1px solid #ECEDF4">
+  <div style="max-width:1200px; margin:0 auto; padding:20px 32px; display:flex; justify-content:center; gap:10px 40px; flex-wrap:wrap; font-size:14px; font-weight:600; color:#6B6E8C">
+    <span>✓ Identity-verified contributors</span><span>✓ Verified sponsors only</span><span>✓ Transparent fees &amp; FX</span><span>✓ No earnings promises — ever</span>
+  </div>
+</div>
+
+<!-- 3 steps -->
+<section id="how" style="max-width:1200px; margin:0 auto; padding:clamp(56px,8vw,96px) 24px 40px 24px">
+  <div style="text-align:center; margin-bottom:56px">
+    <div style="font-family:Sora,sans-serif; font-size:13px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#FF6A3D; margin-bottom:12px">How Taskryse works</div>
+    <h2 style="font-family:Sora,sans-serif; font-size:clamp(28px,5.5vw,38px); font-weight:800; margin:0; letter-spacing:-0.02em">Complete. Grow. Rise.</h2>
+  </div>
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:20px">
+    <sc-for list="{{ steps }}" as="s" hint-placeholder-count="3">
+      <div style="background:#FFFFFF; border:1px solid #ECEDF4; border-radius:18px; padding:32px 28px">
+        <div style="width:46px; height:46px; border-radius:12px; background:{{ s.bg }}; color:{{ s.fg }}; display:flex; align-items:center; justify-content:center; font-family:Sora,sans-serif; font-weight:800; font-size:18px; margin-bottom:20px">{{ s.n }}</div>
+        <h3 style="font-family:Sora,sans-serif; font-size:20px; font-weight:700; margin:0 0 10px 0">{{ s.title }}</h3>
+        <p style="font-size:15px; color:#4A4D6B; line-height:1.65; margin:0">{{ s.desc }}</p>
+      </div>
+    </sc-for>
+  </div>
+</section>
+
+<!-- Payment explanation -->
+<section style="max-width:1200px; margin:0 auto; padding:40px 24px clamp(56px,8vw,96px) 24px">
+  <div style="background:#FFFFFF; border:1px solid #ECEDF4; border-radius:20px; padding:clamp(24px,4.5vw,48px); display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:40px; align-items:center">
+    <div>
+      <h3 style="font-family:Sora,sans-serif; font-size:26px; font-weight:800; margin:0 0 14px 0; letter-spacing:-0.01em">How contributor payments work</h3>
+      <p style="font-size:15.5px; color:#4A4D6B; line-height:1.7; margin:0 0 18px 0">Your plan unlocks eligible task categories — it never buys earnings. Task availability varies, and every payment depends on successful completion and approval by a reviewer or sponsor.</p>
+      <a href="Taskryse Legal.dc.html" style="font-weight:700; font-size:15px">Read the task-payment policy →</a>
+    </div>
+    <div style="display:flex; flex-direction:column; gap:0">
+      <sc-for list="{{ payFlow }}" as="pf" hint-placeholder-count="4">
+        <div style="display:flex; gap:16px">
+          <div style="display:flex; flex-direction:column; align-items:center">
+            <div style="width:12px; height:12px; border-radius:50%; background:{{ pf.color }}; margin-top:5px"></div>
+            <sc-if value="{{ pf.line }}" hint-placeholder-val="{{ true }}"><div style="width:2px; flex:1; background:#ECEDF4; margin:4px 0"></div></sc-if>
+          </div>
+          <div style="padding-bottom:20px">
+            <div style="font-weight:700; font-size:15px">{{ pf.title }}</div>
+            <div style="font-size:14px; color:#6B6E8C; line-height:1.55">{{ pf.desc }}</div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<!-- Categories -->
+<section id="categories" style="background:#FFFFFF; border-top:1px solid #ECEDF4; border-bottom:1px solid #ECEDF4">
+  <div style="max-width:1200px; margin:0 auto; padding:clamp(56px,8vw,96px) 24px">
+    <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:44px; flex-wrap:wrap; gap:16px">
+      <div>
+        <div style="font-family:Sora,sans-serif; font-size:13px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#FF6A3D; margin-bottom:12px">Task categories</div>
+        <h2 style="font-family:Sora,sans-serif; font-size:clamp(27px,5vw,36px); font-weight:800; margin:0; letter-spacing:-0.02em">Real work, from AI data to professional projects</h2>
+      </div>
+      <a href="Taskryse Explore.dc.html" style="font-weight:700; font-size:15px; flex-shrink:0">Browse all categories →</a>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:18px">
+      <sc-for list="{{ categories }}" as="c" hint-placeholder-count="6">
+        <div style="border:1px solid #ECEDF4; border-radius:16px; padding:26px 24px" style-hover="border-color:#FF6A3D">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px">
+            <div style="font-family:Sora,sans-serif; font-weight:700; font-size:17px">{{ c.name }}</div>
+            <span style="background:#F4F5FA; color:#4A4D6B; font-size:12px; font-weight:700; padding:4px 10px; border-radius:999px">{{ c.range }}</span>
+          </div>
+          <div style="font-size:14px; color:#6B6E8C; line-height:1.6; margin-bottom:14px">{{ c.desc }}</div>
+          <div style="font-size:13px; font-weight:600; color:{{ c.tagColor }}">{{ c.tag }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<!-- Payouts -->
+<section id="payouts" style="max-width:1200px; margin:0 auto; padding:clamp(56px,8vw,96px) 24px">
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:44px; align-items:center">
+    <div>
+      <div style="font-family:Sora,sans-serif; font-size:13px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#FF6A3D; margin-bottom:12px">Local-currency payouts</div>
+      <h2 style="font-family:Sora,sans-serif; font-size:clamp(27px,5vw,36px); font-weight:800; margin:0 0 16px 0; letter-spacing:-0.02em">Withdraw in naira. Or cedi, shilling, rand…</h2>
+      <p style="font-size:16px; color:#4A4D6B; line-height:1.7; margin:0 0 24px 0">Approved earnings go to your local bank account or mobile money wallet. Fees and exchange rates are shown before you confirm — no surprises on arrival.</p>
+      <div style="display:flex; flex-wrap:wrap; gap:8px">
+        <sc-for list="{{ currencies }}" as="cur" hint-placeholder-count="7">
+          <span style="background:#FFFFFF; border:1px solid #ECEDF4; font-size:13.5px; font-weight:600; padding:8px 14px; border-radius:999px">{{ cur }}</span>
+        </sc-for>
+      </div>
+    </div>
+    <div style="background:#171A3A; border-radius:20px; padding:32px; color:#FFFFFF">
+      <div style="font-size:13px; color:#8B8FB3; margin-bottom:6px">Withdrawable balance</div>
+      <div style="font-family:Sora,sans-serif; font-size:clamp(26px,5vw,34px); font-weight:800; margin-bottom:24px">₦86,400</div>
+      <div style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-radius:14px; padding:18px 20px; margin-bottom:12px">
+        <div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:10px"><span style="color:#B9BCD9">Withdraw to</span><span style="font-weight:700">GTBank ····2841</span></div>
+        <div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:10px"><span style="color:#B9BCD9">Amount</span><span style="font-weight:700">₦50,000</span></div>
+        <div style="display:flex; justify-content:space-between; font-size:14px; margin-bottom:10px"><span style="color:#B9BCD9">Processing fee</span><span style="font-weight:700">₦150</span></div>
+        <div style="display:flex; justify-content:space-between; font-size:14px; padding-top:10px; border-top:1px solid rgba(255,255,255,0.1)"><span style="color:#B9BCD9">You receive</span><span style="font-family:Sora,sans-serif; font-weight:800; color:#FFC857">₦49,850</span></div>
+      </div>
+      <div style="display:flex; align-items:center; gap:8px; font-size:13px; color:#8B8FB3"><span style="width:7px; height:7px; border-radius:50%; background:#16A67A"></span>Typically arrives within 24 hours · protected by withdrawal PIN + OTP</div>
+    </div>
+  </div>
+</section>
+
+<!-- Plans -->
+<section id="plans" style="background:#FFFFFF; border-top:1px solid #ECEDF4; border-bottom:1px solid #ECEDF4">
+  <div style="max-width:1200px; margin:0 auto; padding:clamp(56px,8vw,96px) 24px">
+    <div style="text-align:center; margin-bottom:20px">
+      <div style="font-family:Sora,sans-serif; font-size:13px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#FF6A3D; margin-bottom:12px">Plans</div>
+      <h2 style="font-family:Sora,sans-serif; font-size:clamp(27px,5vw,36px); font-weight:800; margin:0 0 14px 0; letter-spacing:-0.02em">A plan unlocks eligibility — your work earns the money</h2>
+      <p style="font-size:16px; color:#4A4D6B; max-width:620px; margin:0 auto; line-height:1.6">Plans control which task categories, assessments and tools you can access. They never include, promise or guarantee earnings.</p>
+    </div>
+    <div style="display:flex; justify-content:center; margin-bottom:40px">
+      <div style="display:inline-flex; background:#F4F5FA; border-radius:999px; padding:4px; gap:4px">
+        <button onClick="{{ setMonthly }}" style="border:none; cursor:pointer; font-family:'Albert Sans',sans-serif; font-size:14px; font-weight:700; padding:8px 20px; border-radius:999px; background:{{ monthlyBg }}; color:{{ monthlyFg }}">Monthly</button>
+        <button onClick="{{ setAnnual }}" style="border:none; cursor:pointer; font-family:'Albert Sans',sans-serif; font-size:14px; font-weight:700; padding:8px 20px; border-radius:999px; background:{{ annualBg }}; color:{{ annualFg }}">Annual · save 20%</button>
+      </div>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:18px; align-items:stretch">
+      <sc-for list="{{ plans }}" as="p" hint-placeholder-count="4">
+        <div style="border:{{ p.border }}; border-radius:18px; padding:28px 24px; position:relative; background:{{ p.bg }}">
+          <sc-if value="{{ p.popular }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute; top:-12px; left:50%; transform:translateX(-50%); background:#FF6A3D; color:#FFFFFF; font-size:12px; font-weight:700; padding:5px 14px; border-radius:999px; white-space:nowrap">Most popular</div>
+          </sc-if>
+          <div style="font-family:Sora,sans-serif; font-weight:700; font-size:18px; margin-bottom:6px">{{ p.name }}</div>
+          <div style="font-size:13.5px; color:#6B6E8C; margin-bottom:18px; min-height:38px; line-height:1.5">{{ p.for }}</div>
+          <div style="margin-bottom:4px"><span style="font-family:Sora,sans-serif; font-size:30px; font-weight:800">{{ p.price }}</span><span style="font-size:14px; color:#6B6E8C">/mo</span></div>
+          <div style="font-size:12.5px; color:#9A9DBA; margin-bottom:20px">{{ p.usd }}</div>
+          <a href="Taskryse Pricing.dc.html" style="display:block; text-align:center; font-family:Sora,sans-serif; font-size:14.5px; font-weight:700; padding:12px; border-radius:10px; margin-bottom:20px; background:{{ p.ctaBg }}; color:{{ p.ctaFg }}; border:{{ p.ctaBorder }}" style-hover="opacity:0.9">{{ p.cta }}</a>
+          <div style="display:flex; flex-direction:column; gap:9px">
+            <sc-for list="{{ p.features }}" as="f" hint-placeholder-count="4">
+              <div style="display:flex; gap:9px; font-size:13.5px; color:#4A4D6B; line-height:1.5"><span style="color:#16A67A; font-weight:700">✓</span><span>{{ f }}</span></div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+    <div style="text-align:center; margin-top:28px; font-size:13.5px; color:#6B6E8C">Task availability varies by category, country and demand. Payment depends on successful completion and approval. <a href="Taskryse Pricing.dc.html" style="font-weight:600">Full comparison &amp; refund policy →</a></div>
+  </div>
+</section>
+
+<!-- Business -->
+<section id="business" style="max-width:1200px; margin:0 auto; padding:clamp(56px,8vw,96px) 24px">
+  <div style="background:#171A3A; border-radius:24px; padding:clamp(28px,5vw,60px); display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:40px; align-items:center; color:#FFFFFF">
+    <div>
+      <div style="font-family:Sora,sans-serif; font-size:13px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#FFC857; margin-bottom:14px">Taskryse for Business</div>
+      <h2 style="font-family:Sora,sans-serif; font-size:clamp(26px,5vw,34px); font-weight:800; margin:0 0 16px 0; letter-spacing:-0.02em; line-height:1.15">Reach verified contributors across Africa and beyond</h2>
+      <p style="font-size:16px; color:#B9BCD9; line-height:1.7; margin:0 0 28px 0">Post tasks or sponsored campaigns, define exactly who qualifies, fund upfront, and pay only for work you approve. Every contributor is identity-verified.</p>
+      <a href="Taskryse For Business.dc.html" style="display:inline-block; background:#FFFFFF; color:#171A3A; font-family:Sora,sans-serif; font-size:15px; font-weight:700; padding:14px 28px; border-radius:12px" style-hover="background:#ECEDF4; color:#171A3A">Post a Task</a>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:14px">
+      <sc-for list="{{ bizPoints }}" as="b" hint-placeholder-count="4">
+        <div style="background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.1); border-radius:14px; padding:20px">
+          <div style="font-family:Sora,sans-serif; font-weight:700; font-size:15px; margin-bottom:6px">{{ b.t }}</div>
+          <div style="font-size:13.5px; color:#8B8FB3; line-height:1.55">{{ b.d }}</div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials -->
+<section style="background:#FFFFFF; border-top:1px solid #ECEDF4; border-bottom:1px solid #ECEDF4">
+  <div style="max-width:1200px; margin:0 auto; padding:clamp(56px,8vw,96px) 24px">
+    <div style="text-align:center; margin-bottom:48px">
+      <div style="font-family:Sora,sans-serif; font-size:13px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#FF6A3D; margin-bottom:12px">Contributors</div>
+      <h2 style="font-family:Sora,sans-serif; font-size:clamp(27px,5vw,36px); font-weight:800; margin:0; letter-spacing:-0.02em">Rysers across the continent</h2>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:18px">
+      <sc-for list="{{ testimonials }}" as="t" hint-placeholder-count="3">
+        <div style="border:1px solid #ECEDF4; border-radius:18px; padding:30px 28px; display:flex; flex-direction:column; gap:18px">
+          <p style="font-size:15.5px; line-height:1.7; color:#171A3A; margin:0; flex:1">“{{ t.quote }}”</p>
+          <div style="display:flex; align-items:center; gap:12px">
+            <div style="width:42px; height:42px; border-radius:50%; background:{{ t.avatarBg }}; color:#FFFFFF; display:flex; align-items:center; justify-content:center; font-family:Sora,sans-serif; font-weight:700; font-size:15px">{{ t.initials }}</div>
+            <div>
+              <div style="font-weight:700; font-size:14.5px">{{ t.name }}</div>
+              <div style="font-size:13px; color:#6B6E8C">{{ t.meta }}</div>
+            </div>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section style="max-width:840px; margin:0 auto; padding:clamp(56px,8vw,96px) 24px">
+  <h2 style="font-family:Sora,sans-serif; font-size:clamp(26px,5vw,34px); font-weight:800; margin:0 0 40px 0; letter-spacing:-0.02em; text-align:center">Frequently asked questions</h2>
+  <div style="display:flex; flex-direction:column; gap:10px">
+    <sc-for list="{{ faqs }}" as="q" hint-placeholder-count="6">
+      <div style="background:#FFFFFF; border:1px solid #ECEDF4; border-radius:14px; overflow:hidden">
+        <button onClick="{{ q.toggle }}" style="width:100%; display:flex; justify-content:space-between; align-items:center; gap:16px; background:none; border:none; cursor:pointer; text-align:left; padding:20px 24px; font-family:'Albert Sans',sans-serif; font-size:16px; font-weight:700; color:#171A3A">
+          <span>{{ q.q }}</span><span style="color:#FF6A3D; font-size:18px; flex-shrink:0">{{ q.icon }}</span>
+        </button>
+        <sc-if value="{{ q.open }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:0 24px 22px 24px; font-size:15px; color:#4A4D6B; line-height:1.7">{{ q.a }}</div>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+</section>
+
+<!-- Final CTA -->
+<section style="max-width:1200px; margin:0 auto; padding:0 24px clamp(56px,8vw,96px) 24px">
+  <div style="background:#FF6A3D; border-radius:24px; padding:clamp(32px,6vw,64px) 24px; text-align:center; color:#FFFFFF">
+    <div style="display:inline-flex; align-items:flex-end; gap:5px; margin-bottom:24px">
+      <div style="width:18px; height:16px; background:rgba(255,255,255,0.5); border-radius:4px"></div>
+      <div style="width:18px; height:28px; background:rgba(255,255,255,0.75); border-radius:4px"></div>
+      <div style="width:18px; height:42px; background:#FFFFFF; border-radius:4px"></div>
+    </div>
+    <h2 style="font-family:Sora,sans-serif; font-size:clamp(28px,5.5vw,38px); font-weight:800; margin:0 0 14px 0; letter-spacing:-0.02em">Ready to start your Ryse?</h2>
+    <p style="font-size:17px; margin:0 auto 32px auto; max-width:520px; opacity:0.92; line-height:1.6">Create your profile, verify your identity and unlock your first eligible tasks today.</p>
+    <a href="Taskryse Pricing.dc.html" style="display:inline-block; background:#171A3A; color:#FFFFFF; font-family:Sora,sans-serif; font-size:16px; font-weight:700; padding:16px 36px; border-radius:12px" style-hover="background:#0F1128; color:#FFFFFF">Start Your Ryse</a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer style="background:#0F1128; color:#B9BCD9">
+  <div style="max-width:1200px; margin:0 auto; padding:64px 32px 40px 32px">
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); gap:36px; margin-bottom:48px">
+      <div>
+        <div style="font-family:Sora,sans-serif; font-weight:800; font-size:20px; color:#FFFFFF; margin-bottom:12px; display:flex; align-items:center; gap:10px">
+          <span style="display:inline-flex; align-items:flex-end; gap:2px"><span style="width:6px; height:7px; background:#FFC857; border-radius:1.5px"></span><span style="width:6px; height:11px; background:#FF8A3D; border-radius:1.5px"></span><span style="width:6px; height:15px; background:#FF6A3D; border-radius:1.5px"></span></span>TASKRYSE
+        </div>
+        <div style="font-size:14px; line-height:1.7; color:#8B8FB3; max-width:280px">Complete. Grow. Rise. Verified digital work with transparent, local-currency payment.</div>
+      </div>
+      <sc-for list="{{ footerCols }}" as="fc" hint-placeholder-count="4">
+        <div>
+          <div style="font-family:Sora,sans-serif; font-size:13px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#FFFFFF; margin-bottom:16px">{{ fc.label }}</div>
+          <div style="display:flex; flex-direction:column; gap:10px">
+            <sc-for list="{{ fc.links }}" as="l" hint-placeholder-count="5">
+              <a href="Taskryse Explore.dc.html" style="font-size:14px; color:#8B8FB3" style-hover="color:#FFC857">{{ l }}</a>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+    <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:28px; font-size:13px; color:#6B6E8C; line-height:1.7">A Taskryse plan provides access to platform features, qualifications, learning resources and eligible task categories. Purchasing a plan does not guarantee tasks, earnings or fixed returns. Contributors earn only when legitimate work is completed and approved. Task availability varies by country, category and demand.<br><br>© 2026 Taskryse. All rights reserved.</div>
+  </div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showAnnouncement&quot;: {&quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = { annual: false, openFaq: 0 };
+  renderVals() {
+    const annual = this.state.annual;
+    const ngn = (n) => "₦" + n.toLocaleString("en-NG");
+    const priceOf = (m) => annual ? Math.round(m * 0.8) : m;
+    const planDefs = [
+      { name: "Starter", m: 2500, usd: 1.7, for: "Begin with beginner-friendly AI data tasks.", popular: false, cta: "Choose Starter",
+        features: ["Core AI data task categories", "2 active task applications", "Intro qualification assessments", "Standard support"] },
+      { name: "Riser", m: 6000, usd: 4, for: "More categories and applications as you build your rating.", popular: true, cta: "Choose Riser",
+        features: ["All Starter categories + transcription & annotation", "5 active task applications", "Full qualification library", "Learning pathways", "Priority support"] },
+      { name: "Professional", m: 12000, usd: 8, for: "Professional tasks and advanced workspace tools.", popular: false, cta: "Choose Professional",
+        features: ["Professional tasks: writing, testing, research", "10 active task applications", "Advanced workspace tools", "Early access to new categories", "Priority support"] },
+      { name: "Expert", m: 24000, usd: 16, for: "Expert categories and sponsored-opportunity access.", popular: false, cta: "Choose Expert",
+        features: ["All categories incl. expert & model-safety", "Unlimited applications", "Sponsored-opportunity access", "Dedicated support", "Certificates & advanced analytics"] }
+    ];
+    const faqData = [
+      { q: "Do I earn money just by buying a plan?", a: "No. A plan only unlocks access to eligible task categories, assessments and tools. You earn when you complete legitimate work and it is approved by a reviewer or sponsor. Taskryse never promises earnings, fixed returns or passive income." },
+      { q: "How much can I earn?", a: "It depends entirely on the tasks available to you, the work you complete and its approval. Task availability varies by category, country and demand — we deliberately do not publish earnings projections." },
+      { q: "How do withdrawals work in Nigeria?", a: "Approved earnings become withdrawable once sponsor funding clears. You withdraw in naira to a local bank account or mobile money wallet, confirming with your withdrawal PIN and OTP. Fees and any exchange rate are shown before you confirm; payouts typically arrive within 24 hours." },
+      { q: "Is Taskryse an investment platform?", a: "No. Taskryse is a work platform. There are no deposits, no returns, no referral commissions based on payments. Referral rewards are direct promotional credits from Taskryse, kept separate from withdrawable earnings." },
+      { q: "What if my submission is rejected?", a: "You see the reviewer's reason. If revisions are permitted, you can fix and resubmit within the deadline. If you believe a decision is wrong, you can appeal — appeals are handled by a different reviewer." },
+      { q: "Can I get a refund on my plan?", a: "Yes — within 7 days of purchase, provided you haven't yet accepted a task in the plan's unlocked categories. Full details are in the refund and cancellation policy." }
+    ];
+    return {
+      showAnnouncement: this.props.showAnnouncement ?? true,
+      heroStats: [
+        { v: "120+", l: "task types across 6 categories" },
+        { v: "8", l: "local payout currencies" },
+        { v: "48 hrs", l: "typical review turnaround" }
+      ],
+      mockPay1: "₦1,800", mockPay2: "₦3,200", mockPay3: "₦1,800",
+      steps: [
+        { n: "1", bg: "#FFF1EA", fg: "#E5552B", title: "Complete", desc: "Verify your identity, pass a quick qualification and complete real tasks — AI data work, transcription, testing, research — in a focused workspace built for your phone." },
+        { n: "2", bg: "#FFF8EC", fg: "#B8860B", title: "Grow", desc: "Every approved task builds your quality score and Ryse Level. Learning modules and assessments unlock harder, better-paying task categories." },
+        { n: "3", bg: "#EDF7F3", fg: "#0E7A59", title: "Rise", desc: "Withdraw approved earnings in your local currency, pay bills straight from your wallet, and reach sponsored opportunities reserved for top Rysers." }
+      ],
+      payFlow: [
+        { color: "#377DFF", line: true, title: "You complete and submit a task", desc: "Work is autosaved; quality checks run before submission." },
+        { color: "#FFC857", line: true, title: "A reviewer or sponsor checks it", desc: "Shown as “pending review” in your wallet — typically within 48 hours." },
+        { color: "#16A67A", line: true, title: "Approved work is paid", desc: "The task's stated payment moves to your withdrawable balance." },
+        { color: "#FF6A3D", line: false, title: "You withdraw in local currency", desc: "Bank transfer or mobile money, with fees and FX shown upfront." }
+      ],
+      categories: [
+        { name: "AI response evaluation", range: "₦800–4,000 / task", desc: "Rate and compare AI answers for accuracy, tone and safety.", tag: "Most available in Nigeria", tagColor: "#0E7A59" },
+        { name: "Audio & speech", range: "₦1,500–8,000 / task", desc: "Transcription and speech recording in English, Yorùbá, Hausa, Igbo, Swahili and more.", tag: "African-language demand is high", tagColor: "#0E7A59" },
+        { name: "Data labelling & annotation", range: "₦500–3,500 / task", desc: "Label images, classify content, clean datasets for AI teams.", tag: "Beginner friendly", tagColor: "#377DFF" },
+        { name: "Writing & research", range: "₦2,000–15,000 / task", desc: "Short-form writing, editing, fact checking and structured research.", tag: "Professional plan", tagColor: "#B8860B" },
+        { name: "Software & app testing", range: "₦1,500–10,000 / task", desc: "Test websites and mobile apps, report bugs, evaluate usability.", tag: "Professional plan", tagColor: "#B8860B" },
+        { name: "Sponsored opportunities", range: "Varies", desc: "Clearly-labelled brand surveys, product trials and campaign feedback from verified sponsors.", tag: "Always labelled · Expert access", tagColor: "#E5552B" }
+      ],
+      currencies: ["🇳🇬 Nigerian naira", "🇬🇭 Ghanaian cedi", "🇰🇪 Kenyan shilling", "🇿🇦 South African rand", "🇺🇸 US dollar", "🇬🇧 British pound", "🇪🇺 Euro", "+ more"],
+      setMonthly: () => this.setState({ annual: false }),
+      setAnnual: () => this.setState({ annual: true }),
+      monthlyBg: annual ? "transparent" : "#171A3A", monthlyFg: annual ? "#4A4D6B" : "#FFFFFF",
+      annualBg: annual ? "#171A3A" : "transparent", annualFg: annual ? "#FFFFFF" : "#4A4D6B",
+      plans: planDefs.map(p => ({
+        name: p.name, for: p.for, popular: p.popular, cta: p.cta, features: p.features,
+        price: ngn(priceOf(p.m)),
+        usd: "≈ $" + (annual ? (p.usd * 0.8).toFixed(2) : p.usd.toFixed(2)) + " USD · billed " + (annual ? "annually" : "monthly"),
+        border: p.popular ? "2px solid #FF6A3D" : "1px solid #ECEDF4",
+        bg: p.popular ? "#FFFDFB" : "#FFFFFF",
+        ctaBg: p.popular ? "#FF6A3D" : "#FFFFFF",
+        ctaFg: p.popular ? "#FFFFFF" : "#171A3A",
+        ctaBorder: p.popular ? "none" : "1.5px solid #D7D9E6"
+      })),
+      bizPoints: [
+        { t: "Verified contributors", d: "Every contributor passes identity and liveness verification." },
+        { t: "Pay per approval", d: "Fund campaigns upfront; money moves only when you approve work." },
+        { t: "Precise targeting", d: "Country, language, skill, qualification and Ryse Level eligibility." },
+        { t: "Full audit trail", d: "Submissions, revisions and decisions are logged and exportable." }
+      ],
+      testimonials: [
+        { quote: "The transcription qualification took me two tries, but once I passed, Yorùbá audio tasks showed up almost weekly. Payment lands in my GTBank account the next day.", name: "Adaeze N.", meta: "Skilled Ryser · Lagos, Nigeria", initials: "AN", avatarBg: "#FF6A3D" },
+        { quote: "I like that it tells you upfront when tasks are scarce. No fake promises — when I complete work and it's approved, I get exactly what the task card said.", name: "Kwabena O.", meta: "Pro Ryser · Accra, Ghana", initials: "KO", avatarBg: "#171A3A" },
+        { quote: "Started with data labelling between lectures. The learning modules got me qualified for app testing, which pays better. My quality score does the talking now.", name: "Wanjiru M.", meta: "Active Ryser · Nairobi, Kenya", initials: "WM", avatarBg: "#16A67A" }
+      ],
+      faqs: faqData.map((f, i) => ({
+        q: f.q, a: f.a,
+        open: this.state.openFaq === i,
+        icon: this.state.openFaq === i ? "−" : "+",
+        toggle: () => this.setState({ openFaq: this.state.openFaq === i ? -1 : i })
+      })),
+      footerCols: [
+        { label: "Platform", links: ["How it works", "Task categories", "Plans & pricing", "Learning & qualifications", "Supported countries", "Payments & withdrawals"] },
+        { label: "Business", links: ["Taskryse for Business", "Post a task", "Sponsored campaigns", "Business verification"] },
+        { label: "Support", links: ["Help centre", "FAQ", "Contact", "Trust & safety", "Community guidelines"] },
+        { label: "Legal", links: ["Terms of service", "Privacy policy", "Contributor agreement", "Task-payment policy", "Refund policy"] }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

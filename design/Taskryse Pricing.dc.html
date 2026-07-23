@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Albert+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#FAFAFC; font-family:'Albert Sans',sans-serif; color:#171A3A; }
+  a { color:#FF6A3D; text-decoration:none; }
+  a:hover { color:#E5552B; }
+</style>
+</helmet>
+
+<div style="overflow-x:hidden">
+<!-- Nav -->
+<nav style="background:#FFFFFF; border-bottom:1px solid #ECEDF4; position:sticky; top:0; z-index:50">
+  <div style="max-width:1200px; margin:0 auto; padding:10px 20px; min-height:48px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px 24px">
+    <div style="display:flex; align-items:center; gap:16px 36px; flex-wrap:wrap">
+      <a href="Taskryse Home.dc.html"><img src="assets/taskryse-logo.png" alt="Taskryse" style="height:34px; width:auto"></a>
+      <div style="display:flex; gap:10px 22px; font-size:14.5px; font-weight:500; flex-wrap:wrap">
+        <a href="Taskryse Home.dc.html#how" style="color:#171A3A" style-hover="color:#FF6A3D">How it works</a>
+        <a href="Taskryse Home.dc.html#categories" style="color:#171A3A" style-hover="color:#FF6A3D">Tasks</a>
+        <a href="#" style="color:#FF6A3D; font-weight:700">Plans</a>
+        <a href="Taskryse Home.dc.html#business" style="color:#171A3A" style-hover="color:#FF6A3D">For Business</a>
+      </div>
+    </div>
+    <div style="display:flex; align-items:center; gap:14px">
+      <a href="Taskryse Auth.dc.html" style="font-size:14.5px; font-weight:600; color:#171A3A" style-hover="color:#FF6A3D">Sign in</a>
+      <a href="#checkout" style="background:#FF6A3D; color:#FFFFFF; font-size:14.5px; font-weight:700; padding:11px 22px; border-radius:10px" style-hover="background:#E5552B; color:#FFFFFF">Start Your Ryse</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Header -->
+<header style="max-width:1200px; margin:0 auto; padding:clamp(48px,7vw,72px) 24px 8px 24px; text-align:center">
+  <div style="font-family:Sora,sans-serif; font-size:13px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#FF6A3D; margin-bottom:14px">Plans &amp; pricing</div>
+  <h1 style="font-family:Sora,sans-serif; font-size:clamp(30px,6vw,44px); font-weight:800; margin:0 0 16px 0; letter-spacing:-0.02em">A plan unlocks eligibility.<br>Your work earns the money.</h1>
+  <p style="font-size:16.5px; color:#4A4D6B; max-width:640px; margin:0 auto 8px auto; line-height:1.65">Plans control which task categories, assessments and tools you can access. They never include, promise or guarantee earnings — task availability varies, and payment depends on completed, approved work.</p>
+  <div style="display:flex; justify-content:center; margin:32px 0 10px 0">
+    <div style="display:inline-flex; background:#F0F1F7; border-radius:999px; padding:4px; gap:4px">
+      <button onClick="{{ setMonthly }}" style="border:none; cursor:pointer; font-family:'Albert Sans',sans-serif; font-size:14px; font-weight:700; padding:9px 22px; border-radius:999px; background:{{ monthlyBg }}; color:{{ monthlyFg }}">Monthly</button>
+      <button onClick="{{ setAnnual }}" style="border:none; cursor:pointer; font-family:'Albert Sans',sans-serif; font-size:14px; font-weight:700; padding:9px 22px; border-radius:999px; background:{{ annualBg }}; color:{{ annualFg }}">Annual · save 20%</button>
+    </div>
+  </div>
+  <div style="font-size:13px; color:#9A9DBA">Prices in Nigerian naira · <a href="#" style="font-weight:600">change country</a></div>
+</header>
+
+<!-- Plan cards -->
+<section style="max-width:1200px; margin:0 auto; padding:44px 24px 24px 24px">
+  <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:18px; align-items:stretch">
+    <sc-for list="{{ plans }}" as="p" hint-placeholder-count="4">
+      <div style="border:{{ p.border }}; border-radius:18px; padding:28px 24px; position:relative; background:{{ p.bg }}; display:flex; flex-direction:column">
+        <sc-if value="{{ p.popular }}" hint-placeholder-val="{{ false }}">
+          <div style="position:absolute; top:-12px; left:50%; transform:translateX(-50%); background:#FF6A3D; color:#FFFFFF; font-size:12px; font-weight:700; padding:5px 14px; border-radius:999px; white-space:nowrap">Most popular</div>
+        </sc-if>
+        <div style="font-family:Sora,sans-serif; font-weight:700; font-size:18px; margin-bottom:6px">{{ p.name }}</div>
+        <div style="font-size:13.5px; color:#6B6E8C; margin-bottom:18px; min-height:40px; line-height:1.5">{{ p.for }}</div>
+        <div style="margin-bottom:4px"><span style="font-family:Sora,sans-serif; font-size:30px; font-weight:800">{{ p.price }}</span><span style="font-size:14px; color:#6B6E8C">/mo</span></div>
+        <div style="font-size:12.5px; color:#9A9DBA; margin-bottom:20px">{{ p.usd }}</div>
+        <button onClick="{{ p.choose }}" style="display:block; width:100%; text-align:center; font-family:Sora,sans-serif; font-size:14.5px; font-weight:700; padding:12px; border-radius:10px; margin-bottom:20px; background:{{ p.ctaBg }}; color:{{ p.ctaFg }}; border:{{ p.ctaBorder }}; cursor:pointer" style-hover="opacity:0.88">{{ p.cta }}</button>
+        <div style="display:flex; flex-direction:column; gap:9px">
+          <sc-for list="{{ p.features }}" as="f" hint-placeholder-count="5">
+            <div style="display:flex; gap:9px; font-size:13.5px; color:#4A4D6B; line-height:1.5"><span style="color:#16A67A; font-weight:700">✓</span><span>{{ f }}</span></div>
+          </sc-for>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+  <div style="text-align:center; margin-top:24px; font-size:13.5px; color:#6B6E8C; line-height:1.6">7-day refund window before your first task acceptance · cancel anytime · 5-day grace period on failed renewals. <a href="#" style="font-weight:600">Refund &amp; cancellation policy →</a></div>
+</section>
+
+<!-- Comparison table -->
+<section style="max-width:1200px; margin:0 auto; padding:48px 24px 40px 24px">
+  <h2 style="font-family:Sora,sans-serif; font-size:clamp(24px,4.5vw,28px); font-weight:800; margin:0 0 24px 0; letter-spacing:-0.01em; text-align:center">Compare everything</h2>
+  <div style="overflow-x:auto; border:1px solid #ECEDF4; border-radius:18px; background:#FFFFFF">
+    <div style="min-width:880px">
+      <div style="display:grid; grid-template-columns:1.6fr 1fr 1fr 1fr 1fr; background:#171A3A; color:#FFFFFF">
+        <div style="padding:16px 24px; font-family:Sora,sans-serif; font-size:13px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase">Feature</div>
+        <sc-for list="{{ planNames }}" as="pn" hint-placeholder-count="4">
+          <div style="padding:16px 18px; font-family:Sora,sans-serif; font-size:14px; font-weight:700; text-align:center">{{ pn }}</div>
+        </sc-for>
+      </div>
+      <sc-for list="{{ compareRows }}" as="row" hint-placeholder-count="9">
+        <div style="display:grid; grid-template-columns:1.6fr 1fr 1fr 1fr 1fr; border-top:1px solid #F0F1F7; background:{{ row.bg }}">
+          <div style="padding:14px 24px; font-size:14px; font-weight:600">{{ row.label }}</div>
+          <sc-for list="{{ row.values }}" as="v" hint-placeholder-count="4">
+            <div style="padding:14px 18px; font-size:13.5px; color:#4A4D6B; text-align:center; line-height:1.5">{{ v }}</div>
+          </sc-for>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+  <div style="font-size:12.5px; color:#9A9DBA; margin-top:12px; text-align:center">Scroll sideways on smaller screens to see all plans.</div>
+</section>
+
+<!-- Checkout -->
+<section id="checkout" style="background:#FFFFFF; border-top:1px solid #ECEDF4">
+  <div style="max-width:1200px; margin:0 auto; padding:clamp(56px,8vw,80px) 24px">
+    <div style="text-align:center; margin-bottom:36px">
+      <div style="font-family:Sora,sans-serif; font-size:13px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:#FF6A3D; margin-bottom:12px">Checkout</div>
+      <h2 style="font-family:Sora,sans-serif; font-size:clamp(24px,4.5vw,30px); font-weight:800; margin:0">Complete your {{ selName }} plan</h2>
+    </div>
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:24px; max-width:960px; margin:0 auto">
+      <!-- Payment method -->
+      <div style="border:1px solid #ECEDF4; border-radius:18px; padding:26px 24px; background:#FAFAFC">
+        <div style="font-family:Sora,sans-serif; font-weight:700; font-size:16px; margin-bottom:16px">Payment method</div>
+        <div style="display:flex; flex-direction:column; gap:10px">
+          <sc-for list="{{ payMethods }}" as="m" hint-placeholder-count="4">
+            <button onClick="{{ m.pick }}" style="display:flex; align-items:center; gap:12px; width:100%; text-align:left; background:#FFFFFF; border:{{ m.border }}; border-radius:12px; padding:14px 16px; cursor:pointer; font-family:'Albert Sans',sans-serif">
+              <span style="width:18px; height:18px; border-radius:50%; border:{{ m.dotBorder }}; background:{{ m.dotBg }}; box-sizing:border-box; flex-shrink:0"></span>
+              <span>
+                <span style="display:block; font-weight:700; font-size:14.5px; color:#171A3A">{{ m.name }}</span>
+                <span style="display:block; font-size:12.5px; color:#6B6E8C">{{ m.desc }}</span>
+              </span>
+            </button>
+          </sc-for>
+        </div>
+        <div style="margin-top:18px">
+          <div style="font-size:13px; font-weight:700; margin-bottom:8px">Coupon</div>
+          <div style="display:flex; gap:8px">
+            <input value="{{ couponVal }}" onChange="{{ couponChange }}" placeholder="e.g. RYSE10" style="flex:1; min-width:0; border:1px solid #D7D9E6; border-radius:10px; padding:11px 14px; font-family:'Albert Sans',sans-serif; font-size:14px; color:#171A3A; background:#FFFFFF">
+            <button onClick="{{ applyCoupon }}" style="border:none; background:#171A3A; color:#FFFFFF; font-family:'Albert Sans',sans-serif; font-size:13.5px; font-weight:700; padding:11px 18px; border-radius:10px; cursor:pointer">Apply</button>
+          </div>
+          <sc-if value="{{ couponMsgShow }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:13px; font-weight:600; margin-top:8px; color:{{ couponMsgColor }}">{{ couponMsg }}</div>
+          </sc-if>
+        </div>
+      </div>
+      <!-- Summary -->
+      <div style="border:1px solid #ECEDF4; border-radius:18px; padding:26px 24px; background:#FFFFFF; display:flex; flex-direction:column">
+        <div style="font-family:Sora,sans-serif; font-weight:700; font-size:16px; margin-bottom:16px">Order summary</div>
+        <div style="display:flex; justify-content:space-between; font-size:14.5px; margin-bottom:10px"><span style="color:#6B6E8C">{{ selName }} plan · {{ billingLabel }}</span><span style="font-weight:700">{{ sumBase }}</span></div>
+        <sc-if value="{{ discountShow }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex; justify-content:space-between; font-size:14.5px; margin-bottom:10px"><span style="color:#0E7A59">Coupon RYSE10 (−10%)</span><span style="font-weight:700; color:#0E7A59">−{{ sumDiscount }}</span></div>
+        </sc-if>
+        <div style="display:flex; justify-content:space-between; font-size:16px; padding-top:12px; border-top:1px solid #ECEDF4; margin-bottom:18px"><span style="font-weight:700">Total due today</span><span style="font-family:Sora,sans-serif; font-weight:800">{{ sumTotal }}</span></div>
+        <div style="background:#FFF8EC; border:1px solid #F2E2BC; border-radius:12px; padding:12px 14px; font-size:12.5px; color:#7A5A12; line-height:1.6; margin-bottom:18px">This plan unlocks eligible task categories, assessments and tools. It does not include, promise or guarantee tasks or earnings. You earn only from completed, approved work.</div>
+        <button style="border:none; background:#FF6A3D; color:#FFFFFF; font-family:Sora,sans-serif; font-size:15.5px; font-weight:700; padding:15px; border-radius:12px; cursor:pointer" style-hover="background:#E5552B">Pay {{ sumTotal }}</button>
+        <div style="font-size:12.5px; color:#9A9DBA; text-align:center; margin-top:12px">Secured payment · 7-day refund window before first task acceptance</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ strip -->
+<section style="max-width:840px; margin:0 auto; padding:clamp(56px,8vw,80px) 24px">
+  <h2 style="font-family:Sora,sans-serif; font-size:clamp(24px,4.5vw,30px); font-weight:800; margin:0 0 28px 0; text-align:center">Pricing questions</h2>
+  <div style="display:flex; flex-direction:column; gap:10px">
+    <sc-for list="{{ faqs }}" as="q" hint-placeholder-count="5">
+      <div style="background:#FFFFFF; border:1px solid #ECEDF4; border-radius:14px; overflow:hidden">
+        <button onClick="{{ q.toggle }}" style="width:100%; display:flex; justify-content:space-between; align-items:center; gap:16px; background:none; border:none; cursor:pointer; text-align:left; padding:18px 22px; font-family:'Albert Sans',sans-serif; font-size:15.5px; font-weight:700; color:#171A3A">
+          <span>{{ q.q }}</span><span style="color:#FF6A3D; font-size:18px; flex-shrink:0">{{ q.icon }}</span>
+        </button>
+        <sc-if value="{{ q.open }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:0 22px 20px 22px; font-size:14.5px; color:#4A4D6B; line-height:1.7">{{ q.a }}</div>
+        </sc-if>
+      </div>
+    </sc-for>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer style="background:#0F1128; color:#B9BCD9">
+  <div style="max-width:1200px; margin:0 auto; padding:48px 24px 36px 24px">
+    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; margin-bottom:28px">
+      <div style="font-family:Sora,sans-serif; font-weight:800; font-size:18px; color:#FFFFFF; display:flex; align-items:center; gap:10px">
+        <span style="display:inline-flex; align-items:flex-end; gap:2px"><span style="width:6px; height:7px; background:#FFC857; border-radius:1.5px"></span><span style="width:6px; height:11px; background:#FF8A3D; border-radius:1.5px"></span><span style="width:6px; height:15px; background:#FF6A3D; border-radius:1.5px"></span></span>TASKRYSE
+      </div>
+      <div style="display:flex; gap:12px 24px; flex-wrap:wrap; font-size:14px">
+        <a href="Taskryse Home.dc.html" style="color:#8B8FB3" style-hover="color:#FFC857">Home</a>
+        <a href="Taskryse Legal.dc.html" style="color:#8B8FB3" style-hover="color:#FFC857">Terms</a>
+        <a href="Taskryse Legal.dc.html" style="color:#8B8FB3" style-hover="color:#FFC857">Refund policy</a>
+        <a href="Taskryse Legal.dc.html" style="color:#8B8FB3" style-hover="color:#FFC857">Task-payment policy</a>
+      </div>
+    </div>
+    <div style="border-top:1px solid rgba(255,255,255,0.08); padding-top:24px; font-size:13px; color:#6B6E8C; line-height:1.7">A Taskryse plan provides access to platform features, qualifications, learning resources and eligible task categories. Purchasing a plan does not guarantee tasks, earnings or fixed returns. Contributors earn only when legitimate work is completed and approved.<br><br>© 2026 Taskryse. All rights reserved.</div>
+  </div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { annual: false, sel: 1, method: 0, coupon: "", applied: false, couponMsg: "", openFaq: -1 };
+  renderVals() {
+    const { annual, sel, method, applied } = this.state;
+    const ngn = (n) => "₦" + Math.round(n).toLocaleString("en-NG");
+    const priceOf = (m) => annual ? Math.round(m * 0.8) : m;
+    const planDefs = [
+      { name: "Starter", m: 2500, usd: 1.7, for: "Begin with beginner-friendly AI data tasks.",
+        features: ["Core AI data task categories", "2 active task applications", "Intro qualification assessments", "Learning basics", "Standard support"] },
+      { name: "Riser", m: 6000, usd: 4, for: "More categories and applications as you build your rating.",
+        features: ["Starter + transcription & annotation", "5 active task applications", "Full qualification library", "Learning pathways", "Priority support"] },
+      { name: "Professional", m: 12000, usd: 8, for: "Professional tasks and advanced workspace tools.",
+        features: ["Professional tasks: writing, testing, research", "10 active task applications", "Advanced workspace tools", "Early access to new categories", "Priority support"] },
+      { name: "Expert", m: 24000, usd: 16, for: "Expert categories and sponsored-opportunity access.",
+        features: ["All categories incl. model-safety", "Unlimited applications", "Sponsored-opportunity access", "Certificates & analytics", "Dedicated support"] }
+    ];
+    const methods = [
+      { name: "Card", desc: "Visa, Mastercard, Verve — instant" },
+      { name: "Bank transfer", desc: "Pay to a one-time account number" },
+      { name: "USSD", desc: "Dial from any phone — no data needed" },
+      { name: "Mobile money", desc: "MTN MoMo, M-Pesa & more (outside Nigeria)" }
+    ];
+    const base = priceOf(planDefs[sel].m) * (annual ? 12 : 1);
+    const discount = applied ? base * 0.1 : 0;
+    const faqData = [
+      { q: "Does a higher plan mean higher earnings?", a: "No. Higher plans unlock more task categories and tools, but earnings depend entirely on the work you complete and its approval. Task availability varies by category, country and demand." },
+      { q: "Can I upgrade or downgrade later?", a: "Yes, anytime. Upgrades apply immediately with a prorated charge; downgrades apply at your next renewal. Your Ryse Level and quality history are never affected by plan changes." },
+      { q: "What happens if my renewal payment fails?", a: "You get a 5-day grace period with full access while we retry. After that, your plan pauses — your account, earnings and withdrawable balance remain fully accessible; only plan-gated task categories lock." },
+      { q: "How do refunds work?", a: "Full refund within 7 days of purchase, provided you haven't yet accepted a task in the plan's unlocked categories. Refunds return to your original payment method." },
+      { q: "Is there a free plan?", a: "No — all plans are paid, and that funds identity verification, review and support. What's never paid: you never deposit money to earn, and earnings never depend on recruiting others." }
+    ];
+    return {
+      setMonthly: () => this.setState({ annual: false }),
+      setAnnual: () => this.setState({ annual: true }),
+      monthlyBg: annual ? "transparent" : "#171A3A", monthlyFg: annual ? "#4A4D6B" : "#FFFFFF",
+      annualBg: annual ? "#171A3A" : "transparent", annualFg: annual ? "#FFFFFF" : "#4A4D6B",
+      plans: planDefs.map((p, i) => ({
+        name: p.name, for: p.for, features: p.features,
+        popular: i === 1,
+        price: ngn(priceOf(p.m)),
+        usd: "≈ $" + (annual ? (p.usd * 0.8).toFixed(2) : p.usd.toFixed(2)) + " USD · billed " + (annual ? "annually" : "monthly"),
+        border: sel === i ? "2px solid #FF6A3D" : (i === 1 ? "2px solid #FFD9CB" : "1px solid #ECEDF4"),
+        bg: sel === i ? "#FFFDFB" : "#FFFFFF",
+        cta: sel === i ? "Selected ✓" : "Choose " + p.name,
+        ctaBg: sel === i ? "#FF6A3D" : "#FFFFFF",
+        ctaFg: sel === i ? "#FFFFFF" : "#171A3A",
+        ctaBorder: sel === i ? "none" : "1.5px solid #D7D9E6",
+        choose: () => this.setState({ sel: i })
+      })),
+      planNames: planDefs.map(p => p.name),
+      compareRows: [
+        { label: "Monthly price", values: planDefs.map(p => ngn(priceOf(p.m)) + "/mo") },
+        { label: "Task categories", values: ["Core AI data", "+ transcription, annotation", "+ writing, testing, research", "All incl. model-safety & expert"] },
+        { label: "Active task applications", values: ["2", "5", "10", "Unlimited"] },
+        { label: "Qualification assessments", values: ["Intro only", "Full library", "Full library", "Full library + expert tracks"] },
+        { label: "Learning resources", values: ["Basics", "Pathways", "Pathways + workshops", "Everything + certificates"] },
+        { label: "Workspace tools", values: ["Standard", "Standard", "Advanced", "Advanced + analytics"] },
+        { label: "Priority access to new tasks", values: ["—", "—", "Early access", "First access"] },
+        { label: "Sponsored opportunities", values: ["—", "—", "—", "Included"] },
+        { label: "Support", values: ["Standard", "Priority", "Priority", "Dedicated"] }
+      ].map((r, i) => ({ ...r, bg: i % 2 ? "#FAFAFC" : "#FFFFFF" })),
+      selName: planDefs[sel].name,
+      billingLabel: annual ? "annual" : "monthly",
+      payMethods: methods.map((m, i) => ({
+        name: m.name, desc: m.desc,
+        border: method === i ? "2px solid #FF6A3D" : "1px solid #E1E2EC",
+        dotBorder: method === i ? "5px solid #FF6A3D" : "2px solid #C3C5D6",
+        dotBg: "#FFFFFF",
+        pick: () => this.setState({ method: i })
+      })),
+      couponVal: this.state.coupon,
+      couponChange: (e) => this.setState({ coupon: e.target.value }),
+      applyCoupon: () => {
+        const ok = this.state.coupon.trim().toUpperCase() === "RYSE10";
+        this.setState({ applied: ok, couponMsg: ok ? "Coupon applied — 10% off today's payment." : "That code isn't valid or has expired." });
+      },
+      couponMsgShow: this.state.couponMsg !== "",
+      couponMsg: this.state.couponMsg,
+      couponMsgColor: applied ? "#0E7A59" : "#E5484D",
+      discountShow: applied,
+      sumBase: ngn(base),
+      sumDiscount: ngn(discount),
+      sumTotal: ngn(base - discount),
+      faqs: faqData.map((f, i) => ({
+        q: f.q, a: f.a,
+        open: this.state.openFaq === i,
+        icon: this.state.openFaq === i ? "−" : "+",
+        toggle: () => this.setState({ openFaq: this.state.openFaq === i ? -1 : i })
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>

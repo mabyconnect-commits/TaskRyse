@@ -1,0 +1,560 @@
+// Taskryse — Prisma schema (Postgres). Concrete DB definitions.
+// Money is stored in minor units (kobo/cents) as Int/BigInt. Never store money as float.
+//
+// CORE RULE (enforced in code, modelled here): a Plan grants ELIGIBILITY only.
+// Earnings exist only after a Submission is APPROVED and the sponsor's escrow for
+// that task is funded. promoCreditMinor is a separate, non-withdrawable balance.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  CONTRIBUTOR
+  SPONSOR
+  REVIEWER
+  SUPPORT
+  ADMIN
+}
+
+enum UserStatus {
+  ACTIVE
+  FROZEN
+  DELETED
+}
+
+enum KycDecision {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum LivenessStatus {
+  PENDING
+  PASSED
+  FAILED
+}
+
+enum RiskLevel {
+  LOW
+  MED
+  HIGH
+}
+
+enum PlanName {
+  STARTER
+  RISER
+  PROFESSIONAL
+  EXPERT
+}
+
+enum BillingPeriod {
+  MONTHLY
+  ANNUAL
+}
+
+enum SubStatus {
+  ACTIVE
+  GRACE
+  EXPIRED
+  CANCELLED
+}
+
+enum CategoryFamily {
+  AI_DATA
+  PROFESSIONAL
+  SPONSORED
+}
+
+enum Difficulty {
+  BEGINNER
+  INTERMEDIATE
+  EXPERT
+}
+
+enum ReviewType {
+  MANUAL
+  AUTO
+  TEAM
+}
+
+enum TaskStatus {
+  DRAFT
+  LIVE
+  PAUSED
+  CLOSED
+}
+
+enum AssignmentStatus {
+  ACCEPTED
+  IN_PROGRESS
+  DRAFT
+  SUBMITTED
+  UNDER_REVIEW
+  REVISION_REQUESTED
+  APPROVED
+  REJECTED
+  DISPUTED
+  EXPIRED
+  CANCELLED
+}
+
+enum ReviewDecision {
+  APPROVED
+  REVISION
+  REJECTED
+  FLAGGED
+}
+
+enum AppealStatus {
+  OPEN
+  UNDER_REVIEW
+  UPHELD
+  OVERTURNED
+}
+
+enum RyseLevel {
+  NEW
+  ACTIVE
+  SKILLED
+  PRO
+  ELITE
+}
+
+enum EntryType {
+  TASK_PAYMENT
+  WITHDRAWAL
+  BILL
+  SUBSCRIPTION
+  REFUND
+  PROMO
+  FEE
+}
+
+enum WithdrawalStatus {
+  PROCESSING
+  COMPLETED
+  FAILED_REVERSED
+  HELD_COMPLIANCE
+}
+
+enum PayoutMethod {
+  BANK
+  MOBILE_MONEY
+  PAYPAL
+  STABLECOIN
+}
+
+enum BillService {
+  AIRTIME
+  DATA
+  ELECTRICITY
+  CABLE
+  INTERNET
+  EDUCATION
+}
+
+enum BillStatus {
+  SUCCESSFUL
+  PENDING
+  REVERSED_REFUNDED
+}
+
+enum ReferralStatus {
+  PENDING
+  VERIFIED
+  REVERSED
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  ESCALATED
+  RESOLVED
+}
+
+enum TicketType {
+  GENERAL
+  TASK
+  PAYMENT
+  WITHDRAWAL
+  KYC
+}
+
+enum FraudStatus {
+  OPEN
+  FROZEN
+  CLEARED
+}
+
+model User {
+  id                    String                 @id @default(cuid())
+  email                 String                 @unique
+  phone                 String?
+  passwordHash          String
+  withdrawalPinHash     String?
+  role                  Role                   @default(CONTRIBUTOR)
+  legalName             String?
+  username              String?                @unique
+  photoUrl              String?
+  countryCode           String                 @default("NG")
+  languages             String[]
+  skills                String[]
+  availability          String?
+  bio                   String?
+  ryseLevel             RyseLevel              @default(NEW)
+  status                UserStatus             @default(ACTIVE)
+  emailVerified         Boolean                @default(false)
+  otpCode               String?
+  otpExpiresAt          DateTime?
+  createdAt             DateTime               @default(now())
+  kyc                   KycRecord?
+  subscription          Subscription?
+  wallet                Wallet?
+  assignments           Assignment[]
+  withdrawals           Withdrawal[]
+  bills                 BillPayment[]
+  referralsMade         Referral[]             @relation("referrer")
+  tickets               Ticket[]
+  payoutMethods         PayoutMethodRecord[]
+  qualificationAttempts QualificationAttempt[]
+  orgMemberships        OrgMember[]
+  notifications         Notification[]
+  fraudCases            FraudCase[]
+}
+
+model KycRecord {
+  id            String         @id @default(cuid())
+  userId        String         @unique
+  user          User           @relation(fields: [userId], references: [id])
+  idType        String
+  idDocumentUrl String?
+  liveness      LivenessStatus @default(PENDING)
+  riskLevel     RiskLevel      @default(LOW)
+  decision      KycDecision    @default(PENDING)
+  reviewedBy    String?
+  decidedAt     DateTime?
+  createdAt     DateTime       @default(now())
+}
+
+model PayoutMethodRecord {
+  id             String       @id @default(cuid())
+  userId         String
+  user           User         @relation(fields: [userId], references: [id])
+  method         PayoutMethod
+  label          String?
+  destinationRef String
+  isDefault      Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+}
+
+model Plan {
+  id                    String         @id @default(cuid())
+  name                  PlanName
+  priceMinor            Int
+  currency              String         @default("NGN")
+  billingPeriod         BillingPeriod  @default(MONTHLY)
+  maxActiveApplications Int
+  categoryScope         String[]
+  qualificationAccess   String
+  supportTier           String
+  sponsoredAccess       Boolean        @default(false)
+  isLive                Boolean        @default(true)
+  subscriptions         Subscription[]
+}
+
+model Subscription {
+  id              String    @id @default(cuid())
+  userId          String    @unique
+  user            User      @relation(fields: [userId], references: [id])
+  planId          String
+  plan            Plan      @relation(fields: [planId], references: [id])
+  status          SubStatus @default(ACTIVE)
+  startedAt       DateTime  @default(now())
+  renewsAt        DateTime?
+  graceUntil      DateTime?
+  couponCode      String?
+  // Refund window bookkeeping: a plan purchase is refundable for 7 days
+  // ONLY while no task has been accepted under it.
+  hasAcceptedTask Boolean   @default(false)
+  refundableUntil DateTime?
+}
+
+model TaskCategory {
+  id             String          @id @default(cuid())
+  family         CategoryFamily
+  name           String
+  slug           String          @unique
+  tasks          Task[]
+  qualifications Qualification[]
+}
+
+model Organisation {
+  id                 String      @id @default(cuid())
+  name               String
+  verificationStatus String      @default("pending")
+  escrowBalanceMinor BigInt      @default(0)
+  tasks              Task[]
+  campaigns          Campaign[]
+  members            OrgMember[]
+  createdAt          DateTime    @default(now())
+}
+
+model OrgMember {
+  id     String       @id @default(cuid())
+  orgId  String
+  org    Organisation @relation(fields: [orgId], references: [id])
+  userId String
+  user   User         @relation(fields: [userId], references: [id])
+  role   String       @default("member")
+  scopes String[]
+
+  @@unique([orgId, userId])
+}
+
+model Task {
+  id                    String       @id @default(cuid())
+  sponsorOrgId          String
+  org                   Organisation @relation(fields: [sponsorOrgId], references: [id])
+  categoryId            String
+  category              TaskCategory @relation(fields: [categoryId], references: [id])
+  title                 String
+  description           String
+  instructions          String
+  difficulty            Difficulty
+  payMinor              Int
+  currency              String       @default("NGN")
+  deadline              DateTime?
+  totalSlots            Int
+  slotsTaken            Int          @default(0)
+  minRyseLevel          RyseLevel    @default(NEW)
+  countries             String[]
+  requiredSkills        String[]
+  requiresQualification Boolean      @default(false)
+  reviewType            ReviewType   @default(MANUAL)
+  isSponsored           Boolean      @default(false)
+  sponsorVerified       Boolean      @default(false)
+  status                TaskStatus   @default(DRAFT)
+  // Per-task escrow: earnings become withdrawable only against funded, unspent escrow.
+  escrowFundedMinor     BigInt       @default(0)
+  escrowSpentMinor      BigInt       @default(0)
+  assignments           Assignment[]
+  campaigns             Campaign[]
+  createdAt             DateTime     @default(now())
+}
+
+model Assignment {
+  id              String           @id @default(cuid())
+  taskId          String
+  task            Task             @relation(fields: [taskId], references: [id])
+  contributorId   String
+  contributor     User             @relation(fields: [contributorId], references: [id])
+  status          AssignmentStatus @default(ACCEPTED)
+  acceptedAt      DateTime         @default(now())
+  deadline        DateTime?
+  autosavePayload Json?
+  submittedAt     DateTime?
+  submission      Submission?
+}
+
+model Submission {
+  id           String     @id @default(cuid())
+  assignmentId String     @unique
+  assignment   Assignment @relation(fields: [assignmentId], references: [id])
+  evidence     Json
+  autoChecks   Json?
+  submittedAt  DateTime   @default(now())
+  review       Review?
+  appeal       Appeal?
+}
+
+model Review {
+  id           String         @id @default(cuid())
+  submissionId String         @unique
+  submission   Submission     @relation(fields: [submissionId], references: [id])
+  reviewerId   String
+  rubricScores Json
+  decision     ReviewDecision
+  note         String?
+  decidedAt    DateTime       @default(now())
+}
+
+model Appeal {
+  id               String       @id @default(cuid())
+  submissionId     String       @unique
+  submission       Submission   @relation(fields: [submissionId], references: [id])
+  contributorId    String
+  reason           String
+  status           AppealStatus @default(OPEN)
+  secondReviewerId String?
+  resolvedAt       DateTime?
+  createdAt        DateTime     @default(now())
+}
+
+model Qualification {
+  id            String                 @id @default(cuid())
+  categoryId    String
+  category      TaskCategory           @relation(fields: [categoryId], references: [id])
+  title         String                 @default("Qualification")
+  passThreshold Int                    @default(70)
+  attempts      QualificationAttempt[]
+}
+
+model QualificationAttempt {
+  id              String        @id @default(cuid())
+  userId          String
+  user            User          @relation(fields: [userId], references: [id])
+  qualificationId String
+  qualification   Qualification @relation(fields: [qualificationId], references: [id])
+  score           Int
+  passed          Boolean       @default(false)
+  takenAt         DateTime      @default(now())
+  retakeAfter     DateTime?
+}
+
+model Wallet {
+  id                String        @id @default(cuid())
+  userId            String        @unique
+  user              User          @relation(fields: [userId], references: [id])
+  currency          String        @default("NGN")
+  totalEarnedMinor  BigInt        @default(0)
+  approvedMinor     BigInt        @default(0)
+  pendingMinor      BigInt        @default(0)
+  withdrawableMinor BigInt        @default(0)
+  promoCreditMinor  BigInt        @default(0) // NEVER included in withdrawableMinor
+  refundMinor       BigInt        @default(0)
+  entries           WalletEntry[]
+}
+
+model WalletEntry {
+  id            String    @id @default(cuid())
+  walletId      String
+  wallet        Wallet    @relation(fields: [walletId], references: [id])
+  type          EntryType
+  relatedTaskId String?
+  grossMinor    BigInt
+  feeMinor      BigInt    @default(0)
+  exchangeRate  Float     @default(1)
+  netMinor      BigInt
+  currency      String    @default("NGN")
+  status        String
+  reference     String    @unique
+  createdAt     DateTime  @default(now())
+}
+
+model Withdrawal {
+  id             String           @id @default(cuid())
+  userId         String
+  user           User             @relation(fields: [userId], references: [id])
+  amountMinor    BigInt
+  feeMinor       BigInt
+  currency       String           @default("NGN")
+  payoutMethod   PayoutMethod
+  destinationRef String
+  status         WithdrawalStatus @default(PROCESSING)
+  otpVerified    Boolean          @default(false)
+  pinVerified    Boolean          @default(false)
+  reference      String           @unique
+  createdAt      DateTime         @default(now())
+}
+
+model BillPayment {
+  id          String      @id @default(cuid())
+  userId      String
+  user        User        @relation(fields: [userId], references: [id])
+  service     BillService
+  provider    String
+  customerRef String
+  amountMinor BigInt
+  status      BillStatus  @default(SUCCESSFUL)
+  tokenRef    String?
+  createdAt   DateTime    @default(now())
+}
+
+model Campaign {
+  id               String       @id @default(cuid())
+  orgId            String
+  org              Organisation @relation(fields: [orgId], references: [id])
+  taskId           String
+  task             Task         @relation(fields: [taskId], references: [id])
+  rewardPoolMinor  BigInt
+  platformFeeMinor BigInt
+  fundedMinor      BigInt       @default(0)
+  objective        String?
+  status           String       @default("draft")
+  createdAt        DateTime     @default(now())
+}
+
+model Referral {
+  id          String         @id @default(cuid())
+  referrerId  String
+  referrer    User           @relation("referrer", fields: [referrerId], references: [id])
+  refereeId   String?
+  status      ReferralStatus @default(PENDING)
+  rewardMinor BigInt         @default(0) // promo credit only — never deposit-linked
+  createdAt   DateTime       @default(now())
+}
+
+model Ticket {
+  id          String       @id @default(cuid())
+  userId      String
+  user        User         @relation(fields: [userId], references: [id])
+  type        TicketType   @default(GENERAL)
+  subject     String
+  status      TicketStatus @default(OPEN)
+  thread      Json
+  assignedTo  String?
+  disputeKind String?
+  createdAt   DateTime     @default(now())
+}
+
+model CountryConfig {
+  code               String  @id
+  currency           String
+  fxToUsd            Float
+  withdrawalFeeMinor Int
+  isLive             Boolean @default(false)
+}
+
+model Coupon {
+  code       String    @id
+  percentOff Int
+  active     Boolean   @default(true)
+  expiresAt  DateTime?
+}
+
+model FraudCase {
+  id           String      @id @default(cuid())
+  userId       String?
+  user         User?       @relation(fields: [userId], references: [id])
+  submissionId String?
+  reason       String
+  status       FraudStatus @default(OPEN)
+  createdAt    DateTime    @default(now())
+  resolvedAt   DateTime?
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  actor     String
+  action    String
+  target    String
+  meta      Json?
+  createdAt DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  kind      String
+  title     String
+  body      String?
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}

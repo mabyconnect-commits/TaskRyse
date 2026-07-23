@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Albert+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#FAFAFC; font-family:'Albert Sans',sans-serif; color:#171A3A; }
+  a { color:#FF6A3D; text-decoration:none; }
+  @keyframes trspin { to { transform:rotate(360deg); } }
+  @keyframes trshimmer { 0% { background-position:-400px 0; } 100% { background-position:400px 0; } }
+  .tr-skel { background:linear-gradient(90deg,#ECEDF4 25%,#F6F7FB 50%,#ECEDF4 75%); background-size:800px 100%; animation:trshimmer 1.3s infinite linear; border-radius:8px; }
+</style>
+</helmet>
+
+<div style="overflow-x:hidden">
+<div style="max-width:1160px; margin:0 auto; padding:36px 24px 80px 24px">
+  <div style="display:flex; align-items:center; gap:14px; margin-bottom:10px; flex-wrap:wrap">
+    <a href="Taskryse Index.dc.html"><img src="assets/taskryse-logo.png" alt="Taskryse" style="height:28px; width:auto"></a>
+    <span style="background:#171A3A; color:#FFC857; font-family:Sora,sans-serif; font-size:10.5px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; padding:5px 11px; border-radius:999px">Phase 13 · Interface states</span>
+  </div>
+  <h1 style="font-family:Sora,sans-serif; font-size:clamp(28px,5vw,38px); font-weight:800; letter-spacing:-0.02em; margin:0 0 12px 0">Every state, not just the happy path</h1>
+  <p style="font-size:16px; color:#4A4D6B; line-height:1.6; max-width:620px; margin:0 0 36px 0">The system states each surface can enter — designed once here, applied everywhere. Each preview is the real component in that state.</p>
+
+  <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); gap:20px">
+    <sc-for list="{{ states }}" as="s" hint-placeholder-count="12">
+      <div style="background:#FFFFFF; border:1px solid #ECEDF4; border-radius:16px; overflow:hidden">
+        <div style="display:flex; align-items:center; justify-content:space-between; padding:12px 16px; border-bottom:1px solid #F0F1F7">
+          <span style="font-family:Sora,sans-serif; font-size:13.5px; font-weight:700">{{ s.name }}</span>
+          <span style="background:{{ s.tagBg }}; color:{{ s.tagFg }}; font-size:10px; font-weight:700; padding:3px 9px; border-radius:999px">{{ s.tag }}</span>
+        </div>
+        <div style="padding:20px 16px; min-height:190px; display:flex; align-items:center; justify-content:center; background:{{ s.canvasBg }}">
+          {{ s.preview }}
+        </div>
+        <div style="padding:12px 16px; border-top:1px solid #F0F1F7; font-size:12px; color:#6B6E8C; line-height:1.5">{{ s.desc }}</div>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const h = React.createElement;
+    const center = { display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", gap: "10px", maxWidth: "240px" };
+    const bigIcon = (emoji, bg, fg) => h("div", { style: { width: "52px", height: "52px", borderRadius: "14px", background: bg, color: fg, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "24px" } }, emoji);
+    const title = (t) => h("div", { style: { fontFamily: "Sora,sans-serif", fontSize: "15px", fontWeight: 700 } }, t);
+    const sub = (t) => h("div", { style: { fontSize: "12.5px", color: "#6B6E8C", lineHeight: 1.5 } }, t);
+    const btn = (t, bg, fg) => h("div", { style: { background: bg, color: fg, fontFamily: "Sora,sans-serif", fontSize: "12.5px", fontWeight: 700, padding: "9px 18px", borderRadius: "10px", marginTop: "4px" } }, t);
+
+    const loading = h("div", { style: center },
+      h("div", { style: { width: "40px", height: "40px", borderRadius: "50%", border: "4px solid #FFE4D8", borderTopColor: "#FF6A3D", animation: "trspin 0.8s linear infinite" } }),
+      sub("Loading your tasks…"));
+
+    const skeleton = h("div", { style: { width: "100%", display: "flex", flexDirection: "column", gap: "12px" } },
+      [0,1,2].map(i => h("div", { key: i, style: { display: "flex", gap: "12px", alignItems: "center" } },
+        h("div", { className: "tr-skel", style: { width: "40px", height: "40px", borderRadius: "10px", flexShrink: 0 } }),
+        h("div", { style: { flex: 1, display: "flex", flexDirection: "column", gap: "7px" } },
+          h("div", { className: "tr-skel", style: { height: "11px", width: "80%" } }),
+          h("div", { className: "tr-skel", style: { height: "11px", width: "50%" } })))));
+
+    const empty = h("div", { style: center }, bigIcon("🗂", "#F4F5FA", "#9A9DBA"), title("No active tasks yet"), sub("Accept a task from the marketplace and it'll appear here."), btn("Find a task", "#FF6A3D", "#FFFFFF"));
+    const success = h("div", { style: center }, bigIcon("✓", "#EDF7F3", "#16A67A"), title("Task approved!"), sub("₦1,800 added to your withdrawable balance."), btn("View wallet", "#16A67A", "#FFFFFF"));
+    const warning = h("div", { style: center }, bigIcon("⚠", "#FFF8EC", "#B8860B"), title("Deadline in 30 minutes"), sub("Submit soon or the task will expire and release your slot."));
+    const error = h("div", { style: center }, bigIcon("!", "#FDF6F6", "#E5484D"), title("Something went wrong"), sub("We couldn't load this task. Please try again."), btn("Retry", "#171A3A", "#FFFFFF"));
+    const offline = h("div", { style: center }, bigIcon("📡", "#F4F5FA", "#6B6E8C"), title("You're offline"), sub("Your work is autosaved. It'll sync when you reconnect."));
+    const permission = h("div", { style: center }, bigIcon("🚫", "#FDF6F6", "#E5484D"), title("Permission denied"), sub("This area is limited to verified sponsors."));
+    const restricted = h("div", { style: center }, bigIcon("🔒", "#FDF6F6", "#B33A3E"), title("Account restricted"), sub("Your account is under review. Withdrawals are paused; contact support."), btn("Contact support", "#171A3A", "#FFFFFF"));
+    const session = h("div", { style: center }, bigIcon("⏱", "#FFF8EC", "#B8860B"), title("Session expired"), sub("For your security, please sign in again."), btn("Sign in", "#FF6A3D", "#FFFFFF"));
+    const maintenance = h("div", { style: center }, bigIcon("🛠", "#F0F4FF", "#2B5FCC"), title("Scheduled maintenance"), sub("Taskryse is back at 02:00 WAT. Your earnings are safe."));
+    const locked = h("div", { style: center }, bigIcon("🔐", "#F4F5FA", "#9A9DBA"), title("Qualification required"), sub("Pass a short test to unlock this task category."), btn("Take qualification", "#171A3A", "#FFC857"));
+    const notfound = h("div", { style: center }, h("div", { style: { fontFamily: "Sora,sans-serif", fontSize: "40px", fontWeight: 800, color: "#171A3A" } }, "404"), sub("This page doesn't exist or has moved."), btn("Back to dashboard", "#FF6A3D", "#FFFFFF"));
+
+    const defs = [
+      { name: "Loading", tag: "Async", preview: loading, desc: "Spinner for short waits under 1s.", c: "#FAFAFC" },
+      { name: "Skeleton", tag: "Async", preview: skeleton, desc: "Shape-preserving placeholder for content lists.", c: "#FFFFFF" },
+      { name: "Empty", tag: "Content", preview: empty, desc: "No data yet — always paired with a clear next action.", c: "#FAFAFC" },
+      { name: "Success", tag: "Feedback", preview: success, desc: "Positive confirmation, green reserved for approved.", c: "#FAFAFC" },
+      { name: "Warning", tag: "Feedback", preview: warning, desc: "Time-sensitive nudge before something is lost.", c: "#FAFAFC" },
+      { name: "Error", tag: "Feedback", preview: error, desc: "Recoverable failure with a retry.", c: "#FAFAFC" },
+      { name: "Offline", tag: "System", preview: offline, desc: "Connectivity lost — reassure autosave.", c: "#FAFAFC" },
+      { name: "Permission denied", tag: "System", preview: permission, desc: "Role can't access this surface.", c: "#FAFAFC" },
+      { name: "Account restricted", tag: "System", preview: restricted, desc: "Under review — money paused, path to resolve.", c: "#FAFAFC" },
+      { name: "Session expired", tag: "System", preview: session, desc: "Security timeout, re-auth required.", c: "#FAFAFC" },
+      { name: "Maintenance", tag: "System", preview: maintenance, desc: "Planned downtime with a return time.", c: "#FAFAFC" },
+      { name: "Locked / qualification", tag: "Content", preview: locked, desc: "Gated content with an unlock path.", c: "#FAFAFC" },
+      { name: "404 Not found", tag: "System", preview: notfound, desc: "Missing route, route home.", c: "#FAFAFC" }
+    ];
+    const tagColors = { Async: ["#F0F4FF","#2B5FCC"], Content: ["#FFF1EA","#E5552B"], Feedback: ["#EDF7F3","#0E7A59"], System: ["#F4F5FA","#6B6E8C"] };
+    return {
+      states: defs.map(d => ({ name: d.name, tag: d.tag, preview: d.preview, desc: d.desc, canvasBg: d.c,
+        tagBg: tagColors[d.tag][0], tagFg: tagColors[d.tag][1] }))
+    };
+  }
+}
+</script>
+</body>
+</html>

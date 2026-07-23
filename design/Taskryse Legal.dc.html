@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Albert+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#FAFAFC; font-family:'Albert Sans',sans-serif; color:#171A3A; }
+  a { color:#FF6A3D; text-decoration:none; }
+  a:hover { color:#E5552B; }
+</style>
+</helmet>
+
+<div style="overflow-x:hidden; min-height:100vh">
+<nav style="background:#171A3A; border-bottom:1px solid #262A50">
+  <div style="max-width:1120px; margin:0 auto; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px">
+    <a href="Taskryse Index.dc.html" style="display:flex; align-items:center; gap:12px"><img src="assets/taskryse-logo.png" alt="Taskryse" style="height:26px; width:auto; filter:brightness(0) invert(1)" onerror="this.style.filter='none'"><span style="font-family:Sora,sans-serif; font-size:13px; font-weight:700; color:#B9BCD9; border-left:1px solid rgba(255,255,255,0.15); padding-left:12px">Legal &amp; policies</span></a>
+    <span style="color:#8B8FB3; font-size:12.5px">Last updated 1 July 2026</span>
+  </div>
+</nav>
+
+<div style="max-width:1120px; margin:0 auto; padding:28px 20px 72px 20px; display:flex; gap:32px; align-items:flex-start; flex-wrap:wrap">
+  <!-- Sidebar -->
+  <div style="flex:0 0 auto; width:min(260px,100%); position:sticky; top:20px">
+    <div style="background:#FFFFFF; border:1px solid #ECEDF4; border-radius:16px; padding:12px">
+      <sc-for list="{{ docs }}" as="d" hint-placeholder-count="6">
+        <button onClick="{{ d.go }}" style="display:block; width:100%; text-align:left; border:none; cursor:pointer; background:{{ d.bg }}; border-radius:10px; padding:11px 14px; font-family:'Albert Sans',sans-serif; font-size:13.5px; font-weight:{{ d.weight }}; color:{{ d.fg }}; margin-bottom:2px">{{ d.title }}</button>
+      </sc-for>
+    </div>
+  </div>
+
+  <!-- Doc -->
+  <div style="flex:1 1 380px; min-width:280px; background:#FFFFFF; border:1px solid #ECEDF4; border-radius:18px; padding:clamp(24px,4vw,40px)">
+    <div style="font-family:Sora,sans-serif; font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#FF6A3D; margin-bottom:10px">{{ curKicker }}</div>
+    <h1 style="font-family:Sora,sans-serif; font-size:clamp(26px,4.5vw,34px); font-weight:800; letter-spacing:-0.01em; margin:0 0 8px 0">{{ curTitle }}</h1>
+    <p style="font-size:15px; color:#6B6E8C; line-height:1.6; margin:0 0 28px 0">{{ curIntro }}</p>
+    <sc-for list="{{ sections }}" as="s" hint-placeholder-count="5">
+      <div style="margin-bottom:24px">
+        <div style="font-family:Sora,sans-serif; font-size:16px; font-weight:700; margin-bottom:8px">{{ s.h }}</div>
+        <div style="font-size:14.5px; color:#4A4D6B; line-height:1.75">{{ s.p }}</div>
+      </div>
+    </sc-for>
+    <div style="background:#FFF8EC; border:1px solid #F2E2BC; border-radius:12px; padding:16px 20px; font-size:13.5px; color:#7A5A12; line-height:1.65; margin-top:8px">{{ curNote }}</div>
+  </div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { doc: "terms" };
+  renderVals() {
+    const st = this.state;
+    const docs = {
+      terms: { title: "Terms of Service", kicker: "Agreement", intro: "The terms governing your use of the Taskryse platform.",
+        sections: [
+          { h: "1. What Taskryse provides", p: "Taskryse is a platform that connects contributors with legitimate digital tasks from verified sponsors. We provide access to task categories, qualifications, learning resources and payment infrastructure — we do not employ contributors or guarantee task availability." },
+          { h: "2. Plans and access", p: "A paid plan unlocks eligible task categories, assessments and tools. A plan is a subscription to platform features. It does not include, promise or guarantee any tasks, earnings or returns. Task availability varies by category, plan, country and demand." },
+          { h: "3. Earnings", p: "You earn only when you complete legitimate work that passes the required review. Payment for a task is released from the sponsor's escrow once your submission is approved. Rejected work is not paid." },
+          { h: "4. Acceptable use", p: "You may not submit fake, spam, plagiarised or low-effort work; operate multiple accounts; manipulate reviews; or engage in fraud. Violations may result in withheld payment, account freezing or termination." },
+          { h: "5. Changes", p: "We may update these terms with notice. Continued use after changes take effect constitutes acceptance." }
+        ], note: "Plain-language summary: a plan buys access to the platform, not income. You get paid for approved work, and cheating or fraud forfeits payment." },
+      privacy: { title: "Privacy Policy", kicker: "Your data", intro: "How we collect, use and protect your personal information.",
+        sections: [
+          { h: "1. What we collect", p: "Account details, identity-verification documents (KYC), task submissions, payout information and usage data needed to operate the platform and meet legal obligations." },
+          { h: "2. How we use it", p: "To verify identity, match you with eligible tasks, process payments, prevent fraud, provide support and comply with anti-money-laundering law. We never sell your personal data." },
+          { h: "3. Sharing", p: "Sponsors see the work you submit and a pseudonymous contributor rating — never your identity documents. Payment and compliance partners receive only what's needed to process payouts." },
+          { h: "4. Your rights", p: "You can download your data, correct it, or request deletion from Security & account settings. Some records are retained where law requires." },
+          { h: "5. Security", p: "Data is encrypted in transit and at rest. Access is role-limited and audit-logged." }
+        ], note: "You control your data: download or delete it anytime from your account, subject to legal retention requirements." },
+      contributor: { title: "Contributor Agreement", kicker: "Your role", intro: "The relationship between you and Taskryse as an independent contributor.",
+        sections: [
+          { h: "1. Independent status", p: "You are an independent contributor, not an employee. You choose which eligible tasks to accept and when to work. Taskryse does not guarantee a minimum amount of work or income." },
+          { h: "2. Quality and reviews", p: "Your submissions are reviewed against published rubrics. Consistent quality raises your Ryse Level and unlocks more categories. Poor quality or policy breaches can lower it." },
+          { h: "3. Payment terms", p: "Approved work is credited to your wallet. Funds become withdrawable once the sponsor's funding clears. Promotional credits are separate and not withdrawable." },
+          { h: "4. Progression", p: "Ryse Levels are earned through approved work, quality, on-time rate and qualifications only — never through spending or recruiting others." }
+        ], note: "You're independent: you pick your work, you're paid for approved results, and your standing is earned through quality — never purchased." },
+      payment: { title: "Task-Payment Policy", kicker: "Getting paid", intro: "Exactly how, when and why you get paid.",
+        sections: [
+          { h: "1. When payment is earned", p: "Payment is earned only when a submission is approved by the required review (sponsor, reviewer or automated). Submitting work does not by itself earn payment." },
+          { h: "2. Pending vs withdrawable", p: "On submission, expected payment shows as 'pending review'. On approval it becomes 'approved earnings'. It becomes withdrawable once the sponsor's escrow funding has cleared." },
+          { h: "3. Revisions and rejections", p: "Revision requests let you resubmit without penalty. Rejected work is not paid but can be appealed to an independent reviewer within 7 days." },
+          { h: "4. Fees and currency", p: "A flat withdrawal fee applies per payout and is shown before you confirm. Payouts are made in your local currency at the displayed rate." }
+        ], note: "The core rule: no guaranteed income. Money is tied to a specific approved task, and every payment has a receipt you can download." },
+      refund: { title: "Refund & Cancellation Policy", kicker: "Plans & billing", intro: "Your options around plan purchases and renewals.",
+        sections: [
+          { h: "1. Refund window", p: "You can request a full refund within 7 days of a plan purchase, provided you have not yet accepted a task in the plan's newly-unlocked categories." },
+          { h: "2. Cancellation", p: "You can cancel anytime. Access continues until the end of the paid period; no further renewals are charged. Your earnings and withdrawable balance are unaffected." },
+          { h: "3. Failed renewals & grace period", p: "If a renewal payment fails, you get a 5-day grace period with full access while we retry. After that, plan-gated categories lock, but your account and balances stay accessible." },
+          { h: "4. How refunds are paid", p: "Refunds return to your original payment method, typically within 5–10 business days." }
+        ], note: "Try with confidence: 7-day refund before your first task acceptance, cancel anytime, and a grace period so a failed card never costs you access to your money." },
+      community: { title: "Community Guidelines", kicker: "Standards", intro: "The behaviour expected from everyone on Taskryse.",
+        sections: [
+          { h: "1. Do genuine work", p: "Complete tasks honestly and to the best of your ability. Follow each task's instructions and rubric." },
+          { h: "2. No manipulation", p: "No fake reviews, spam, deceptive engagement, bots, or coordinated account activity. No buying, selling or sharing accounts." },
+          { h: "3. Respect and safety", p: "Treat sponsors, reviewers and support staff respectfully. Report unsafe, illegal or policy-violating tasks using the report button." },
+          { h: "4. Consequences", p: "Breaches lead to warnings, withheld payment, Ryse-Level reduction, account freezing or permanent removal depending on severity." }
+        ], note: "One standard for all: honest work, no manipulation, mutual respect. It keeps payments flowing to the people who earn them." }
+    };
+    const order = ["terms", "privacy", "contributor", "payment", "refund", "community"];
+    const cur = docs[st.doc];
+    return {
+      docs: order.map(k => ({ title: docs[k].title, go: () => this.setState({ doc: k }),
+        bg: st.doc === k ? "#FFF1EA" : "transparent", fg: st.doc === k ? "#E5552B" : "#4A4D6B", weight: st.doc === k ? 700 : 500 })),
+      curTitle: cur.title, curKicker: cur.kicker, curIntro: cur.intro, sections: cur.sections, curNote: cur.note
+    };
+  }
+}
+</script>
+</body>
+</html>

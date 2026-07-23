@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Albert+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#EEEFF5; font-family:'Albert Sans',sans-serif; color:#171A3A; }
+  a { color:#FF6A3D; text-decoration:none; }
+  a:hover { color:#E5552B; }
+  input:focus { outline:2px solid #FF6A3D; outline-offset:1px; }
+</style>
+</helmet>
+
+<div style="overflow-x:hidden; min-height:100vh">
+<div style="max-width:1240px; margin:0 auto; padding:20px 20px 4px 20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px 16px">
+  <div style="display:flex; align-items:center; gap:12px">
+    <a href="Taskryse Home.dc.html"><img src="assets/taskryse-logo.png" alt="Taskryse" style="height:26px; width:auto"></a>
+    <span style="background:#171A3A; color:#FFC857; font-family:Sora,sans-serif; font-size:10.5px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; padding:5px 11px; border-radius:999px; white-space:nowrap">Contributor app demo</span>
+  </div>
+  <div style="font-size:12.5px; color:#6B6E8C; line-height:1.5">Dashboard · marketplace · task flow — all clickable</div>
+</div>
+
+<div style="max-width:1240px; margin:0 auto; padding:16px 20px 64px 20px; display:flex; gap:28px; align-items:flex-start; flex-wrap:wrap; justify-content:center">
+
+  <!-- Phone -->
+  <div style="flex:0 0 auto; width:min(400px, 100%)">
+    <div style="background:#FAFAFC; border:1px solid #E3E4EE; border-radius:28px; box-shadow:0 24px 64px rgba(23,26,58,0.14); overflow:hidden; display:flex; flex-direction:column; height:800px; position:relative">
+
+      <!-- ============ HOME ============ -->
+      <sc-if value="{{ tabHome }}" hint-placeholder-val="{{ true }}">
+        <div style="flex:1; overflow-y:auto; padding:20px 20px 12px 20px">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px">
+            <div>
+              <div style="font-size:13px; color:#6B6E8C">{{ greeting }}</div>
+              <div style="font-family:Sora,sans-serif; font-size:20px; font-weight:800">Adaeze 👋</div>
+            </div>
+            <div style="display:flex; align-items:center; gap:10px">
+              <span style="position:relative; width:36px; height:36px; border-radius:12px; background:#FFFFFF; border:1px solid #E3E4EE; display:flex; align-items:center; justify-content:center; font-size:15px">🔔<span style="position:absolute; top:7px; right:8px; width:7px; height:7px; border-radius:50%; background:#FF6A3D"></span></span>
+              <span style="width:36px; height:36px; border-radius:50%; background:#FF6A3D; color:#FFFFFF; display:flex; align-items:center; justify-content:center; font-family:Sora,sans-serif; font-weight:700; font-size:14px">AN</span>
+            </div>
+          </div>
+
+          <!-- Level card -->
+          <div style="background:#171A3A; border-radius:18px; padding:18px 20px; color:#FFFFFF; margin-bottom:14px">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px">
+              <div style="display:flex; align-items:center; gap:10px">
+                <span style="display:inline-flex; align-items:flex-end; gap:2px"><span style="width:6px; height:8px; background:#FFC857; border-radius:1.5px"></span><span style="width:6px; height:13px; background:#FF8A3D; border-radius:1.5px"></span><span style="width:6px; height:18px; background:#FF6A3D; border-radius:1.5px"></span></span>
+                <span style="font-family:Sora,sans-serif; font-weight:800; font-size:15px">Skilled Ryser</span>
+              </div>
+              <span style="font-size:12px; color:#B9BCD9">Level 3 of 5</span>
+            </div>
+            <div style="height:7px; background:rgba(255,255,255,0.12); border-radius:999px; overflow:hidden; margin-bottom:8px"><div style="height:100%; width:64%; background:linear-gradient(90deg,#FFC857,#FF6A3D); border-radius:999px"></div></div>
+            <div style="font-size:12px; color:#B9BCD9">11 more approved tasks to Pro Ryser · keep quality ≥ 92%</div>
+          </div>
+
+          <!-- Balances -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px">
+            <button onClick="{{ goWallet }}" style="text-align:left; border:1px solid #E3E4EE; background:#FFFFFF; border-radius:14px; padding:14px 16px; cursor:pointer; font-family:'Albert Sans',sans-serif">
+              <div style="font-size:11.5px; color:#6B6E8C; margin-bottom:3px">Withdrawable</div>
+              <div style="font-family:Sora,sans-serif; font-size:18px; font-weight:800; color:#171A3A">{{ withdrawable }}</div>
+            </button>
+            <button onClick="{{ goWallet }}" style="text-align:left; border:1px solid #E3E4EE; background:#FFFFFF; border-radius:14px; padding:14px 16px; cursor:pointer; font-family:'Albert Sans',sans-serif">
+              <div style="font-size:11.5px; color:#6B6E8C; margin-bottom:3px">Pending review</div>
+              <div style="font-family:Sora,sans-serif; font-size:18px; font-weight:800; color:#B8860B">{{ pending }}</div>
+            </button>
+          </div>
+
+          <!-- Stats row -->
+          <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:16px">
+            <sc-for list="{{ stats }}" as="stt" hint-placeholder-count="4">
+              <div style="background:#FFFFFF; border:1px solid #E3E4EE; border-radius:12px; padding:10px 6px; text-align:center">
+                <div style="font-family:Sora,sans-serif; font-size:14.5px; font-weight:800; color:{{ stt.color }}">{{ stt.v }}</div>
+                <div style="font-size:10px; color:#6B6E8C; margin-top:2px">{{ stt.l }}</div>
+              </div>
+            </sc-for>
+          </div>
+
+          <!-- Continue task -->
+          <sc-if value="{{ hasActive }}" hint-placeholder-val="{{ true }}">
+            <div style="font-family:Sora,sans-serif; font-size:14px; font-weight:700; margin-bottom:8px">Continue working</div>
+            <sc-for list="{{ activePreview }}" as="t" hint-placeholder-count="1">
+              <button onClick="{{ t.open }}" style="width:100%; text-align:left; border:1px solid #FFD9CB; background:#FFF8F4; border-radius:14px; padding:14px 16px; cursor:pointer; font-family:'Albert Sans',sans-serif; margin-bottom:16px">
+                <div style="display:flex; justify-content:space-between; gap:8px; margin-bottom:8px">
+                  <span style="font-size:14px; font-weight:700; color:#171A3A">{{ t.title }}</span>
+                  <span style="font-family:Sora,sans-serif; font-size:13.5px; font-weight:800; white-space:nowrap">{{ t.pay }}</span>
+                </div>
+                <div style="height:5px; background:#FFE4D8; border-radius:999px; overflow:hidden; margin-bottom:6px"><div style="height:100%; width:{{ t.prog }}; background:#FF6A3D; border-radius:999px"></div></div>
+                <div style="display:flex; justify-content:space-between; font-size:11.5px; color:#B33A2B"><span>{{ t.prog }} complete · autosaved</span><span>due {{ t.deadline }}</span></div>
+              </button>
+            </sc-for>
+          </sc-if>
+
+          <!-- Quick actions -->
+          <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:16px">
+            <sc-for list="{{ quickActions }}" as="qa" hint-placeholder-count="4">
+              <button onClick="{{ qa.go }}" style="border:1px solid #E3E4EE; background:#FFFFFF; border-radius:12px; padding:12px 4px; cursor:pointer; font-family:'Albert Sans',sans-serif; text-align:center">
+                <div style="font-size:17px; margin-bottom:4px">{{ qa.icon }}</div>
+                <div style="font-size:10.5px; font-weight:700; color:#171A3A">{{ qa.label }}</div>
+              </button>
+            </sc-for>
+          </div>
+
+          <!-- Recommended -->
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px">
+            <div style="font-family:Sora,sans-serif; font-size:14px; font-weight:700">Recommended for you</div>
+            <button onClick="{{ goTasks }}" style="border:none; background:none; color:#FF6A3D; font-size:12.5px; font-weight:700; cursor:pointer; font-family:'Albert Sans',sans-serif">See all →</button>
+          </div>
+          <sc-for list="{{ recTasks }}" as="t" hint-placeholder-count="2">
+            <button onClick="{{ t.open }}" style="width:100%; text-align:left; border:1px solid #E3E4EE; background:#FFFFFF; border-radius:14px; padding:14px 16px; cursor:pointer; font-family:'Albert Sans',sans-serif; margin-bottom:8px">
+              <div style="display:flex; justify-content:space-between; gap:8px; margin-bottom:6px">
+                <span style="font-size:14px; font-weight:700; color:#171A3A; line-height:1.4">{{ t.title }}</span>
+                <span style="font-family:Sora,sans-serif; font-size:13.5px; font-weight:800; white-space:nowrap">{{ t.pay }}</span>
+              </div>
+              <div style="display:flex; gap:6px; flex-wrap:wrap">
+                <span style="background:#F4F5FA; color:#4A4D6B; font-size:10.5px; font-weight:600; padding:3px 8px; border-radius:999px">{{ t.cat }}</span>
+                <span style="background:#F4F5FA; color:#4A4D6B; font-size:10.5px; font-weight:600; padding:3px 8px; border-radius:999px">~{{ t.mins }} min</span>
+                <span style="background:{{ t.eligBg }}; color:{{ t.eligFg }}; font-size:10.5px; font-weight:700; padding:3px 8px; border-radius:999px">{{ t.elig }}</span>
+              </div>
+            </button>
+          </sc-for>
+          <div style="background:#FFF8EC; border:1px solid #F2E2BC; border-radius:12px; padding:11px 14px; font-size:11.5px; color:#7A5A12; line-height:1.55; margin-top:8px">Task availability varies. Earnings come only from completed, approved work.</div>
+        </div>
+      </sc-if>
+
+      <!-- ============ TASKS (marketplace) ============ -->
+      <sc-if value="{{ tabTasks }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1; overflow-y:auto; padding:20px 20px 12px 20px">
+          <div style="font-family:Sora,sans-serif; font-size:20px; font-weight:800; margin-bottom:14px">Find tasks</div>
+          <input value="{{ q }}" onChange="{{ setQ }}" placeholder="Search tasks…" style="width:100%; box-sizing:border-box; border:1px solid #D7D9E6; border-radius:12px; padding:12px 14px; font-family:'Albert Sans',sans-serif; font-size:14px; margin-bottom:10px; background:#FFFFFF">
+          <div style="display:flex; gap:6px; overflow-x:auto; padding-bottom:8px; margin-bottom:6px">
+            <sc-for list="{{ cats }}" as="c" hint-placeholder-count="6">
+              <button onClick="{{ c.pick }}" style="border:none; cursor:pointer; white-space:nowrap; font-family:'Albert Sans',sans-serif; font-size:12.5px; font-weight:700; padding:8px 14px; border-radius:999px; background:{{ c.bg }}; color:{{ c.fg }}">{{ c.name }}</button>
+            </sc-for>
+          </div>
+          <div style="font-size:12px; color:#6B6E8C; margin-bottom:10px">{{ resultCount }} tasks · eligible first</div>
+          <sc-for list="{{ marketTasks }}" as="t" hint-placeholder-count="6">
+            <button onClick="{{ t.open }}" style="width:100%; text-align:left; border:1px solid {{ t.cardBorder }}; background:#FFFFFF; border-radius:14px; padding:14px 16px; cursor:pointer; font-family:'Albert Sans',sans-serif; margin-bottom:8px; opacity:{{ t.opacity }}">
+              <div style="display:flex; justify-content:space-between; gap:8px; margin-bottom:4px">
+                <span style="font-size:14px; font-weight:700; color:#171A3A; line-height:1.4">{{ t.title }}</span>
+                <span style="font-family:Sora,sans-serif; font-size:13.5px; font-weight:800; white-space:nowrap">{{ t.pay }}</span>
+              </div>
+              <div style="font-size:12px; color:#6B6E8C; margin-bottom:8px">{{ t.sponsor }} ✓ · {{ t.slots }} slots · due {{ t.deadline }}</div>
+              <div style="display:flex; gap:6px; flex-wrap:wrap">
+                <span style="background:#F4F5FA; color:#4A4D6B; font-size:10.5px; font-weight:600; padding:3px 8px; border-radius:999px">{{ t.cat }}</span>
+                <span style="background:#F4F5FA; color:#4A4D6B; font-size:10.5px; font-weight:600; padding:3px 8px; border-radius:999px">{{ t.diff }}</span>
+                <span style="background:#F4F5FA; color:#4A4D6B; font-size:10.5px; font-weight:600; padding:3px 8px; border-radius:999px">~{{ t.mins }} min</span>
+                <span style="background:{{ t.eligBg }}; color:{{ t.eligFg }}; font-size:10.5px; font-weight:700; padding:3px 8px; border-radius:999px">{{ t.elig }}</span>
+              </div>
+            </button>
+          </sc-for>
+          <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+            <div style="text-align:center; padding:36px 20px; color:#6B6E8C">
+              <div style="font-size:26px; margin-bottom:10px">🔍</div>
+              <div style="font-weight:700; font-size:14.5px; color:#171A3A; margin-bottom:6px">No tasks match</div>
+              <div style="font-size:13px; line-height:1.6">Try another search or category. New tasks arrive daily — availability varies.</div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <!-- ============ MY WORK ============ -->
+      <sc-if value="{{ tabWork }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1; overflow-y:auto; padding:20px 20px 12px 20px">
+          <div style="font-family:Sora,sans-serif; font-size:20px; font-weight:800; margin-bottom:14px">My work</div>
+          <sc-if value="{{ workEmpty }}" hint-placeholder-val="{{ false }}">
+            <div style="text-align:center; padding:48px 20px; color:#6B6E8C">
+              <div style="font-size:26px; margin-bottom:10px">🗂</div>
+              <div style="font-weight:700; font-size:14.5px; color:#171A3A; margin-bottom:6px">Nothing in progress</div>
+              <div style="font-size:13px; line-height:1.6; margin-bottom:16px">Accept a task from the marketplace and it appears here.</div>
+              <button onClick="{{ goTasks }}" style="border:none; background:#FF6A3D; color:#FFFFFF; font-family:Sora,sans-serif; font-size:14px; font-weight:700; padding:12px 24px; border-radius:12px; cursor:pointer">Find a task</button>
+            </div>
+          </sc-if>
+          <sc-for list="{{ workItems }}" as="w" hint-placeholder-count="3">
+            <div style="border:1px solid #E3E4EE; background:#FFFFFF; border-radius:14px; padding:14px 16px; margin-bottom:10px">
+              <div style="display:flex; justify-content:space-between; gap:8px; margin-bottom:8px">
+                <span style="font-size:14px; font-weight:700; color:#171A3A; line-height:1.4">{{ w.title }}</span>
+                <span style="font-family:Sora,sans-serif; font-size:13.5px; font-weight:800; white-space:nowrap">{{ w.pay }}</span>
+              </div>
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px">
+                <span style="display:inline-flex; align-items:center; gap:6px; background:{{ w.chipBg }}; color:{{ w.chipFg }}; font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px"><span style="width:6px; height:6px; border-radius:50%; background:{{ w.dot }}"></span>{{ w.status }}</span>
+                <span style="font-size:11.5px; color:#6B6E8C">{{ w.note }}</span>
+              </div>
+              <sc-if value="{{ w.canSubmit }}" hint-placeholder-val="{{ false }}">
+                <button onClick="{{ w.submit }}" style="width:100%; border:none; background:#FF6A3D; color:#FFFFFF; font-family:Sora,sans-serif; font-size:13.5px; font-weight:700; padding:11px; border-radius:10px; cursor:pointer" style-hover="background:#E5552B">Submit work</button>
+                <div style="font-size:11px; color:#9A9DBA; text-align:center; margin-top:6px">Full task workspace ships in Phase 4</div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- ============ WALLET ============ -->
+      <sc-if value="{{ tabWallet }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1; overflow-y:auto; padding:20px 20px 12px 20px">
+          <div style="font-family:Sora,sans-serif; font-size:20px; font-weight:800; margin-bottom:14px">Wallet</div>
+          <div style="background:#171A3A; border-radius:18px; padding:20px; color:#FFFFFF; margin-bottom:12px">
+            <div style="font-size:12px; color:#8B8FB3; margin-bottom:4px">Withdrawable balance</div>
+            <div style="font-family:Sora,sans-serif; font-size:30px; font-weight:800; margin-bottom:14px">{{ withdrawable }}</div>
+            <div style="display:flex; gap:8px">
+              <button style="flex:1; border:none; background:#FF6A3D; color:#FFFFFF; font-family:Sora,sans-serif; font-size:13.5px; font-weight:700; padding:12px; border-radius:11px; cursor:pointer">Withdraw</button>
+              <button style="flex:1; border:1px solid rgba(255,255,255,0.25); background:rgba(255,255,255,0.08); color:#FFFFFF; font-family:Sora,sans-serif; font-size:13.5px; font-weight:700; padding:12px; border-radius:11px; cursor:pointer">Pay bills</button>
+            </div>
+            <div style="font-size:11px; color:#8B8FB3; margin-top:10px; text-align:center">Withdrawal &amp; bills flows ship in Phase 5</div>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px">
+            <div style="border:1px solid #E3E4EE; background:#FFFFFF; border-radius:14px; padding:13px 15px">
+              <div style="font-size:11.5px; color:#6B6E8C; margin-bottom:3px">Pending review</div>
+              <div style="font-family:Sora,sans-serif; font-size:16px; font-weight:800; color:#B8860B">{{ pending }}</div>
+            </div>
+            <div style="border:1px solid #E3E4EE; background:#FFFFFF; border-radius:14px; padding:13px 15px">
+              <div style="font-size:11.5px; color:#6B6E8C; margin-bottom:3px">Promo credits <span style="font-size:10px">(not withdrawable)</span></div>
+              <div style="font-family:Sora,sans-serif; font-size:16px; font-weight:800; color:#4A4D6B">₦500</div>
+            </div>
+          </div>
+          <div style="font-family:Sora,sans-serif; font-size:14px; font-weight:700; margin-bottom:8px">Recent transactions</div>
+          <sc-for list="{{ txs }}" as="tx" hint-placeholder-count="4">
+            <div style="display:flex; justify-content:space-between; align-items:center; gap:10px; border-bottom:1px solid #ECEDF4; padding:12px 2px">
+              <div>
+                <div style="font-size:13.5px; font-weight:700">{{ tx.title }}</div>
+                <div style="font-size:11.5px; color:#6B6E8C">{{ tx.meta }}</div>
+              </div>
+              <div style="text-align:right">
+                <div style="font-family:Sora,sans-serif; font-size:13.5px; font-weight:800; color:{{ tx.amtColor }}">{{ tx.amt }}</div>
+                <div style="font-size:11px; font-weight:700; color:{{ tx.stColor }}">{{ tx.st }}</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- ============ MORE ============ -->
+      <sc-if value="{{ tabMore }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1; overflow-y:auto; padding:20px 20px 12px 20px">
+          <div style="font-family:Sora,sans-serif; font-size:20px; font-weight:800; margin-bottom:14px">More</div>
+          <div style="display:flex; align-items:center; gap:14px; background:#FFFFFF; border:1px solid #E3E4EE; border-radius:16px; padding:16px; margin-bottom:14px">
+            <span style="width:48px; height:48px; border-radius:50%; background:#FF6A3D; color:#FFFFFF; display:flex; align-items:center; justify-content:center; font-family:Sora,sans-serif; font-weight:700; font-size:18px">AN</span>
+            <div>
+              <div style="font-family:Sora,sans-serif; font-weight:700; font-size:15px">Adaeze Nwosu</div>
+              <div style="font-size:12px; color:#6B6E8C">@adaeze · Skilled Ryser · Riser plan</div>
+            </div>
+          </div>
+          <sc-for list="{{ moreItems }}" as="m" hint-placeholder-count="7">
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#FFFFFF; border:1px solid #E3E4EE; border-radius:13px; padding:14px 16px; margin-bottom:8px">
+              <span style="font-size:14px; font-weight:700">{{ m.icon }}&nbsp; {{ m.label }}</span>
+              <span style="font-size:11px; font-weight:700; color:#9A9DBA">{{ m.tag }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- ============ TASK DETAIL (overlay) ============ -->
+      <sc-if value="{{ showDetail }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute; inset:0; background:#FAFAFC; z-index:10; display:flex; flex-direction:column; border-radius:28px; overflow:hidden">
+          <div style="padding:16px 20px; display:flex; align-items:center; gap:12px; border-bottom:1px solid #ECEDF4; background:#FFFFFF">
+            <button onClick="{{ closeDetail }}" style="border:none; background:#F4F5FA; width:34px; height:34px; border-radius:10px; cursor:pointer; font-size:16px">←</button>
+            <span style="font-family:Sora,sans-serif; font-weight:700; font-size:15px">Task details</span>
+          </div>
+          <div style="flex:1; overflow-y:auto; padding:20px">
+            <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:10px">
+              <span style="background:#F4F5FA; color:#4A4D6B; font-size:11px; font-weight:600; padding:4px 10px; border-radius:999px">{{ dCat }}</span>
+              <span style="background:#F4F5FA; color:#4A4D6B; font-size:11px; font-weight:600; padding:4px 10px; border-radius:999px">{{ dDiff }}</span>
+              <span style="background:{{ dEligBg }}; color:{{ dEligFg }}; font-size:11px; font-weight:700; padding:4px 10px; border-radius:999px">{{ dElig }}</span>
+            </div>
+            <h2 style="font-family:Sora,sans-serif; font-size:20px; font-weight:800; margin:0 0 8px 0; line-height:1.3">{{ dTitle }}</h2>
+            <div style="font-size:13px; color:#6B6E8C; margin-bottom:16px">{{ dSponsor }} <span style="color:#0E7A59; font-weight:700">✓ Verified sponsor</span></div>
+            <div style="background:#FFFFFF; border:1px solid #E3E4EE; border-radius:14px; padding:16px; margin-bottom:12px">
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px">
+                <div><div style="font-size:11px; color:#6B6E8C">Payment on approval</div><div style="font-family:Sora,sans-serif; font-size:17px; font-weight:800">{{ dPay }}</div></div>
+                <div><div style="font-size:11px; color:#6B6E8C">Estimated time</div><div style="font-family:Sora,sans-serif; font-size:17px; font-weight:800">~{{ dMins }} min</div></div>
+                <div><div style="font-size:11px; color:#6B6E8C">Deadline</div><div style="font-size:14px; font-weight:700">{{ dDeadline }}</div></div>
+                <div><div style="font-size:11px; color:#6B6E8C">Slots left</div><div style="font-size:14px; font-weight:700">{{ dSlots }}</div></div>
+              </div>
+            </div>
+            <div style="font-family:Sora,sans-serif; font-size:13.5px; font-weight:700; margin-bottom:6px">What you'll do</div>
+            <p style="font-size:13.5px; color:#4A4D6B; line-height:1.65; margin:0 0 14px 0">{{ dDesc }}</p>
+            <div style="font-family:Sora,sans-serif; font-size:13.5px; font-weight:700; margin-bottom:6px">Review &amp; payment</div>
+            <p style="font-size:13px; color:#4A4D6B; line-height:1.65; margin:0 0 14px 0">Submissions are reviewed within 48 hours against a published rubric. Approval moves {{ dPay }} to your withdrawable balance. Revisions are permitted once; rejections can be appealed.</p>
+            <sc-if value="{{ dQualNote }}" hint-placeholder-val="{{ false }}">
+              <div style="background:#FFF8EC; border:1px solid #F2E2BC; border-radius:12px; padding:12px 14px; font-size:12.5px; color:#7A5A12; line-height:1.55; margin-bottom:12px"><strong>Qualification required.</strong> A short scored test (~10 min) unlocks this task category permanently.</div>
+            </sc-if>
+            <sc-if value="{{ dLockNote }}" hint-placeholder-val="{{ false }}">
+              <div style="background:#F4F5FA; border:1px solid #E1E2EC; border-radius:12px; padding:12px 14px; font-size:12.5px; color:#4A4D6B; line-height:1.55; margin-bottom:12px"><strong>🔒 Professional plan required.</strong> This category isn't in your current Riser plan. Upgrading unlocks eligibility — it doesn't guarantee tasks or earnings.</div>
+            </sc-if>
+            <sc-if value="{{ dQualPassed }}" hint-placeholder-val="{{ false }}">
+              <div style="background:#EDF7F3; border:1px solid #CDEBDF; border-radius:12px; padding:12px 14px; font-size:12.5px; color:#0E7A59; font-weight:700; margin-bottom:12px">✓ Qualification passed — you can now accept this task.</div>
+            </sc-if>
+          </div>
+          <div style="padding:14px 20px 18px 20px; background:#FFFFFF; border-top:1px solid #ECEDF4">
+            <button onClick="{{ dAction }}" style="width:100%; border:none; background:{{ dBtnBg }}; color:{{ dBtnFg }}; font-family:Sora,sans-serif; font-size:15px; font-weight:700; padding:15px; border-radius:13px; cursor:pointer">{{ dBtnLabel }}</button>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- Bottom nav -->
+      <div style="display:grid; grid-template-columns:repeat(5,1fr); border-top:1px solid #E3E4EE; background:#FFFFFF; padding:8px 6px 12px 6px">
+        <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="5">
+          <button onClick="{{ n.go }}" style="border:none; background:none; cursor:pointer; font-family:'Albert Sans',sans-serif; text-align:center; padding:6px 2px">
+            <div style="font-size:17px; margin-bottom:2px; opacity:{{ n.iconOp }}">{{ n.icon }}</div>
+            <div style="font-size:10px; font-weight:700; color:{{ n.fg }}">{{ n.label }}</div>
+          </button>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notes -->
+  <div style="flex:1 1 280px; min-width:250px; max-width:340px; display:flex; flex-direction:column; gap:14px">
+    <div style="background:#171A3A; border-radius:16px; padding:22px; color:#FFFFFF">
+      <div style="font-family:Sora,sans-serif; font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#FFC857; margin-bottom:12px">Phase 3 · Dashboard &amp; marketplace</div>
+      <div style="font-size:13.5px; color:#B9BCD9; line-height:1.7">A complete loop: find a task → check eligibility → qualify if needed → accept → submit → watch it get approved and paid into the wallet. Every balance and transaction updates live.</div>
+    </div>
+    <div style="background:#FFFFFF; border:1px solid #E3E4EE; border-radius:16px; padding:22px">
+      <div style="font-family:Sora,sans-serif; font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#6B6E8C; margin-bottom:12px">Try these</div>
+      <div style="font-size:13.5px; color:#4A4D6B; line-height:1.85">· Open the Yorùbá transcription task and take its qualification<br>· Open the app-testing task — it's plan-locked<br>· Accept an eligible task, then submit it in My Work<br>· Watch it approve after a few seconds — wallet updates<br>· Search “xyz” in Find tasks for the empty state</div>
+    </div>
+  </div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    tab: "home", detail: null, q: "", cat: "All",
+    taskStatus: { 3: "inprogress" }, qualPassed: [],
+    withdrawable: 12500, pending: 4600,
+    txs: [
+      { title: "Image annotation — street scenes", meta: "Task payment · 21 Jul", amt: "+₦900", st: "Approved", ok: true },
+      { title: "Withdrawal to GTBank ····2841", meta: "₦150 fee · 19 Jul", amt: "−₦10,000", st: "Completed", ok: true },
+      { title: "AI response evaluation", meta: "Task payment · 18 Jul", amt: "+₦1,800", st: "Approved", ok: true },
+      { title: "Riser plan renewal", meta: "Subscription · 15 Jul", amt: "−₦6,000", st: "Paid", ok: true }
+    ]
+  };
+  tasks = [
+    { id: 1, title: "AI response evaluation — English (Nigeria)", cat: "AI data", diff: "Beginner", mins: 25, payN: 1800, deadline: "Fri, 25 Jul", slots: 42, sponsor: "Meridian AI Labs", gate: "open", desc: "Compare two AI-generated answers to the same question and rate each for accuracy, tone and helpfulness. Clear rubric with examples provided; attention checks included." },
+    { id: 2, title: "Audio transcription — Yorùbá speech", cat: "Audio", diff: "Intermediate", mins: 40, payN: 3200, deadline: "Sun, 27 Jul", slots: 18, sponsor: "Lagoon Speech Data", gate: "qual", desc: "Transcribe short Yorùbá voice clips verbatim, including tone marks where indicated. Native or fluent speakers only — the qualification checks listening accuracy." },
+    { id: 3, title: "Image annotation — street scenes", cat: "AI data", diff: "Beginner", mins: 15, payN: 900, deadline: "Thu, 24 Jul", slots: 120, sponsor: "Meridian AI Labs", gate: "open", desc: "Draw bounding boxes around vehicles and pedestrians in Lagos street photos. Follow the definition list exactly — e-bikes count as vehicles." },
+    { id: 4, title: "Survey — fintech app habits (sponsored)", cat: "Surveys", diff: "Beginner", mins: 10, payN: 1200, deadline: "Sat, 26 Jul", slots: 65, sponsor: "Kobo Insights", gate: "open", desc: "A 10-minute survey about how you use mobile banking and payment apps. Honest answers only — attention checks are scored, and this task is clearly labelled as sponsored." },
+    { id: 5, title: "Mobile app testing — food delivery app", cat: "Testing", diff: "Intermediate", mins: 60, payN: 4500, deadline: "Mon, 28 Jul", slots: 12, sponsor: "Swiftly", gate: "locked", desc: "Install a beta food-delivery app, complete five scripted flows on Android, and file structured bug reports with screenshots." },
+    { id: 6, title: "Speech recording — Hausa phrases", cat: "Audio", diff: "Beginner", mins: 30, payN: 2400, deadline: "Tue, 29 Jul", slots: 30, sponsor: "Lagoon Speech Data", gate: "qual", desc: "Record 60 short Hausa phrases in a quiet room using your phone microphone. The qualification checks pronunciation and recording quality." },
+    { id: 7, title: "Fact checking — news claims", cat: "Writing", diff: "Intermediate", mins: 35, payN: 2000, deadline: "Wed, 30 Jul", slots: 25, sponsor: "Veritas Media", gate: "locked", desc: "Verify five short claims against reliable sources and write one-paragraph verdicts with links." },
+    { id: 8, title: "Prompt evaluation — safety review", cat: "AI data", diff: "Intermediate", mins: 30, payN: 2800, deadline: "Fri, 25 Jul", slots: 20, sponsor: "Meridian AI Labs", gate: "open", desc: "Review AI prompts and responses for policy violations using a detailed safety rubric. Sensitive content is flagged in advance; you can skip any item." }
+  ];
+  ngn(n) { return "₦" + n.toLocaleString("en-NG"); }
+  gateOf(t) {
+    const st = this.state;
+    if (st.taskStatus[t.id]) return st.taskStatus[t.id];
+    if (t.gate === "qual" && st.qualPassed.includes(t.id)) return "open";
+    return t.gate;
+  }
+  eligChip(g) {
+    if (g === "open") return { elig: "Eligible", eligBg: "#EDF7F3", eligFg: "#0E7A59" };
+    if (g === "qual") return { elig: "Qualification required", eligBg: "#FFF8EC", eligFg: "#B8860B" };
+    if (g === "locked") return { elig: "🔒 Plan upgrade", eligBg: "#F4F5FA", eligFg: "#6B6E8C" };
+    if (g === "inprogress") return { elig: "In progress", eligBg: "#FFF1EA", eligFg: "#E5552B" };
+    if (g === "review") return { elig: "Under review", eligBg: "#FFF8EC", eligFg: "#B8860B" };
+    return { elig: "Approved", eligBg: "#EDF7F3", eligFg: "#0E7A59" };
+  }
+  card(t) {
+    const g = this.gateOf(t);
+    return { ...this.eligChip(g), title: t.title, cat: t.cat, diff: t.diff, mins: t.mins,
+      pay: this.ngn(t.payN), sponsor: t.sponsor, slots: t.slots, deadline: t.deadline,
+      cardBorder: g === "inprogress" ? "#FFD9CB" : "#E3E4EE",
+      opacity: g === "locked" ? "0.66" : "1",
+      open: () => this.setState({ detail: t.id }) };
+  }
+  submitTask(id) {
+    const t = this.tasks.find(x => x.id === id);
+    this.setState({ taskStatus: { ...this.state.taskStatus, [id]: "review" }, pending: this.state.pending + t.payN });
+    setTimeout(() => {
+      const st = this.state;
+      this.setState({
+        taskStatus: { ...st.taskStatus, [id]: "approved" },
+        pending: st.pending - t.payN,
+        withdrawable: st.withdrawable + t.payN,
+        txs: [{ title: t.title, meta: "Task payment · just now", amt: "+" + this.ngn(t.payN), st: "Approved", ok: true }, ...st.txs]
+      });
+    }, 4000);
+  }
+  renderVals() {
+    const st = this.state;
+    const dt = st.detail ? this.tasks.find(t => t.id === st.detail) : null;
+    const dGate = dt ? this.gateOf(dt) : "open";
+    const catList = ["All", "AI data", "Audio", "Writing", "Testing", "Surveys"];
+    const filtered = this.tasks.filter(t =>
+      (st.cat === "All" || t.cat === st.cat) &&
+      (st.q === "" || t.title.toLowerCase().includes(st.q.toLowerCase())));
+    const order = { open: 0, inprogress: 0, review: 0, approved: 0, qual: 1, locked: 2 };
+    filtered.sort((a, b) => order[this.gateOf(a)] - order[this.gateOf(b)]);
+    const workIds = Object.keys(st.taskStatus).map(Number);
+    const hour = new Date().getHours();
+    const dActionMap = {
+      open: { label: "Accept task · due " + (dt ? dt.deadline : ""), bg: "#FF6A3D", fg: "#FFFFFF",
+        act: () => { this.setState({ taskStatus: { ...st.taskStatus, [dt.id]: "inprogress" }, detail: null, tab: "work" }); } },
+      qual: { label: "Take qualification (~10 min)", bg: "#171A3A", fg: "#FFC857",
+        act: () => this.setState({ qualPassed: [...st.qualPassed, dt.id] }) },
+      locked: { label: "Upgrade to Professional →", bg: "#171A3A", fg: "#FFFFFF",
+        act: () => { window.location.href = "Taskryse Pricing.dc.html"; } },
+      inprogress: { label: "Continue in My Work →", bg: "#FF6A3D", fg: "#FFFFFF",
+        act: () => this.setState({ detail: null, tab: "work" }) },
+      review: { label: "Under review — check My Work", bg: "#C3C5D6", fg: "#FFFFFF",
+        act: () => this.setState({ detail: null, tab: "work" }) },
+      approved: { label: "Approved ✓ — see Wallet", bg: "#16A67A", fg: "#FFFFFF",
+        act: () => this.setState({ detail: null, tab: "wallet" }) }
+    };
+    const da = dActionMap[dGate];
+    return {
+      tabHome: st.tab === "home", tabTasks: st.tab === "tasks", tabWork: st.tab === "work",
+      tabWallet: st.tab === "wallet", tabMore: st.tab === "more",
+      greeting: hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening",
+      withdrawable: this.ngn(st.withdrawable), pending: this.ngn(st.pending),
+      goWallet: () => this.setState({ tab: "wallet" }),
+      goTasks: () => this.setState({ tab: "tasks" }),
+      stats: [
+        { v: "96%", l: "Quality", color: "#0E7A59" },
+        { v: "94%", l: "On-time", color: "#0E7A59" },
+        { v: "38", l: "Approved", color: "#171A3A" },
+        { v: "6 🔥", l: "Day streak", color: "#E5552B" }
+      ],
+      hasActive: workIds.some(id => st.taskStatus[id] === "inprogress"),
+      activePreview: this.tasks.filter(t => st.taskStatus[t.id] === "inprogress").slice(0, 1).map(t => ({
+        title: t.title, pay: this.ngn(t.payN), prog: "60%", deadline: t.deadline,
+        open: () => this.setState({ tab: "work" }) })),
+      quickActions: [
+        { icon: "🔎", label: "Find Tasks", go: () => this.setState({ tab: "tasks" }) },
+        { icon: "💸", label: "Withdraw", go: () => this.setState({ tab: "wallet" }) },
+        { icon: "🧾", label: "Pay Bills", go: () => this.setState({ tab: "wallet" }) },
+        { icon: "🎓", label: "Learn", go: () => this.setState({ tab: "more" }) }
+      ],
+      recTasks: this.tasks.filter(t => this.gateOf(t) === "open").slice(0, 2).map(t => this.card(t)),
+      q: st.q, setQ: (e) => this.setState({ q: e.target.value }),
+      cats: catList.map(name => ({ name, pick: () => this.setState({ cat: name }),
+        bg: st.cat === name ? "#171A3A" : "#FFFFFF", fg: st.cat === name ? "#FFFFFF" : "#4A4D6B" })),
+      resultCount: filtered.length,
+      noResults: filtered.length === 0,
+      marketTasks: filtered.map(t => this.card(t)),
+      workEmpty: workIds.length === 0,
+      workItems: workIds.map(id => {
+        const t = this.tasks.find(x => x.id === id), g = st.taskStatus[id];
+        const map = {
+          inprogress: { status: "In progress", chipBg: "#FFF1EA", chipFg: "#E5552B", dot: "#FF6A3D", note: "due " + t.deadline, canSubmit: true },
+          review: { status: "Under review", chipBg: "#FFF8EC", chipFg: "#B8860B", dot: "#FFC857", note: "typically within 48 hrs (demo: seconds)", canSubmit: false },
+          approved: { status: "Approved · paid", chipBg: "#EDF7F3", chipFg: "#0E7A59", dot: "#16A67A", note: this.ngn(t.payN) + " added to withdrawable", canSubmit: false }
+        };
+        return { title: t.title, pay: this.ngn(t.payN), ...map[g], submit: () => this.submitTask(id) };
+      }),
+      txs: st.txs.map(tx => ({ ...tx,
+        amtColor: tx.amt.startsWith("+") ? "#0E7A59" : "#171A3A",
+        stColor: tx.ok ? "#0E7A59" : "#B8860B" })),
+      moreItems: [
+        { icon: "🎓", label: "Learning & qualifications", tag: "Phase 5" },
+        { icon: "📈", label: "Ryse Level & achievements", tag: "Phase 5" },
+        { icon: "🎁", label: "Referral centre", tag: "Phase 5" },
+        { icon: "💳", label: "Plan & billing", tag: "Riser · active" },
+        { icon: "🔐", label: "Security & payout methods", tag: "2FA on" },
+        { icon: "💬", label: "Support & disputes", tag: "Phase 6" },
+        { icon: "⚙️", label: "Settings", tag: "" }
+      ],
+      showDetail: !!dt,
+      closeDetail: () => this.setState({ detail: null }),
+      dTitle: dt ? dt.title : "", dCat: dt ? dt.cat : "", dDiff: dt ? dt.diff : "",
+      dSponsor: dt ? dt.sponsor : "", dPay: dt ? this.ngn(dt.payN) : "", dMins: dt ? dt.mins : "",
+      dDeadline: dt ? dt.deadline : "", dSlots: dt ? dt.slots : "", dDesc: dt ? dt.desc : "",
+      ...(dt ? this.eligChip(dGate) : { elig: "", eligBg: "#FFF", eligFg: "#000" }),
+      dElig: dt ? this.eligChip(dGate).elig : "", dEligBg: dt ? this.eligChip(dGate).eligBg : "#FFF", dEligFg: dt ? this.eligChip(dGate).eligFg : "#000",
+      dQualNote: dt ? (dt.gate === "qual" && !st.qualPassed.includes(dt.id)) : false,
+      dQualPassed: dt ? (dt.gate === "qual" && st.qualPassed.includes(dt.id)) : false,
+      dLockNote: dGate === "locked",
+      dBtnLabel: da ? da.label : "", dBtnBg: da ? da.bg : "#FF6A3D", dBtnFg: da ? da.fg : "#FFF",
+      dAction: da ? da.act : () => {},
+      navItems: [
+        { key: "home", icon: "⌂", label: "Home" },
+        { key: "tasks", icon: "🔎", label: "Tasks" },
+        { key: "work", icon: "▣", label: "My Work" },
+        { key: "wallet", icon: "◈", label: "Wallet" },
+        { key: "more", icon: "⋯", label: "More" }
+      ].map(n => ({ ...n, go: () => this.setState({ tab: n.key, detail: null }),
+        fg: st.tab === n.key ? "#FF6A3D" : "#9A9DBA", iconOp: st.tab === n.key ? "1" : "0.45" }))
+    };
+  }
+}
+</script>
+</body>
+</html>

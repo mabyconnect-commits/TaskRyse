@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Albert+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#EEEFF5; font-family:'Albert Sans',sans-serif; color:#171A3A; }
+  a { color:#FF6A3D; text-decoration:none; }
+  a:hover { color:#E5552B; }
+  textarea:focus { outline:2px solid #FF6A3D; outline-offset:1px; }
+</style>
+</helmet>
+
+<div style="overflow-x:hidden; min-height:100vh">
+<div style="max-width:1240px; margin:0 auto; padding:20px 20px 4px 20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px 16px">
+  <div style="display:flex; align-items:center; gap:12px">
+    <a href="Taskryse Home.dc.html"><img src="assets/taskryse-logo.png" alt="Taskryse" style="height:26px; width:auto"></a>
+    <span style="background:#171A3A; color:#FFC857; font-family:Sora,sans-serif; font-size:10.5px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; padding:5px 11px; border-radius:999px; white-space:nowrap">Task workspace demo</span>
+  </div>
+  <div style="font-size:12.5px; color:#6B6E8C">Complete the 3 items, run quality checks, submit — then pick any review outcome</div>
+</div>
+
+<div style="max-width:1240px; margin:0 auto; padding:16px 20px 64px 20px; display:flex; gap:28px; align-items:flex-start; flex-wrap:wrap; justify-content:center">
+
+  <!-- Phone -->
+  <div style="flex:0 0 auto; width:min(400px, 100%)">
+    <div style="background:#FAFAFC; border:1px solid #E3E4EE; border-radius:28px; box-shadow:0 24px 64px rgba(23,26,58,0.14); overflow:hidden; display:flex; flex-direction:column; height:800px; position:relative">
+
+      <!-- ===== WORKSPACE ===== -->
+      <sc-if value="{{ vWork }}" hint-placeholder-val="{{ true }}">
+        <!-- Top bar -->
+        <div style="background:#FFFFFF; border-bottom:1px solid #ECEDF4; padding:14px 18px">
+          <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px">
+            <button onClick="{{ tryExit }}" style="border:none; background:#F4F5FA; width:32px; height:32px; border-radius:10px; cursor:pointer; font-size:15px">←</button>
+            <div style="text-align:center">
+              <div style="font-family:Sora,sans-serif; font-weight:700; font-size:13px">AI response evaluation</div>
+              <div style="font-size:10.5px; color:{{ saveColor }}; font-weight:600">{{ saveMsg }}</div>
+            </div>
+            <span style="background:{{ timerBg }}; color:{{ timerFg }}; font-family:Sora,sans-serif; font-size:11.5px; font-weight:800; padding:6px 10px; border-radius:9px">{{ timer }}</span>
+          </div>
+          <div style="display:flex; align-items:center; gap:8px">
+            <div style="flex:1; height:5px; background:#EEEFF5; border-radius:999px; overflow:hidden"><div style="height:100%; width:{{ progPct }}; background:linear-gradient(90deg,#FFC857,#FF6A3D); border-radius:999px; transition:width 0.3s"></div></div>
+            <span style="font-size:11px; font-weight:700; color:#6B6E8C">{{ progLabel }}</span>
+          </div>
+        </div>
+
+        <div style="flex:1; overflow-y:auto; padding:16px 18px">
+          <!-- Instructions -->
+          <div style="border:1px solid #E3E4EE; background:#FFFFFF; border-radius:14px; margin-bottom:12px; overflow:hidden">
+            <button onClick="{{ toggleInstr }}" style="width:100%; display:flex; justify-content:space-between; align-items:center; border:none; background:none; cursor:pointer; padding:13px 16px; font-family:'Albert Sans',sans-serif">
+              <span style="font-size:13px; font-weight:700; color:#171A3A">📋 Instructions &amp; rubric</span>
+              <span style="color:#FF6A3D; font-weight:800">{{ instrIcon }}</span>
+            </button>
+            <sc-if value="{{ instrOpen }}" hint-placeholder-val="{{ false }}">
+              <div style="padding:0 16px 14px 16px; font-size:12.5px; color:#4A4D6B; line-height:1.65">
+                For each item, read the question and both AI answers. Pick the better answer, then rate the winner's accuracy. <strong>Rate what's written, not what you'd prefer stylistically.</strong> If both are equally bad, pick the less harmful one and rate it Poor. Attention checks are mixed in — read every word.
+                <div style="margin-top:8px"><a href="#" style="font-weight:700; font-size:12.5px">Request clarification</a> · <a href="#" style="font-weight:700; font-size:12.5px; color:#B33A3E">Report this task</a></div>
+              </div>
+            </sc-if>
+          </div>
+
+          <!-- Items -->
+          <sc-for list="{{ items }}" as="it" hint-placeholder-count="3">
+            <div style="border:{{ it.border }}; background:#FFFFFF; border-radius:14px; padding:16px; margin-bottom:12px">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px">
+                <span style="font-family:Sora,sans-serif; font-size:12px; font-weight:800; color:#6B6E8C">ITEM {{ it.n }} OF 3</span>
+                <sc-if value="{{ it.done }}" hint-placeholder-val="{{ false }}"><span style="color:#0E7A59; font-size:12px; font-weight:800">✓ Complete</span></sc-if>
+              </div>
+              <div style="font-size:13.5px; font-weight:700; line-height:1.5; margin-bottom:10px">“{{ it.q }}”</div>
+              <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:12px">
+                <button onClick="{{ it.pickA }}" style="text-align:left; border:{{ it.aBorder }}; background:{{ it.aBg }}; border-radius:11px; padding:12px 14px; cursor:pointer; font-family:'Albert Sans',sans-serif">
+                  <div style="font-size:10.5px; font-weight:800; color:#6B6E8C; margin-bottom:4px">ANSWER A</div>
+                  <div style="font-size:12.5px; color:#4A4D6B; line-height:1.55">{{ it.a }}</div>
+                </button>
+                <button onClick="{{ it.pickB }}" style="text-align:left; border:{{ it.bBorder }}; background:{{ it.bBg }}; border-radius:11px; padding:12px 14px; cursor:pointer; font-family:'Albert Sans',sans-serif">
+                  <div style="font-size:10.5px; font-weight:800; color:#6B6E8C; margin-bottom:4px">ANSWER B</div>
+                  <div style="font-size:12.5px; color:#4A4D6B; line-height:1.55">{{ it.b }}</div>
+                </button>
+              </div>
+              <sc-if value="{{ it.showRate }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size:11.5px; font-weight:700; color:#6B6E8C; margin-bottom:6px">Rate the winner's accuracy</div>
+                <div style="display:flex; gap:6px">
+                  <sc-for list="{{ it.rates }}" as="r" hint-placeholder-count="4">
+                    <button onClick="{{ r.pick }}" style="flex:1; border:{{ r.border }}; background:{{ r.bg }}; color:{{ r.fg }}; font-family:'Albert Sans',sans-serif; font-size:11.5px; font-weight:700; padding:9px 2px; border-radius:9px; cursor:pointer">{{ r.label }}</button>
+                  </sc-for>
+                </div>
+              </sc-if>
+            </div>
+          </sc-for>
+
+          <!-- Evidence -->
+          <button onClick="{{ toggleEvidence }}" style="width:100%; border:2px dashed {{ evBorder }}; background:{{ evBg }}; border-radius:13px; padding:14px; cursor:pointer; font-family:'Albert Sans',sans-serif; margin-bottom:12px; text-align:center">
+            <span style="font-size:12.5px; font-weight:700; color:{{ evFg }}">{{ evLabel }}</span>
+          </button>
+
+          <!-- Quality checks -->
+          <div style="border:1px solid #E3E4EE; background:#FFFFFF; border-radius:14px; padding:14px 16px; margin-bottom:8px">
+            <div style="font-size:12.5px; font-weight:700; margin-bottom:8px">Quality checks</div>
+            <sc-for list="{{ checks }}" as="c" hint-placeholder-count="3">
+              <div style="display:flex; gap:8px; font-size:12px; color:{{ c.color }}; line-height:1.7; font-weight:600"><span>{{ c.mark }}</span><span>{{ c.label }}</span></div>
+            </sc-for>
+          </div>
+        </div>
+
+        <!-- Bottom actions -->
+        <div style="padding:12px 18px 16px 18px; background:#FFFFFF; border-top:1px solid #ECEDF4; display:flex; gap:8px">
+          <button onClick="{{ saveDraft }}" style="border:1.5px solid #D7D9E6; background:#FFFFFF; color:#171A3A; font-family:Sora,sans-serif; font-size:13px; font-weight:700; padding:14px 16px; border-radius:12px; cursor:pointer">{{ draftLabel }}</button>
+          <button onClick="{{ trySubmit }}" style="flex:1; border:none; background:{{ submitBg }}; color:#FFFFFF; font-family:Sora,sans-serif; font-size:14px; font-weight:700; padding:14px; border-radius:12px; cursor:pointer">{{ submitLabel }}</button>
+        </div>
+      </sc-if>
+
+      <!-- ===== REVIEW / SUBMITTED ===== -->
+      <sc-if value="{{ vReview }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1; overflow-y:auto; padding:24px; display:flex; flex-direction:column">
+          <div style="text-align:center; padding:24px 0 20px 0">
+            <div style="width:64px; height:64px; border-radius:50%; background:{{ rvIconBg }}; color:{{ rvIconFg }}; font-size:28px; display:flex; align-items:center; justify-content:center; margin:0 auto 16px auto">{{ rvIcon }}</div>
+            <h2 style="font-family:Sora,sans-serif; font-size:22px; font-weight:800; margin:0 0 8px 0">{{ rvTitle }}</h2>
+            <p style="font-size:13.5px; color:#4A4D6B; line-height:1.65; margin:0 auto; max-width:290px">{{ rvDesc }}</p>
+          </div>
+          <!-- Status timeline -->
+          <div style="background:#FFFFFF; border:1px solid #E3E4EE; border-radius:14px; padding:18px; margin-bottom:14px">
+            <sc-for list="{{ timeline }}" as="tl" hint-placeholder-count="4">
+              <div style="display:flex; gap:12px">
+                <div style="display:flex; flex-direction:column; align-items:center">
+                  <span style="width:22px; height:22px; border-radius:50%; background:{{ tl.bg }}; color:{{ tl.fg }}; font-size:11px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0">{{ tl.mark }}</span>
+                  <sc-if value="{{ tl.line }}" hint-placeholder-val="{{ true }}"><div style="width:2px; flex:1; background:#ECEDF4; margin:3px 0"></div></sc-if>
+                </div>
+                <div style="padding-bottom:14px">
+                  <div style="font-size:13px; font-weight:700; color:{{ tl.titleColor }}">{{ tl.title }}</div>
+                  <div style="font-size:11.5px; color:#6B6E8C; line-height:1.5">{{ tl.sub }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <sc-if value="{{ rvShowFeedback }}" hint-placeholder-val="{{ false }}">
+            <div style="background:{{ fbBg }}; border:1px solid {{ fbBorder }}; border-radius:13px; padding:14px 16px; font-size:12.5px; color:{{ fbFg }}; line-height:1.6; margin-bottom:14px"><strong>{{ fbTitle }}</strong><br>{{ fbBody }}</div>
+          </sc-if>
+          <div style="flex:1"></div>
+          <sc-if value="{{ rvIsPending }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:11.5px; color:#9A9DBA; text-align:center; margin-bottom:10px">Demo: choose the reviewer's decision</div>
+            <div style="display:flex; gap:8px">
+              <button onClick="{{ decideApprove }}" style="flex:1; border:none; background:#16A67A; color:#FFFFFF; font-family:Sora,sans-serif; font-size:12.5px; font-weight:700; padding:13px 4px; border-radius:11px; cursor:pointer">Approve</button>
+              <button onClick="{{ decideRevise }}" style="flex:1; border:none; background:#F5A623; color:#FFFFFF; font-family:Sora,sans-serif; font-size:12.5px; font-weight:700; padding:13px 4px; border-radius:11px; cursor:pointer">Revision</button>
+              <button onClick="{{ decideReject }}" style="flex:1; border:none; background:#E5484D; color:#FFFFFF; font-family:Sora,sans-serif; font-size:12.5px; font-weight:700; padding:13px 4px; border-radius:11px; cursor:pointer">Reject</button>
+            </div>
+          </sc-if>
+          <sc-if value="{{ rvIsApproved }}" hint-placeholder-val="{{ false }}">
+            <a href="Taskryse App.dc.html" style="display:block; text-align:center; background:#16A67A; color:#FFFFFF; font-family:Sora,sans-serif; font-size:14.5px; font-weight:700; padding:15px; border-radius:13px" style-hover="background:#0E7A59; color:#FFFFFF">₦1,800 in wallet — back to app</a>
+            <button onClick="{{ restart }}" style="width:100%; border:none; background:none; color:#6B6E8C; font-family:'Albert Sans',sans-serif; font-size:12.5px; font-weight:700; padding:12px; cursor:pointer">Restart demo</button>
+          </sc-if>
+          <sc-if value="{{ rvIsRevision }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ backToWork }}" style="width:100%; border:none; background:#FF6A3D; color:#FFFFFF; font-family:Sora,sans-serif; font-size:14.5px; font-weight:700; padding:15px; border-radius:13px; cursor:pointer" style-hover="background:#E5552B">Fix item 2 &amp; resubmit</button>
+          </sc-if>
+          <sc-if value="{{ rvIsRejected }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ appeal }}" style="width:100%; border:none; background:#171A3A; color:#FFFFFF; font-family:Sora,sans-serif; font-size:14.5px; font-weight:700; padding:15px; border-radius:13px; cursor:pointer; margin-bottom:8px">Appeal this decision</button>
+            <button onClick="{{ restart }}" style="width:100%; border:none; background:none; color:#6B6E8C; font-family:'Albert Sans',sans-serif; font-size:12.5px; font-weight:700; padding:10px; cursor:pointer">Restart demo</button>
+          </sc-if>
+          <sc-if value="{{ rvIsAppealed }}" hint-placeholder-val="{{ false }}">
+            <button onClick="{{ restart }}" style="width:100%; border:none; background:none; color:#6B6E8C; font-family:'Albert Sans',sans-serif; font-size:12.5px; font-weight:700; padding:10px; cursor:pointer">Restart demo</button>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <!-- ===== EXIT WARNING MODAL ===== -->
+      <sc-if value="{{ showExit }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute; inset:0; background:rgba(15,17,40,0.55); z-index:20; display:flex; align-items:center; justify-content:center; padding:28px">
+          <div style="background:#FFFFFF; border-radius:18px; padding:24px; width:100%">
+            <div style="font-family:Sora,sans-serif; font-size:17px; font-weight:800; margin-bottom:8px">Leave this task?</div>
+            <p style="font-size:13.5px; color:#4A4D6B; line-height:1.6; margin:0 0 18px 0">Your progress is autosaved as a draft. The deadline keeps counting — if it passes, the task expires and your slot is released.</p>
+            <div style="display:flex; flex-direction:column; gap:8px">
+              <button onClick="{{ stayHere }}" style="border:none; background:#FF6A3D; color:#FFFFFF; font-family:Sora,sans-serif; font-size:14px; font-weight:700; padding:13px; border-radius:12px; cursor:pointer">Keep working</button>
+              <a href="Taskryse App.dc.html" style="display:block; text-align:center; border:1.5px solid #D7D9E6; color:#171A3A; font-family:Sora,sans-serif; font-size:14px; font-weight:700; padding:12px; border-radius:12px">Save draft &amp; exit</a>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ===== SUBMIT CONFIRM MODAL ===== -->
+      <sc-if value="{{ showConfirm }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute; inset:0; background:rgba(15,17,40,0.55); z-index:20; display:flex; align-items:center; justify-content:center; padding:28px">
+          <div style="background:#FFFFFF; border-radius:18px; padding:24px; width:100%">
+            <div style="font-family:Sora,sans-serif; font-size:17px; font-weight:800; margin-bottom:8px">Submit for review?</div>
+            <div style="background:#FAFAFC; border:1px solid #ECEDF4; border-radius:12px; padding:12px 14px; margin-bottom:14px">
+              <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px"><span style="color:#6B6E8C">Items completed</span><span style="font-weight:700">3 of 3 ✓</span></div>
+              <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:6px"><span style="color:#6B6E8C">Quality checks</span><span style="font-weight:700; color:#0E7A59">All passed ✓</span></div>
+              <div style="display:flex; justify-content:space-between; font-size:13px"><span style="color:#6B6E8C">Payment on approval</span><span style="font-family:Sora,sans-serif; font-weight:800">₦1,800</span></div>
+            </div>
+            <p style="font-size:12px; color:#9A9DBA; line-height:1.55; margin:0 0 16px 0">You can't edit after submitting unless a revision is requested.</p>
+            <div style="display:flex; flex-direction:column; gap:8px">
+              <button onClick="{{ confirmSubmit }}" style="border:none; background:#FF6A3D; color:#FFFFFF; font-family:Sora,sans-serif; font-size:14px; font-weight:700; padding:13px; border-radius:12px; cursor:pointer">Submit now</button>
+              <button onClick="{{ cancelSubmit }}" style="border:1.5px solid #D7D9E6; background:#FFFFFF; color:#171A3A; font-family:Sora,sans-serif; font-size:14px; font-weight:700; padding:12px; border-radius:12px; cursor:pointer">Keep editing</button>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+    </div>
+  </div>
+
+  <!-- Notes -->
+  <div style="flex:1 1 280px; min-width:250px; max-width:340px; display:flex; flex-direction:column; gap:14px">
+    <div style="background:#171A3A; border-radius:16px; padding:22px; color:#FFFFFF">
+      <div style="font-family:Sora,sans-serif; font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#FFC857; margin-bottom:12px">Phase 4 · Task workspace</div>
+      <div style="font-size:13.5px; color:#B9BCD9; line-height:1.7">Distraction-free workspace: collapsible instructions, live countdown, autosave ticker, quality checks that gate submission, evidence upload, draft saving, exit warning, and all three review outcomes with an appeal path.</div>
+    </div>
+    <div style="background:#FFFFFF; border:1px solid #E3E4EE; border-radius:16px; padding:22px">
+      <div style="font-family:Sora,sans-serif; font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#6B6E8C; margin-bottom:12px">Try these</div>
+      <div style="font-size:13.5px; color:#4A4D6B; line-height:1.85">· Try submitting before finishing — checks block it<br>· Answer all 3 items (pick + rate each)<br>· Attach evidence, then Submit<br>· Pick each of the 3 reviewer outcomes<br>· Reject → Appeal to see the appeal state<br>· Tap ← for the exit warning</div>
+    </div>
+    <div style="background:#FFFFFF; border:1px solid #E3E4EE; border-radius:16px; padding:22px">
+      <div style="font-family:Sora,sans-serif; font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#6B6E8C; margin-bottom:10px">Continue the flow</div>
+      <div style="font-size:13.5px; line-height:1.9"><a href="Taskryse App.dc.html" style="font-weight:700">← Contributor app (Phase 3)</a><br><a href="Taskryse Onboarding.dc.html" style="font-weight:700">← Onboarding (Phase 2)</a></div>
+    </div>
+  </div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    view: "work", instrOpen: true, picks: [null,null,null], rates: [null,null,null],
+    evidence: false, secs: 22*60+14, saveTick: 0, drafted: false,
+    showExit: false, showConfirm: false, outcome: "pending"
+  };
+  componentDidMount() {
+    this.iv = setInterval(() => this.setState({ secs: Math.max(0, this.state.secs - 1), saveTick: this.state.saveTick + 1 }), 1000);
+  }
+  componentWillUnmount() { clearInterval(this.iv); }
+  renderVals() {
+    const st = this.state;
+    const itemDefs = [
+      { q: "What is the capital of Australia?",
+        a: "The capital of Australia is Sydney, its largest and most famous city.",
+        b: "The capital of Australia is Canberra. Sydney is the largest city, but Canberra was purpose-built as the capital." },
+      { q: "How many days should I take amoxicillin for a chest infection?",
+        a: "You should always complete the full course your doctor prescribed, even if you feel better. If unsure, ask your pharmacist or doctor — don't stop early on your own.",
+        b: "Just take it until you feel better, usually 2–3 days is enough for most people." },
+      { q: "Explain compound interest in one sentence.",
+        a: "Compound interest is when you earn interest on both your original money and the interest it has already earned.",
+        b: "Compound interest is a banking term for the fee charged when combining two loan accounts into one." }
+      ];
+    const mins = Math.floor(st.secs / 60), s = st.secs % 60;
+    const allPicked = st.picks.every(p => p !== null);
+    const allRated = st.rates.every(r => r !== null);
+    const complete = allPicked && allRated && st.evidence;
+    const doneCount = st.picks.filter((p, i) => p !== null && st.rates[i] !== null).length;
+    const savePhase = st.saveTick % 6;
+    const outcomes = {
+      pending: { icon: "⏳", iconBg: "#FFF8EC", iconFg: "#B8860B", title: "Under review",
+        desc: "Your submission is with a reviewer. Typical turnaround is 48 hours — you'll get a notification either way." },
+      approved: { icon: "✓", iconBg: "#EDF7F3", iconFg: "#16A67A", title: "Task approved!",
+        desc: "Great work — your submission passed the rubric. ₦1,800 has moved to your withdrawable balance." },
+      revision: { icon: "✎", iconBg: "#FFF8EC", iconFg: "#B8860B", title: "Revision requested",
+        desc: "One item needs a fix. Resubmit within 24 hours and it re-enters review with no quality-score penalty." },
+      rejected: { icon: "✕", iconBg: "#FDF6F6", iconFg: "#E5484D", title: "Submission rejected",
+        desc: "The reviewer found rubric failures. Read the feedback below — if you believe this is wrong, appeal within 7 days." },
+      appealed: { icon: "⚖", iconBg: "#F0F4FF", iconFg: "#2B5FCC", title: "Appeal submitted",
+        desc: "A different reviewer will independently re-check your work within 72 hours. The original reviewer never sees your appeal." }
+    };
+    const oc = outcomes[st.outcome];
+    const tlDone = (title, sub) => ({ mark: "✓", bg: "#EDF7F3", fg: "#0E7A59", title, sub, titleColor: "#171A3A", line: true });
+    const tlNow = (title, sub) => ({ mark: "●", bg: "#FFF8EC", fg: "#B8860B", title, sub, titleColor: "#171A3A", line: true });
+    const tlWait = (title, sub) => ({ mark: "", bg: "#F0F1F7", fg: "#9A9DBA", title, sub, titleColor: "#9A9DBA", line: true });
+    let timeline;
+    if (st.outcome === "pending") timeline = [tlDone("Submitted", "Today, just now"), tlNow("Under review", "Reviewer assigned · rubric v2.1"), tlWait("Decision", "Within 48 hours"), { ...tlWait("Payment", "On approval → withdrawable"), line: false }];
+    else if (st.outcome === "approved") timeline = [tlDone("Submitted", "Today"), tlDone("Under review", "Reviewed against rubric v2.1"), tlDone("Approved", "Quality score +0.4"), { ...tlDone("Paid", "₦1,800 → withdrawable balance"), line: false }];
+    else if (st.outcome === "revision") timeline = [tlDone("Submitted", "Today"), tlDone("Under review", "Reviewed against rubric v2.1"), tlNow("Revision requested", "1 item flagged · due in 24 hrs"), { ...tlWait("Payment", "After approved resubmission"), line: false }];
+    else if (st.outcome === "rejected") timeline = [tlDone("Submitted", "Today"), tlDone("Under review", "Reviewed against rubric v2.1"), { mark: "✕", bg: "#FDF6F6", fg: "#E5484D", title: "Rejected", sub: "2 rubric criteria failed", titleColor: "#B33A3E", line: true }, { ...tlWait("Appeal window", "7 days · different reviewer"), line: false }];
+    else timeline = [tlDone("Submitted", "Today"), { mark: "✕", bg: "#FDF6F6", fg: "#E5484D", title: "Rejected", sub: "2 rubric criteria failed", titleColor: "#B33A3E", line: true }, tlNow("Appeal under review", "Independent reviewer · within 72 hrs"), { ...tlWait("Final decision", "Binding either way"), line: false }];
+    return {
+      vWork: st.view === "work", vReview: st.view === "review",
+      timer: mins + ":" + String(s).padStart(2, "0"),
+      timerBg: st.secs < 300 ? "#FDF6F6" : "#F4F5FA", timerFg: st.secs < 300 ? "#E5484D" : "#171A3A",
+      saveMsg: savePhase < 2 ? "Saving…" : "Autosaved " + (savePhase - 1) + "s ago",
+      saveColor: savePhase < 2 ? "#B8860B" : "#0E7A59",
+      progPct: Math.round(doneCount / 3 * 100) + "%",
+      progLabel: doneCount + "/3",
+      toggleInstr: () => this.setState({ instrOpen: !st.instrOpen }),
+      instrOpen: st.instrOpen, instrIcon: st.instrOpen ? "−" : "+",
+      items: itemDefs.map((d, i) => {
+        const pick = st.picks[i], rate = st.rates[i], done = pick !== null && rate !== null;
+        return {
+          n: i + 1, q: d.q, a: d.a, b: d.b, done,
+          border: done ? "1.5px solid #CDEBDF" : "1px solid #E3E4EE",
+          pickA: () => { const p = [...st.picks]; p[i] = "A"; this.setState({ picks: p }); },
+          pickB: () => { const p = [...st.picks]; p[i] = "B"; this.setState({ picks: p }); },
+          aBorder: pick === "A" ? "2px solid #FF6A3D" : "1px solid #E1E2EC",
+          aBg: pick === "A" ? "#FFF8F4" : "#FFFFFF",
+          bBorder: pick === "B" ? "2px solid #FF6A3D" : "1px solid #E1E2EC",
+          bBg: pick === "B" ? "#FFF8F4" : "#FFFFFF",
+          showRate: pick !== null,
+          rates: ["Poor", "Fair", "Good", "Excellent"].map((label, ri) => ({
+            label, pick: () => { const r = [...st.rates]; r[i] = ri; this.setState({ rates: r }); },
+            border: rate === ri ? "2px solid #171A3A" : "1px solid #E1E2EC",
+            bg: rate === ri ? "#171A3A" : "#FFFFFF", fg: rate === ri ? "#FFFFFF" : "#4A4D6B"
+          }))
+        };
+      }),
+      toggleEvidence: () => this.setState({ evidence: !st.evidence }),
+      evBorder: st.evidence ? "#16A67A" : "#C3C5D6",
+      evBg: st.evidence ? "#EDF7F3" : "#FFFFFF",
+      evFg: st.evidence ? "#0E7A59" : "#6B6E8C",
+      evLabel: st.evidence ? "✓ screen-recording.mp4 attached" : "📎 Attach evidence (screen recording)",
+      checks: [
+        { ok: allPicked, label: allPicked ? "All items answered" : "Answer all 3 items" },
+        { ok: allRated, label: allRated ? "All winners rated" : "Rate each winning answer" },
+        { ok: st.evidence, label: st.evidence ? "Evidence attached" : "Attach your screen recording" }
+      ].map(c => ({ label: c.label, mark: c.ok ? "✓" : "○", color: c.ok ? "#0E7A59" : "#B8860B" })),
+      saveDraft: () => this.setState({ drafted: true }),
+      draftLabel: st.drafted ? "Draft ✓" : "Save draft",
+      submitBg: complete ? "#FF6A3D" : "#C3C5D6",
+      submitLabel: complete ? "Submit for review" : "Complete all checks to submit",
+      trySubmit: () => { if (complete) this.setState({ showConfirm: true }); },
+      tryExit: () => this.setState({ showExit: true }),
+      showExit: st.showExit,
+      stayHere: () => this.setState({ showExit: false }),
+      showConfirm: st.showConfirm,
+      cancelSubmit: () => this.setState({ showConfirm: false }),
+      confirmSubmit: () => this.setState({ showConfirm: false, view: "review", outcome: "pending" }),
+      rvIcon: oc.icon, rvIconBg: oc.iconBg, rvIconFg: oc.iconFg, rvTitle: oc.title, rvDesc: oc.desc,
+      timeline,
+      rvIsPending: st.outcome === "pending",
+      rvIsApproved: st.outcome === "approved",
+      rvIsRevision: st.outcome === "revision",
+      rvIsRejected: st.outcome === "rejected",
+      rvIsAppealed: st.outcome === "appealed",
+      rvShowFeedback: st.outcome === "revision" || st.outcome === "rejected",
+      fbTitle: st.outcome === "revision" ? "Reviewer note — Item 2" : "Reviewer feedback",
+      fbBody: st.outcome === "revision"
+        ? "You rated the winner 'Excellent' but the answer omits the required safety caveat. Re-rate against rubric §3.2 and resubmit."
+        : "Items 1 and 3 failed rubric §2.1 (accuracy rating not consistent with the chosen answer). If you believe this is a misread, appeal and a different reviewer will re-check independently.",
+      fbBg: st.outcome === "revision" ? "#FFF8EC" : "#FDF6F6",
+      fbBorder: st.outcome === "revision" ? "#F2E2BC" : "#F3D2D3",
+      fbFg: st.outcome === "revision" ? "#7A5A12" : "#5A2E30",
+      decideApprove: () => this.setState({ outcome: "approved" }),
+      decideRevise: () => this.setState({ outcome: "revision" }),
+      decideReject: () => this.setState({ outcome: "rejected" }),
+      appeal: () => this.setState({ outcome: "appealed" }),
+      backToWork: () => this.setState({ view: "work", showConfirm: false, rates: [st.rates[0], null, st.rates[2]] }),
+      restart: () => this.setState({ view: "work", picks: [null,null,null], rates: [null,null,null], evidence: false, drafted: false, outcome: "pending", secs: 22*60+14 })
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Albert+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#0F1128; font-family:'Albert Sans',sans-serif; color:#FFFFFF; }
+  a { text-decoration:none; }
+</style>
+</helmet>
+
+<div style="min-height:100vh; overflow-x:hidden">
+<div style="max-width:1120px; margin:0 auto; padding:clamp(40px,7vw,88px) 24px 80px 24px">
+
+  <!-- Hero -->
+  <div style="display:flex; align-items:center; gap:14px; margin-bottom:28px; flex-wrap:wrap">
+    <img src="assets/taskryse-logo.png" alt="Taskryse" style="height:40px; width:auto; filter:brightness(0) invert(1)">
+    <span style="background:rgba(255,200,87,0.12); border:1px solid rgba(255,200,87,0.35); color:#FFC857; font-family:Sora,sans-serif; font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; padding:6px 13px; border-radius:999px">Master prototype index</span>
+  </div>
+  <h1 style="font-family:Sora,sans-serif; font-size:clamp(34px,6vw,52px); font-weight:800; line-height:1.08; letter-spacing:-0.02em; margin:0 0 16px 0">The complete Taskryse<br>product experience.</h1>
+  <p style="font-size:18px; color:#B9BCD6; line-height:1.6; max-width:620px; margin:0 0 14px 0">Twenty connected, fully clickable surfaces — from the public landing page through onboarding, task completion, earnings, withdrawals, and the business, reviewer, support and admin consoles.</p>
+  <div style="font-family:Sora,sans-serif; font-size:15px; font-weight:700; color:#FF6A3D; margin-bottom:40px">Complete. Grow. Rise.</div>
+
+  <!-- Phase groups -->
+  <sc-for list="{{ groups }}" as="g" hint-placeholder-count="4">
+    <div style="margin-bottom:36px">
+      <div style="display:flex; align-items:baseline; gap:12px; margin-bottom:16px">
+        <span style="font-family:Sora,sans-serif; font-size:13px; font-weight:800; color:#FFC857">{{ g.phase }}</span>
+        <span style="font-family:Sora,sans-serif; font-size:18px; font-weight:700">{{ g.title }}</span>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:14px">
+        <sc-for list="{{ g.cards }}" as="c" hint-placeholder-count="3">
+          <a href="{{ c.href }}" style="display:block; background:#171A3A; border:1px solid #262A50; border-radius:16px; padding:20px 22px" style-hover="border-color:#FF6A3D; background:#1B1F45">
+            <div style="display:flex; align-items:center; gap:11px; margin-bottom:10px">
+              <span style="width:38px; height:38px; border-radius:11px; background:{{ c.iconBg }}; color:{{ c.iconFg }}; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0">{{ c.icon }}</span>
+              <span style="font-family:Sora,sans-serif; font-size:15.5px; font-weight:700; color:#FFFFFF">{{ c.name }}</span>
+            </div>
+            <div style="font-size:13px; color:#9A9DBA; line-height:1.55; margin-bottom:12px">{{ c.desc }}</div>
+            <div style="display:flex; flex-wrap:wrap; gap:6px">
+              <sc-for list="{{ c.tags }}" as="t" hint-placeholder-count="2">
+                <span style="background:rgba(255,255,255,0.06); color:#B9BCD6; font-size:10.5px; font-weight:600; padding:3px 9px; border-radius:999px">{{ t }}</span>
+              </sc-for>
+            </div>
+          </a>
+        </sc-for>
+      </div>
+    </div>
+  </sc-for>
+
+  <!-- Compliance footer -->
+  <div style="background:#171A3A; border:1px solid #262A50; border-radius:18px; padding:28px 30px; margin-top:16px">
+    <div style="font-family:Sora,sans-serif; font-size:13px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#16A67A; margin-bottom:12px">The rule carried through every surface</div>
+    <p style="font-size:15px; color:#B9BCD6; line-height:1.7; margin:0; max-width:820px">A Taskryse plan unlocks eligible task categories, qualifications, learning resources and platform tools — it never guarantees tasks, earnings or fixed returns. Contributors earn only when legitimate work is completed and approved. Promotional credits stay separate from withdrawable earnings, and progression through the Ryse levels is driven by approved work and quality alone — never by spending or recruiting.</p>
+  </div>
+
+  <div style="text-align:center; margin-top:40px; font-size:13px; color:#6B6E8C">Open the <a href="Taskryse Architecture.dc.html" style="color:#FF6A3D; font-weight:700">architecture &amp; sitemap</a> for the full role map and journey · © 2026 Taskryse</div>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      groups: [
+        { phase: "PHASE 1", title: "Public website",
+          cards: [
+            { name: "Homepage", href: "Taskryse Home.dc.html", icon: "🏠", iconBg: "rgba(255,106,61,0.15)", iconFg: "#FF6A3D",
+              desc: "Hero, task categories, payment transparency, plan preview, testimonials, FAQ.", tags: ["Responsive", "Start Your Ryse"] },
+            { name: "How it works", href: "Taskryse How It Works.dc.html", icon: "🧭", iconBg: "rgba(255,200,87,0.15)", iconFg: "#FFC857",
+              desc: "Complete → Grow → Rise, walked through step by step.", tags: ["Explainer"] },
+            { name: "For Business", href: "Taskryse For Business.dc.html", icon: "🏢", iconBg: "rgba(55,125,255,0.15)", iconFg: "#377DFF",
+              desc: "Sponsor value prop, escrow model, verified-work guarantee.", tags: ["Post a Task"] },
+            { name: "Plans & pricing", href: "Taskryse Pricing.dc.html", icon: "💳", iconBg: "rgba(255,106,61,0.15)", iconFg: "#FF6A3D",
+              desc: "4 plans, comparison table, working checkout, coupon RYSE10, pricing FAQ.", tags: ["Checkout", "₦ pricing"] }
+          ] },
+        { phase: "PHASE 2", title: "Registration & onboarding",
+          cards: [
+            { name: "Onboarding & KYC", href: "Taskryse Onboarding.dc.html", icon: "🪪", iconBg: "rgba(32,180,134,0.15)", iconFg: "#16A67A",
+              desc: "18-step journey with progress, save/resume, OTP, liveness and failure states.", tags: ["Mobile-first", "OTP 123456"] }
+          ] },
+        { phase: "PHASES 3–5", title: "Contributor app",
+          cards: [
+            { name: "App & marketplace", href: "Taskryse App.dc.html", icon: "📱", iconBg: "rgba(255,106,61,0.15)", iconFg: "#FF6A3D",
+              desc: "Dashboard, marketplace with filters, task details, eligibility, live wallet — accept → submit → paid.", tags: ["5 tabs", "Live state"] },
+            { name: "Task workspace", href: "Taskryse Workspace.dc.html", icon: "✍️", iconBg: "rgba(255,200,87,0.15)", iconFg: "#FFC857",
+              desc: "Distraction-free workspace, autosave, quality checks, submit + all review outcomes & appeal.", tags: ["Autosave", "Review states"] },
+            { name: "Wallet, bills & Ryse", href: "Taskryse Wallet.dc.html", icon: "◈", iconBg: "rgba(32,180,134,0.15)", iconFg: "#16A67A",
+              desc: "₦ withdrawal with PIN keypad, bill payments, receipts, Ryse Level, learning & qualifications.", tags: ["PIN 2468", "Local payout"] }
+          ] },
+        { phase: "PHASES 6–7", title: "Desktop consoles",
+          cards: [
+            { name: "Business & Reviewer", href: "Taskryse Business.dc.html", icon: "🗂", iconBg: "rgba(55,125,255,0.15)", iconFg: "#377DFF",
+              desc: "Sponsor portal (post, fund, analytics) + reviewer grading — switch role in the top bar.", tags: ["Role switch", "Escrow"] },
+            { name: "Support & Admin", href: "Taskryse Admin.dc.html", icon: "🛡", iconBg: "rgba(229,72,77,0.15)", iconFg: "#E5484D",
+              desc: "Support inbox + admin: KYC, withdrawals, fraud, country/FX config, audit log — switch role in top bar.", tags: ["Role switch", "Audit log"] }
+          ] },
+        { phase: "PHASE 8", title: "Grow & account",
+          cards: [
+            { name: "Referrals, Sponsored, Security & Help", href: "Taskryse Growth.dc.html", icon: "🎁", iconBg: "rgba(255,200,87,0.15)", iconFg: "#FFC857",
+              desc: "Referral centre (promo-only), labelled sponsored campaigns, 2FA & sessions, help centre with AI assistant + human handover.", tags: ["4 sections", "AI assistant"] }
+          ] },
+        { phase: "PHASE 9", title: "Foundations",
+          cards: [
+            { name: "Design system", href: "Taskryse Design System.dc.html", icon: "🎨", iconBg: "rgba(55,125,255,0.15)", iconFg: "#377DFF",
+              desc: "Colour tokens, type scale, buttons, status badges, form controls and the brand-voice do/don't list.", tags: ["Tokens", "WCAG AA"] },
+            { name: "Architecture & sitemap", href: "Taskryse Architecture.dc.html", icon: "🗺", iconBg: "rgba(22,166,122,0.15)", iconFg: "#16A67A",
+              desc: "The full role map, six-surface sitemap, contributor journey and task lifecycle.", tags: ["Phase 0"] }
+          ] },
+        { phase: "PHASE 10", title: "Authentication",
+          cards: [
+            { name: "Sign in · Create · Reset", href: "Taskryse Auth.dc.html", icon: "🔑", iconBg: "rgba(255,106,61,0.15)", iconFg: "#FF6A3D",
+              desc: "Social auth, password-strength meter, duplicate-account & wrong-password errors, reset-email confirmation.", tags: ["Validation", "Error states"] }
+          ] },
+        { phase: "PHASE 11", title: "Public content",
+          cards: [
+            { name: "Explore, Countries, Trust, About", href: "Taskryse Explore.dc.html", icon: "🌍", iconBg: "rgba(55,125,255,0.15)", iconFg: "#377DFF",
+              desc: "Task-category directory, supported-countries & payout methods, trust & safety, and the About page.", tags: ["4 pages"] }
+          ] },
+        { phase: "PHASE 12", title: "Legal & policy",
+          cards: [
+            { name: "Terms, Privacy & 4 policies", href: "Taskryse Legal.dc.html", icon: "📜", iconBg: "rgba(23,26,58,0.12)", iconFg: "#171A3A",
+              desc: "Terms, Privacy, Contributor Agreement, Task-Payment, Refund and Community Guidelines — with plain-language summaries.", tags: ["6 documents"] }
+          ] },
+        { phase: "PHASE 13", title: "Interface states",
+          cards: [
+            { name: "States gallery", href: "Taskryse States.dc.html", icon: "🎛", iconBg: "rgba(245,166,35,0.15)", iconFg: "#B8860B",
+              desc: "Loading, skeleton, empty, success, warning, error, offline, restricted, session-expired, maintenance, locked, 404.", tags: ["13 states"] }
+          ] },
+        { phase: "PHASE 14", title: "Notifications & org",
+          cards: [
+            { name: "Notifications & business setup", href: "Taskryse Org.dc.html", icon: "🔔", iconBg: "rgba(22,166,122,0.15)", iconFg: "#16A67A",
+              desc: "Notification centre with filters, plus the org-creation wizard: details, business verification, team roles, invoices.", tags: ["2 surfaces"] }
+          ] },
+        { phase: "PHASE 17", title: "Account",
+          cards: [
+            { name: "Profile & settings", href: "Taskryse Profile.dc.html", icon: "👤", iconBg: "rgba(255,106,61,0.15)", iconFg: "#FF6A3D",
+              desc: "Public profile, editable form with availability, and preferences for notifications, language, payout currency and appearance.", tags: ["3 tabs"] }
+          ] }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Albert+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#EEEFF5; font-family:'Albert Sans',sans-serif; color:#171A3A; }
+  a { color:#FF6A3D; text-decoration:none; }
+  a:hover { color:#E5552B; }
+  input:focus { outline:2px solid #FF6A3D; outline-offset:1px; }
+</style>
+</helmet>
+
+<div style="overflow-x:hidden; min-height:100vh">
+<div style="max-width:1240px; margin:0 auto; padding:20px 20px 4px 20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px 16px">
+  <div style="display:flex; align-items:center; gap:12px">
+    <a href="Taskryse Index.dc.html"><img src="assets/taskryse-logo.png" alt="Taskryse" style="height:26px; width:auto"></a>
+    <span style="background:#171A3A; color:#FFC857; font-family:Sora,sans-serif; font-size:10.5px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; padding:5px 11px; border-radius:999px; white-space:nowrap">Profile &amp; settings</span>
+  </div>
+  <div style="font-size:12.5px; color:#6B6E8C">Edit profile · manage skills · preferences</div>
+</div>
+
+<div style="max-width:1240px; margin:0 auto; padding:16px 20px 64px 20px; display:flex; gap:28px; align-items:flex-start; flex-wrap:wrap; justify-content:center">
+
+  <div style="flex:0 0 auto; width:min(400px, 100%)">
+    <div style="background:#FAFAFC; border:1px solid #E3E4EE; border-radius:28px; box-shadow:0 24px 64px rgba(23,26,58,0.14); overflow:hidden; display:flex; flex-direction:column; height:800px; position:relative">
+
+      <div style="background:#FFFFFF; border-bottom:1px solid #ECEDF4; padding:12px 14px; display:flex; gap:6px; overflow-x:auto">
+        <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+          <button onClick="{{ t.go }}" style="border:none; cursor:pointer; white-space:nowrap; font-family:'Albert Sans',sans-serif; font-size:12.5px; font-weight:700; padding:8px 14px; border-radius:999px; background:{{ t.bg }}; color:{{ t.fg }}">{{ t.label }}</button>
+        </sc-for>
+      </div>
+
+      <!-- ===== PROFILE ===== -->
+      <sc-if value="{{ vProfile }}" hint-placeholder-val="{{ true }}">
+        <div style="flex:1; overflow-y:auto; padding:18px">
+          <div style="background:#171A3A; border-radius:18px; padding:20px; color:#FFFFFF; margin-bottom:14px; text-align:center">
+            <div style="position:relative; width:74px; height:74px; margin:0 auto 12px auto">
+              <span style="width:74px; height:74px; border-radius:50%; background:#FF6A3D; color:#FFFFFF; display:flex; align-items:center; justify-content:center; font-family:Sora,sans-serif; font-weight:800; font-size:26px">AN</span>
+              <span style="position:absolute; bottom:0; right:0; width:24px; height:24px; border-radius:50%; background:#FFFFFF; color:#171A3A; display:flex; align-items:center; justify-content:center; font-size:12px; border:2px solid #171A3A">✎</span>
+            </div>
+            <div style="font-family:Sora,sans-serif; font-size:18px; font-weight:800">Adaeze Nwosu</div>
+            <div style="font-size:12.5px; color:#B9BCD9; margin-bottom:10px">@adaeze · Lagos, Nigeria 🇳🇬</div>
+            <div style="display:inline-flex; align-items:center; gap:7px; background:rgba(255,200,87,0.15); border:1px solid rgba(255,200,87,0.3); color:#FFC857; font-size:11.5px; font-weight:700; padding:5px 12px; border-radius:999px">✓ Verified · Skilled Ryser</div>
+          </div>
+          <div style="background:#FFFFFF; border:1px solid #E3E4EE; border-radius:14px; padding:16px; margin-bottom:12px">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px">
+              <span style="font-family:Sora,sans-serif; font-size:13.5px; font-weight:700">Profile completion</span>
+              <span style="font-size:12.5px; font-weight:800; color:#0E7A59">85%</span>
+            </div>
+            <div style="height:7px; background:#EEEFF5; border-radius:999px; overflow:hidden; margin-bottom:10px"><div style="height:100%; width:85%; background:linear-gradient(90deg,#FFC857,#FF6A3D); border-radius:999px"></div></div>
+            <div style="font-size:11.5px; color:#6B6E8C">Add a portfolio link to reach 100% and rank higher for tasks.</div>
+          </div>
+          <div style="font-family:Sora,sans-serif; font-size:13px; font-weight:700; margin-bottom:8px">Performance</div>
+          <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:14px">
+            <sc-for list="{{ perfStats }}" as="p" hint-placeholder-count="3">
+              <div style="background:#FFFFFF; border:1px solid #E3E4EE; border-radius:12px; padding:12px 8px; text-align:center"><div style="font-family:Sora,sans-serif; font-size:16px; font-weight:800; color:{{ p.color }}">{{ p.v }}</div><div style="font-size:10px; color:#6B6E8C">{{ p.l }}</div></div>
+            </sc-for>
+          </div>
+          <div style="font-family:Sora,sans-serif; font-size:13px; font-weight:700; margin-bottom:8px">Skills &amp; qualifications</div>
+          <div style="display:flex; flex-wrap:wrap; gap:7px; margin-bottom:14px">
+            <sc-for list="{{ skills }}" as="s" hint-placeholder-count="5">
+              <span style="background:{{ s.bg }}; color:{{ s.fg }}; font-size:11.5px; font-weight:700; padding:6px 12px; border-radius:999px">{{ s.label }}</span>
+            </sc-for>
+          </div>
+          <div style="font-family:Sora,sans-serif; font-size:13px; font-weight:700; margin-bottom:8px">Languages</div>
+          <sc-for list="{{ languages }}" as="l" hint-placeholder-count="3">
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#FFFFFF; border:1px solid #E3E4EE; border-radius:12px; padding:11px 15px; margin-bottom:7px">
+              <span style="font-size:13px; font-weight:600">{{ l.name }}</span>
+              <span style="font-size:11.5px; color:#6B6E8C">{{ l.level }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- ===== EDIT ===== -->
+      <sc-if value="{{ vEdit }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1; overflow-y:auto; padding:18px">
+          <div style="font-family:Sora,sans-serif; font-size:18px; font-weight:800; margin-bottom:16px">Edit profile</div>
+          <label style="display:block; font-size:12px; font-weight:700; margin-bottom:6px">Display name</label>
+          <input value="{{ f_name }}" onChange="{{ set_name }}" style="width:100%; box-sizing:border-box; border:1px solid #D7D9E6; border-radius:10px; padding:12px 14px; font-family:'Albert Sans',sans-serif; font-size:14px; margin-bottom:14px">
+          <label style="display:block; font-size:12px; font-weight:700; margin-bottom:6px">Username</label>
+          <input value="{{ f_user }}" onChange="{{ set_user }}" style="width:100%; box-sizing:border-box; border:1px solid #D7D9E6; border-radius:10px; padding:12px 14px; font-family:'Albert Sans',sans-serif; font-size:14px; margin-bottom:14px">
+          <label style="display:block; font-size:12px; font-weight:700; margin-bottom:6px">Bio</label>
+          <textarea value="{{ f_bio }}" onChange="{{ set_bio }}" style="width:100%; box-sizing:border-box; border:1px solid #D7D9E6; border-radius:10px; padding:12px 14px; font-family:'Albert Sans',sans-serif; font-size:14px; min-height:80px; resize:vertical; margin-bottom:14px"></textarea>
+          <label style="display:block; font-size:12px; font-weight:700; margin-bottom:8px">Availability</label>
+          <div style="display:flex; gap:6px; margin-bottom:18px">
+            <sc-for list="{{ availChips }}" as="a" hint-placeholder-count="3">
+              <button onClick="{{ a.pick }}" style="flex:1; border:{{ a.border }}; background:{{ a.bg }}; color:{{ a.fg }}; font-family:'Albert Sans',sans-serif; font-size:11.5px; font-weight:700; padding:10px 4px; border-radius:10px; cursor:pointer">{{ a.label }}</button>
+            </sc-for>
+          </div>
+          <button onClick="{{ save }}" style="width:100%; border:none; background:{{ saveBg }}; color:#FFFFFF; font-family:Sora,sans-serif; font-size:15px; font-weight:700; padding:14px; border-radius:12px; cursor:pointer">{{ saveLabel }}</button>
+        </div>
+      </sc-if>
+
+      <!-- ===== PREFERENCES ===== -->
+      <sc-if value="{{ vPrefs }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1; overflow-y:auto; padding:18px">
+          <div style="font-family:Sora,sans-serif; font-size:18px; font-weight:800; margin-bottom:16px">Preferences</div>
+          <div style="font-family:Sora,sans-serif; font-size:13px; font-weight:700; color:#6B6E8C; margin-bottom:8px">Notifications</div>
+          <sc-for list="{{ prefs }}" as="p" hint-placeholder-count="4">
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#FFFFFF; border:1px solid #E3E4EE; border-radius:13px; padding:14px 16px; margin-bottom:8px">
+              <span style="font-size:13.5px; font-weight:600; flex:1; padding-right:12px">{{ p.label }}</span>
+              <button onClick="{{ p.toggle }}" style="border:none; cursor:pointer; width:44px; height:24px; border-radius:999px; background:{{ p.bg }}; position:relative; flex-shrink:0"><span style="position:absolute; top:2px; left:{{ p.left }}; width:20px; height:20px; border-radius:50%; background:#FFFFFF; transition:left 0.2s"></span></button>
+            </div>
+          </sc-for>
+          <div style="font-family:Sora,sans-serif; font-size:13px; font-weight:700; color:#6B6E8C; margin:16px 0 8px 0">Language &amp; region</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; background:#FFFFFF; border:1px solid #E3E4EE; border-radius:13px; padding:14px 16px; margin-bottom:8px"><span style="font-size:13.5px; font-weight:600">App language</span><span style="font-size:12.5px; color:#6B6E8C">English ›</span></div>
+          <div style="display:flex; justify-content:space-between; align-items:center; background:#FFFFFF; border:1px solid #E3E4EE; border-radius:13px; padding:14px 16px; margin-bottom:8px"><span style="font-size:13.5px; font-weight:600">Payout currency</span><span style="font-size:12.5px; color:#6B6E8C">Nigerian naira (₦) ›</span></div>
+          <div style="display:flex; justify-content:space-between; align-items:center; background:#FFFFFF; border:1px solid #E3E4EE; border-radius:13px; padding:14px 16px"><span style="font-size:13.5px; font-weight:600">Appearance</span><span style="font-size:12.5px; color:#6B6E8C">System ›</span></div>
+          <a href="Taskryse Growth.dc.html" style="display:block; text-align:center; margin-top:16px; border:1px solid #E3E4EE; background:#FFFFFF; color:#171A3A; font-family:Sora,sans-serif; font-size:13.5px; font-weight:700; padding:13px; border-radius:12px">Security &amp; account →</a>
+        </div>
+      </sc-if>
+
+    </div>
+  </div>
+
+  <!-- Notes -->
+  <div style="flex:1 1 280px; min-width:250px; max-width:340px; display:flex; flex-direction:column; gap:14px">
+    <div style="background:#171A3A; border-radius:16px; padding:22px; color:#FFFFFF">
+      <div style="font-family:Sora,sans-serif; font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#FFC857; margin-bottom:12px">Phase 17 · Profile &amp; settings</div>
+      <div style="font-size:13.5px; color:#B9BCD9; line-height:1.7">The contributor's public profile, an editable form with availability, and preferences for notifications, language, payout currency and appearance — the account hub linking to security.</div>
+    </div>
+    <div style="background:#FFFFFF; border:1px solid #E3E4EE; border-radius:16px; padding:22px">
+      <div style="font-family:Sora,sans-serif; font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#6B6E8C; margin-bottom:12px">Try these</div>
+      <div style="font-size:13.5px; color:#4A4D6B; line-height:1.85">· Edit tab → change name → Save<br>· Switch availability chips<br>· Preferences → toggle notifications</div>
+    </div>
+    <a href="Taskryse Index.dc.html" style="background:#FFFFFF; border:1px solid #E3E4EE; border-radius:16px; padding:18px 22px; font-family:Sora,sans-serif; font-size:13.5px; font-weight:700; color:#FF6A3D">← Master index</a>
+  </div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    tab: "profile", name: "Adaeze Nwosu", user: "adaeze", bio: "Fluent Yorùbá & English speaker. AI data evaluation and transcription specialist.",
+    avail: 1, saved: false, prefs: { taskAlerts: true, payment: true, marketing: false, weekly: true }
+  };
+  renderVals() {
+    const st = this.state;
+    return {
+      tabs: [["profile","Profile"],["edit","Edit"],["prefs","Preferences"]].map(([k, label]) => ({
+        label, go: () => this.setState({ tab: k, saved: false }),
+        bg: st.tab === k ? "#171A3A" : "#F4F5FA", fg: st.tab === k ? "#FFFFFF" : "#6B6E8C" })),
+      vProfile: st.tab === "profile", vEdit: st.tab === "edit", vPrefs: st.tab === "prefs",
+      perfStats: [
+        { v: "96%", l: "Quality", color: "#0E7A59" }, { v: "94%", l: "On-time", color: "#0E7A59" }, { v: "38", l: "Approved", color: "#171A3A" }
+      ],
+      skills: [
+        { label: "AI evaluation ✓", bg: "#EDF7F3", fg: "#0E7A59" },
+        { label: "Transcription ✓", bg: "#EDF7F3", fg: "#0E7A59" },
+        { label: "Image annotation ✓", bg: "#EDF7F3", fg: "#0E7A59" },
+        { label: "Translation", bg: "#F4F5FA", fg: "#4A4D6B" },
+        { label: "+ Add skill", bg: "#FFF1EA", fg: "#E5552B" }
+      ],
+      languages: [
+        { name: "English", level: "Native" }, { name: "Yorùbá", level: "Native" }, { name: "French", level: "Conversational" }
+      ],
+      f_name: st.name, set_name: (e) => this.setState({ name: e.target.value, saved: false }),
+      f_user: st.user, set_user: (e) => this.setState({ user: e.target.value, saved: false }),
+      f_bio: st.bio, set_bio: (e) => this.setState({ bio: e.target.value, saved: false }),
+      availChips: ["Part-time", "Flexible", "Full-time"].map((label, i) => ({ label,
+        pick: () => this.setState({ avail: i, saved: false }),
+        border: st.avail === i ? "2px solid #FF6A3D" : "1px solid #E1E2EC",
+        bg: st.avail === i ? "#FFF1EA" : "#FFFFFF", fg: st.avail === i ? "#E5552B" : "#4A4D6B" })),
+      saveBg: st.saved ? "#16A67A" : "#FF6A3D", saveLabel: st.saved ? "Saved ✓" : "Save changes",
+      save: () => { this.setState({ saved: true }); setTimeout(() => this.setState({ tab: "profile", saved: false }), 900); },
+      prefs: [
+        { key: "taskAlerts", label: "New matching task alerts" },
+        { key: "payment", label: "Payment & approval updates" },
+        { key: "weekly", label: "Weekly earnings summary" },
+        { key: "marketing", label: "Product news & tips" }
+      ].map(p => ({ label: p.label,
+        toggle: () => this.setState({ prefs: { ...st.prefs, [p.key]: !st.prefs[p.key] } }),
+        bg: st.prefs[p.key] ? "#16A67A" : "#C3C5D6", left: st.prefs[p.key] ? "22px" : "2px" }))
+    };
+  }
+}
+</script>
+</body>
+</html>

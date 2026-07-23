@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Albert+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#0F1128; font-family:'Albert Sans',sans-serif; color:#171A3A; }
+  a { color:#FF6A3D; text-decoration:none; }
+  a:hover { color:#E5552B; }
+  input:focus { outline:2px solid #FF6A3D; outline-offset:1px; }
+</style>
+</helmet>
+
+<div style="overflow-x:hidden; min-height:100vh">
+<div style="max-width:1240px; margin:0 auto; padding:18px 20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px">
+  <a href="Taskryse Index.dc.html"><img src="assets/taskryse-logo.png" alt="Taskryse" style="height:26px; width:auto; filter:brightness(0) invert(1)"></a>
+  <span style="color:#8B8FB3; font-size:12.5px">Sign in · Create account · Reset — switch tabs</span>
+</div>
+
+<div style="max-width:1240px; margin:0 auto; padding:8px 20px 64px 20px; display:flex; gap:32px; align-items:flex-start; flex-wrap:wrap; justify-content:center">
+
+  <!-- Auth card -->
+  <div style="flex:0 0 auto; width:min(440px,100%)">
+    <div style="background:#FFFFFF; border-radius:22px; padding:clamp(24px,5vw,36px); box-shadow:0 24px 64px rgba(0,0,0,0.35)">
+      <div style="display:flex; gap:4px; background:#F0F1F7; border-radius:12px; padding:4px; margin-bottom:26px">
+        <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+          <button onClick="{{ t.go }}" style="flex:1; border:none; cursor:pointer; font-family:'Albert Sans',sans-serif; font-size:13px; font-weight:700; padding:10px 4px; border-radius:9px; background:{{ t.bg }}; color:{{ t.fg }}">{{ t.label }}</button>
+        </sc-for>
+      </div>
+
+      <!-- SIGN IN -->
+      <sc-if value="{{ vSignin }}" hint-placeholder-val="{{ true }}">
+        <h1 style="font-family:Sora,sans-serif; font-size:24px; font-weight:800; margin:0 0 6px 0">Welcome back</h1>
+        <p style="font-size:14px; color:#6B6E8C; margin:0 0 22px 0">Continue your Ryse.</p>
+        <div style="display:flex; gap:10px; margin-bottom:18px">
+          <button style="flex:1; border:1px solid #E1E2EC; background:#FFFFFF; font-family:'Albert Sans',sans-serif; font-size:13px; font-weight:700; padding:11px; border-radius:10px; cursor:pointer">Google</button>
+          <button style="flex:1; border:1px solid #E1E2EC; background:#FFFFFF; font-family:'Albert Sans',sans-serif; font-size:13px; font-weight:700; padding:11px; border-radius:10px; cursor:pointer">Apple</button>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:18px; color:#9A9DBA; font-size:12px"><div style="flex:1; height:1px; background:#ECEDF4"></div>or<div style="flex:1; height:1px; background:#ECEDF4"></div></div>
+        <label style="display:block; font-size:12.5px; font-weight:700; margin-bottom:6px">Email or phone</label>
+        <input value="{{ email }}" onChange="{{ setEmail }}" placeholder="you@example.com" style="width:100%; box-sizing:border-box; border:{{ emailBorder }}; border-radius:10px; padding:12px 14px; font-family:'Albert Sans',sans-serif; font-size:14px; margin-bottom:16px">
+        <label style="display:block; font-size:12.5px; font-weight:700; margin-bottom:6px">Password</label>
+        <input value="{{ pwd }}" onChange="{{ setPwd }}" type="password" placeholder="••••••••" style="width:100%; box-sizing:border-box; border:1px solid #D7D9E6; border-radius:10px; padding:12px 14px; font-family:'Albert Sans',sans-serif; font-size:14px; margin-bottom:8px">
+        <div style="text-align:right; margin-bottom:16px"><button onClick="{{ goReset }}" style="border:none; background:none; color:#FF6A3D; font-size:12.5px; font-weight:700; cursor:pointer; font-family:'Albert Sans',sans-serif">Forgot password?</button></div>
+        <sc-if value="{{ signinErr }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#FDF6F6; border:1px solid #F3D2D3; border-radius:10px; padding:11px 14px; font-size:12.5px; color:#B33A3E; font-weight:600; margin-bottom:16px">Incorrect email or password. Try again or reset it.</div>
+        </sc-if>
+        <button onClick="{{ doSignin }}" style="width:100%; border:none; background:#FF6A3D; color:#FFFFFF; font-family:Sora,sans-serif; font-size:15px; font-weight:700; padding:14px; border-radius:12px; cursor:pointer" style-hover="background:#E5552B">Sign in</button>
+      </sc-if>
+
+      <!-- CREATE -->
+      <sc-if value="{{ vCreate }}" hint-placeholder-val="{{ false }}">
+        <h1 style="font-family:Sora,sans-serif; font-size:24px; font-weight:800; margin:0 0 6px 0">Create your account</h1>
+        <p style="font-size:14px; color:#6B6E8C; margin:0 0 22px 0">Start earning from verified work.</p>
+        <div style="display:flex; gap:10px; margin-bottom:18px">
+          <button style="flex:1; border:1px solid #E1E2EC; background:#FFFFFF; font-family:'Albert Sans',sans-serif; font-size:13px; font-weight:700; padding:11px; border-radius:10px; cursor:pointer">Google</button>
+          <button style="flex:1; border:1px solid #E1E2EC; background:#FFFFFF; font-family:'Albert Sans',sans-serif; font-size:13px; font-weight:700; padding:11px; border-radius:10px; cursor:pointer">Apple</button>
+        </div>
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:18px; color:#9A9DBA; font-size:12px"><div style="flex:1; height:1px; background:#ECEDF4"></div>or<div style="flex:1; height:1px; background:#ECEDF4"></div></div>
+        <label style="display:block; font-size:12.5px; font-weight:700; margin-bottom:6px">Email</label>
+        <input value="{{ email }}" onChange="{{ setEmail }}" placeholder="you@example.com" style="width:100%; box-sizing:border-box; border:{{ dupBorder }}; border-radius:10px; padding:12px 14px; font-family:'Albert Sans',sans-serif; font-size:14px; margin-bottom:8px">
+        <sc-if value="{{ dupErr }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:12px; color:#B33A3E; font-weight:600; margin-bottom:12px">An account already exists with this email. <button onClick="{{ goSignin }}" style="border:none; background:none; color:#FF6A3D; font-weight:700; cursor:pointer; font-size:12px; font-family:'Albert Sans',sans-serif; padding:0">Sign in instead →</button></div>
+        </sc-if>
+        <div style="height:8px"></div>
+        <label style="display:block; font-size:12.5px; font-weight:700; margin-bottom:6px">Create password</label>
+        <input value="{{ pwd }}" onChange="{{ setPwd }}" type="password" placeholder="At least 8 characters" style="width:100%; box-sizing:border-box; border:1px solid #D7D9E6; border-radius:10px; padding:12px 14px; font-family:'Albert Sans',sans-serif; font-size:14px; margin-bottom:8px">
+        <div style="display:flex; gap:4px; margin-bottom:18px">
+          <sc-for list="{{ pwdBars }}" as="b" hint-placeholder-count="4"><div style="flex:1; height:4px; border-radius:999px; background:{{ b }}"></div></sc-for>
+        </div>
+        <div style="font-size:11.5px; color:#6B6E8C; margin-bottom:8px">{{ pwdHint }}</div>
+        <button onClick="{{ doCreate }}" style="width:100%; border:none; background:{{ createBg }}; color:#FFFFFF; font-family:Sora,sans-serif; font-size:15px; font-weight:700; padding:14px; border-radius:12px; cursor:pointer">Create account</button>
+        <p style="font-size:11.5px; color:#9A9DBA; text-align:center; line-height:1.55; margin:14px 0 0 0">By continuing you agree to the <a href="Taskryse Legal.dc.html">Terms</a> and <a href="Taskryse Legal.dc.html">Contributor Agreement</a>.</p>
+      </sc-if>
+
+      <!-- RESET -->
+      <sc-if value="{{ vReset }}" hint-placeholder-val="{{ false }}">
+        <sc-if value="{{ resetStep1 }}" hint-placeholder-val="{{ true }}">
+          <h1 style="font-family:Sora,sans-serif; font-size:24px; font-weight:800; margin:0 0 6px 0">Reset password</h1>
+          <p style="font-size:14px; color:#6B6E8C; margin:0 0 22px 0">We'll send a reset code to your email.</p>
+          <label style="display:block; font-size:12.5px; font-weight:700; margin-bottom:6px">Email</label>
+          <input value="{{ email }}" onChange="{{ setEmail }}" placeholder="you@example.com" style="width:100%; box-sizing:border-box; border:1px solid #D7D9E6; border-radius:10px; padding:12px 14px; font-family:'Albert Sans',sans-serif; font-size:14px; margin-bottom:18px">
+          <button onClick="{{ sendReset }}" style="width:100%; border:none; background:#FF6A3D; color:#FFFFFF; font-family:Sora,sans-serif; font-size:15px; font-weight:700; padding:14px; border-radius:12px; cursor:pointer">Send reset code</button>
+        </sc-if>
+        <sc-if value="{{ resetStep2 }}" hint-placeholder-val="{{ false }}">
+          <div style="text-align:center; padding:20px 0">
+            <div style="width:56px; height:56px; border-radius:50%; background:#EDF7F3; color:#16A67A; font-size:24px; display:flex; align-items:center; justify-content:center; margin:0 auto 16px auto">✓</div>
+            <h1 style="font-family:Sora,sans-serif; font-size:22px; font-weight:800; margin:0 0 8px 0">Check your email</h1>
+            <p style="font-size:14px; color:#6B6E8C; line-height:1.6; margin:0 0 20px 0">We sent a reset link to <strong>{{ emailShown }}</strong>. It expires in 30 minutes.</p>
+            <button onClick="{{ goSignin }}" style="width:100%; border:none; background:#171A3A; color:#FFFFFF; font-family:Sora,sans-serif; font-size:14px; font-weight:700; padding:13px; border-radius:12px; cursor:pointer">Back to sign in</button>
+          </div>
+        </sc-if>
+      </sc-if>
+
+      <!-- SUCCESS -->
+      <sc-if value="{{ vSuccess }}" hint-placeholder-val="{{ false }}">
+        <div style="text-align:center; padding:16px 0">
+          <div style="width:60px; height:60px; border-radius:50%; background:#EDF7F3; color:#16A67A; font-size:26px; display:flex; align-items:center; justify-content:center; margin:0 auto 16px auto">✓</div>
+          <h1 style="font-family:Sora,sans-serif; font-size:22px; font-weight:800; margin:0 0 8px 0">{{ successTitle }}</h1>
+          <p style="font-size:14px; color:#6B6E8C; line-height:1.6; margin:0 0 22px 0">{{ successDesc }}</p>
+          <a href="{{ successHref }}" style="display:block; background:#FF6A3D; color:#FFFFFF; font-family:Sora,sans-serif; font-size:15px; font-weight:700; padding:14px; border-radius:12px" style-hover="background:#E5552B; color:#FFFFFF">{{ successCta }}</a>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+
+  <!-- Notes -->
+  <div style="flex:1 1 260px; min-width:250px; max-width:330px; display:flex; flex-direction:column; gap:14px">
+    <div style="background:#171A3A; border-radius:16px; padding:22px; color:#FFFFFF">
+      <div style="font-family:Sora,sans-serif; font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#FFC857; margin-bottom:12px">Phase 10 · Authentication</div>
+      <div style="font-size:13.5px; color:#B9BCD9; line-height:1.7">Sign in, create account and reset — with social auth, password-strength meter, duplicate-account detection, wrong-password error and the email-sent confirmation.</div>
+    </div>
+    <div style="background:#FFFFFF; border:1px solid #E3E4EE; border-radius:16px; padding:22px">
+      <div style="font-family:Sora,sans-serif; font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#6B6E8C; margin-bottom:12px">Try these</div>
+      <div style="font-size:13.5px; color:#4A4D6B; line-height:1.85">· Sign in with a short password → error<br>· Create with <strong>taken@taskryse.com</strong> → duplicate<br>· Type a password → strength meter<br>· Reset → email-sent confirmation</div>
+    </div>
+    <a href="Taskryse Index.dc.html" style="background:#FFFFFF; border:1px solid #E3E4EE; border-radius:16px; padding:18px 22px; font-family:Sora,sans-serif; font-size:13.5px; font-weight:700; color:#FF6A3D">← Master index</a>
+  </div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = { view: "signin", email: "", pwd: "", signinErr: false, resetStep: 1, success: null };
+  renderVals() {
+    const st = this.state;
+    const goView = (v) => this.setState({ view: v, signinErr: false, resetStep: 1, success: null });
+    const strength = st.pwd.length === 0 ? 0 : st.pwd.length < 6 ? 1 : st.pwd.length < 9 ? 2 : /[0-9]/.test(st.pwd) && /[A-Z]/.test(st.pwd) ? 4 : 3;
+    const sc = ["#E6E7F0", "#E5484D", "#F5A623", "#FFC857", "#16A67A"];
+    return {
+      tabs: [["signin","Sign in"],["create","Create account"],["reset","Reset"]].map(([k, label]) => ({
+        label, go: () => goView(k),
+        bg: st.view === k ? "#171A3A" : "transparent", fg: st.view === k ? "#FFFFFF" : "#6B6E8C" })),
+      vSignin: st.view === "signin", vCreate: st.view === "create", vReset: st.view === "reset", vSuccess: st.view === "success",
+      email: st.email, setEmail: (e) => this.setState({ email: e.target.value }),
+      pwd: st.pwd, setPwd: (e) => this.setState({ pwd: e.target.value }),
+      emailBorder: st.signinErr ? "1px solid #E5484D" : "1px solid #D7D9E6",
+      signinErr: st.signinErr,
+      goReset: () => goView("reset"), goSignin: () => goView("signin"),
+      doSignin: () => { if (st.pwd.length < 8) this.setState({ signinErr: true }); else this.setState({ view: "success", success: "signin" }); },
+      dupErr: st.email.trim().toLowerCase() === "taken@taskryse.com",
+      dupBorder: st.email.trim().toLowerCase() === "taken@taskryse.com" ? "1px solid #E5484D" : "1px solid #D7D9E6",
+      pwdBars: [1,2,3,4].map(i => i <= strength ? sc[strength] : "#E6E7F0"),
+      pwdHint: strength === 0 ? "Use 8+ characters with a number and capital." : strength < 2 ? "Too weak — add more characters." : strength < 4 ? "Getting there — add a number and capital." : "Strong password ✓",
+      createBg: st.email && st.pwd.length >= 8 && st.email.trim().toLowerCase() !== "taken@taskryse.com" ? "#FF6A3D" : "#C3C5D6",
+      doCreate: () => { if (st.email && st.pwd.length >= 8 && st.email.trim().toLowerCase() !== "taken@taskryse.com") this.setState({ view: "success", success: "create" }); },
+      resetStep1: st.resetStep === 1, resetStep2: st.resetStep === 2,
+      sendReset: () => { if (st.email) this.setState({ resetStep: 2 }); },
+      emailShown: st.email || "you@example.com",
+      successTitle: st.success === "create" ? "Account created!" : "You're signed in",
+      successDesc: st.success === "create" ? "Next: verify your identity and set up your profile in onboarding." : "Redirecting you to your dashboard.",
+      successCta: st.success === "create" ? "Continue to onboarding →" : "Go to dashboard →",
+      successHref: st.success === "create" ? "Taskryse Onboarding.dc.html" : "Taskryse App.dc.html"
+    };
+  }
+}
+</script>
+</body>
+</html>

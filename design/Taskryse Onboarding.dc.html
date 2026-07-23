@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Albert+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#EEEFF5; font-family:'Albert Sans',sans-serif; color:#171A3A; }
+  a { color:#FF6A3D; text-decoration:none; }
+  a:hover { color:#E5552B; }
+  input:focus, select:focus { outline:2px solid #FF6A3D; outline-offset:1px; }
+</style>
+</helmet>
+
+<div style="overflow-x:hidden; min-height:100vh">
+<div style="max-width:1240px; margin:0 auto; padding:20px 20px 4px 20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px 16px">
+  <div style="display:flex; align-items:center; gap:14px">
+    <a href="Taskryse Home.dc.html"><img src="assets/taskryse-logo.png" alt="Taskryse" style="height:26px; width:auto"></a>
+    <span style="background:#171A3A; color:#FFC857; font-family:Sora,sans-serif; font-size:10.5px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; padding:5px 11px; border-radius:999px; white-space:nowrap">Onboarding demo</span>
+  </div>
+  <div style="font-size:12.5px; color:#6B6E8C; line-height:1.5">Fully clickable · OTP code: <strong>123456</strong></div>
+</div>
+
+<div style="max-width:1240px; margin:0 auto; padding:16px 24px 64px 24px; display:flex; gap:28px; align-items:flex-start; flex-wrap:wrap; justify-content:center">
+
+  <!-- Phone -->
+  <div style="flex:0 0 auto; width:min(400px, 100%)">
+    <div style="background:#FFFFFF; border:1px solid #E3E4EE; border-radius:28px; box-shadow:0 24px 64px rgba(23,26,58,0.14); overflow:hidden; display:flex; flex-direction:column; min-height:740px">
+      <div style="padding:16px 20px 0 20px">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px">
+          <button onClick="{{ goBack }}" style="border:none; background:#F4F5FA; color:#171A3A; width:34px; height:34px; border-radius:10px; cursor:pointer; font-size:16px; visibility:{{ backVis }}">←</button>
+          <div style="font-size:12.5px; font-weight:700; color:#6B6E8C">{{ stepCounter }}</div>
+          <a href="Taskryse Home.dc.html" style="font-size:12.5px; font-weight:700; color:#6B6E8C" style-hover="color:#FF6A3D">Save &amp; exit</a>
+        </div>
+        <div style="height:5px; background:#EEEFF5; border-radius:999px; overflow:hidden; margin-bottom:6px">
+          <div style="height:100%; width:{{ progressPct }}; background:linear-gradient(90deg,#FFC857,#FF6A3D); border-radius:999px; transition:width 0.3s"></div>
+        </div>
+      </div>
+
+      <div style="padding:18px 24px 24px 24px; flex:1; display:flex; flex-direction:column">
+
+        <!-- 1 Welcome -->
+        <sc-if value="{{ s1 }}" hint-placeholder-val="{{ true }}">
+          <div style="flex:1; display:flex; flex-direction:column; justify-content:center; text-align:center">
+            <div style="display:flex; justify-content:center; align-items:flex-end; gap:5px; margin-bottom:28px">
+              <span style="width:20px; height:18px; background:#FFC857; border-radius:4px"></span>
+              <span style="width:20px; height:30px; background:#FF8A3D; border-radius:4px"></span>
+              <span style="width:20px; height:44px; background:#FF6A3D; border-radius:4px"></span>
+            </div>
+            <h1 style="font-family:Sora,sans-serif; font-size:28px; font-weight:800; margin:0 0 12px 0">Welcome to Taskryse</h1>
+            <p style="font-size:15px; color:#4A4D6B; line-height:1.65; margin:0 0 8px 0">Complete verified digital work. Grow your skills. Get paid in your local currency.</p>
+            <p style="font-size:13px; color:#9A9DBA; line-height:1.6; margin:0">Setup takes about 10 minutes. You can save and finish later at any step.</p>
+          </div>
+          <button onClick="{{ next }}" style="border:none; background:#FF6A3D; color:#FFFFFF; font-family:Sora,sans-serif; font-size:15.5px; font-weight:700; padding:16px; border-radius:14px; cursor:pointer; width:100%" style-hover="background:#E5552B">Start Your Ryse</button>
+          <div style="text-align:center; margin-top:14px; font-size:13.5px; color:#6B6E8C">Already have an account? <a href="#" style="font-weight:700">Sign in</a></div>
+        </sc-if>
+
+        <!-- 2 Country -->
+        <sc-if value="{{ s2 }}" hint-placeholder-val="{{ false }}">
+          <h2 style="font-family:Sora,sans-serif; font-size:22px; font-weight:800; margin:6px 0 6px 0">Where do you live?</h2>
+          <p style="font-size:13.5px; color:#6B6E8C; margin:0 0 16px 0; line-height:1.55">This sets your payout currency and the tasks you can see.</p>
+          <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px">
+            <sc-for list="{{ countries }}" as="c" hint-placeholder-count="6">
+              <button onClick="{{ c.pick }}" style="display:flex; align-items:center; justify-content:space-between; gap:10px; border:{{ c.border }}; background:#FFFFFF; border-radius:12px; padding:12px 16px; cursor:pointer; font-family:'Albert Sans',sans-serif">
+                <span style="font-size:14.5px; font-weight:600; color:#171A3A">{{ c.flag }}&nbsp; {{ c.name }}</span>
+                <span style="font-size:12.5px; color:#6B6E8C; font-weight:600">{{ c.cur }}</span>
+              </button>
+            </sc-for>
+          </div>
+          <sc-if value="{{ unsupported }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#FDF6F6; border:1px solid #F3D2D3; border-radius:12px; padding:14px 16px; font-size:13px; color:#B33A3E; line-height:1.6; margin-bottom:14px"><strong>Not available yet.</strong> Taskryse hasn't launched there. Leave your email and we'll tell you the day we do — we never charge in unsupported countries.</div>
+          </sc-if>
+          <div style="flex:1"></div>
+          <button onClick="{{ nextIfCountry }}" style="border:none; background:{{ countryBtnBg }}; color:#FFFFFF; font-family:Sora,sans-serif; font-size:15.5px; font-weight:700; padding:16px; border-radius:14px; cursor:pointer; width:100%">Continue</button>
+        </sc-if>
+
+        <!-- 3 Register -->
+        <sc-if value="{{ s3 }}" hint-placeholder-val="{{ false }}">
+          <h2 style="font-family:Sora,sans-serif; font-size:22px; font-weight:800; margin:6px 0 6px 0">Create your account</h2>
+          <p style="font-size:13.5px; color:#6B6E8C; margin:0 0 16px 0">We'll send a one-time code to verify it's you.</p>
+          <div style="display:flex; gap:8px; margin-bottom:14px">
+            <button onClick="{{ regEmail }}" style="flex:1; border:none; cursor:pointer; font-family:'Albert Sans',sans-serif; font-size:13.5px; font-weight:700; padding:10px; border-radius:10px; background:{{ regEmailBg }}; color:{{ regEmailFg }}">Email</button>
+            <button onClick="{{ regPhone }}" style="flex:1; border:none; cursor:pointer; font-family:'Albert Sans',sans-serif; font-size:13.5px; font-weight:700; padding:10px; border-radius:10px; background:{{ regPhoneBg }}; color:{{ regPhoneFg }}">Phone</button>
+          </div>
+          <sc-if value="{{ regIsEmail }}" hint-placeholder-val="{{ true }}">
+            <input value="{{ email }}" onChange="{{ setEmail }}" placeholder="you@example.com" style="width:100%; box-sizing:border-box; border:1px solid #D7D9E6; border-radius:12px; padding:14px; font-family:'Albert Sans',sans-serif; font-size:15px; margin-bottom:12px">
+          </sc-if>
+          <sc-if value="{{ regIsPhone }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex; gap:8px; margin-bottom:12px">
+              <span style="border:1px solid #D7D9E6; border-radius:12px; padding:14px; font-size:15px; font-weight:600; background:#F4F5FA">+234</span>
+              <input value="{{ phone }}" onChange="{{ setPhone }}" placeholder="801 234 5678" style="flex:1; min-width:0; border:1px solid #D7D9E6; border-radius:12px; padding:14px; font-family:'Albert Sans',sans-serif; font-size:15px">
+            </div>
+          </sc-if>
+          <button onClick="{{ sendCode }}" style="border:none; background:{{ sendBtnBg }}; color:#FFFFFF; font-family:Sora,sans-serif; font-size:15.5px; font-weight:700; padding:15px; border-radius:14px; cursor:pointer; width:100%; margin-bottom:16px">Send code</button>
+          <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px"><div style="flex:1; height:1px; background:#ECEDF4"></div><span style="font-size:12px; color:#9A9DBA; font-weight:600">or</span><div style="flex:1; height:1px; background:#ECEDF4"></div></div>
+          <div style="display:flex; flex-direction:column; gap:10px">
+            <button onClick="{{ socialReg }}" style="border:1.5px solid #D7D9E6; background:#FFFFFF; font-family:'Albert Sans',sans-serif; font-size:14.5px; font-weight:700; padding:13px; border-radius:12px; cursor:pointer; color:#171A3A">Continue with Google</button>
+            <button onClick="{{ socialReg }}" style="border:1.5px solid #D7D9E6; background:#FFFFFF; font-family:'Albert Sans',sans-serif; font-size:14.5px; font-weight:700; padding:13px; border-radius:12px; cursor:pointer; color:#171A3A"> Continue with Apple</button>
+          </div>
+        </sc-if>
+
+        <!-- 4 OTP -->
+        <sc-if value="{{ s4 }}" hint-placeholder-val="{{ false }}">
+          <h2 style="font-family:Sora,sans-serif; font-size:22px; font-weight:800; margin:6px 0 6px 0">Enter the 6-digit code</h2>
+          <p style="font-size:13.5px; color:#6B6E8C; margin:0 0 20px 0; line-height:1.55">Sent to <strong style="color:#171A3A">{{ otpTarget }}</strong> · <a href="#" style="font-weight:700">change</a></p>
+          <input value="{{ otp }}" onChange="{{ setOtp }}" placeholder="••••••" maxLength="6" inputMode="numeric" style="width:100%; box-sizing:border-box; border:{{ otpBorder }}; border-radius:14px; padding:18px; font-family:Sora,sans-serif; font-size:26px; font-weight:800; letter-spacing:0.4em; text-align:center; margin-bottom:10px">
+          <sc-if value="{{ otpError }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:13px; font-weight:600; color:#E5484D; margin-bottom:10px">That code isn't correct. Try 123456 — 2 attempts left.</div>
+          </sc-if>
+          <div style="font-size:13px; color:#6B6E8C; margin-bottom:20px">Didn't get it? <a href="#" style="font-weight:700">Resend code</a> (00:42)</div>
+          <div style="flex:1"></div>
+          <button onClick="{{ verifyOtp }}" style="border:none; background:{{ otpBtnBg }}; color:#FFFFFF; font-family:Sora,sans-serif; font-size:15.5px; font-weight:700; padding:16px; border-radius:14px; cursor:pointer; width:100%">Verify</button>
+        </sc-if>
+
+        <!-- 5 Password -->
+        <sc-if value="{{ s5 }}" hint-placeholder-val="{{ false }}">
+          <h2 style="font-family:Sora,sans-serif; font-size:22px; font-weight:800; margin:6px 0 6px 0">Create a password</h2>
+          <p style="font-size:13.5px; color:#6B6E8C; margin:0 0 18px 0">At least 8 characters with a number and a symbol.</p>
+          <input value="{{ pw }}" onChange="{{ setPw }}" type="password" placeholder="Password" style="width:100%; box-sizing:border-box; border:1px solid #D7D9E6; border-radius:12px; padding:14px; font-family:'Albert Sans',sans-serif; font-size:15px; margin-bottom:12px">
+          <div style="display:flex; gap:6px; margin-bottom:8px">
+            <div style="flex:1; height:5px; border-radius:999px; background:{{ pwBar1 }}"></div>
+            <div style="flex:1; height:5px; border-radius:999px; background:{{ pwBar2 }}"></div>
+            <div style="flex:1; height:5px; border-radius:999px; background:{{ pwBar3 }}"></div>
+          </div>
+          <div style="font-size:13px; font-weight:600; color:{{ pwMsgColor }}; margin-bottom:18px">{{ pwMsg }}</div>
+          <div style="flex:1"></div>
+          <button onClick="{{ nextIfPw }}" style="border:none; background:{{ pwBtnBg }}; color:#FFFFFF; font-family:Sora,sans-serif; font-size:15.5px; font-weight:700; padding:16px; border-radius:14px; cursor:pointer; width:100%">Continue</button>
+        </sc-if>
+
+        <!-- 6 Profile -->
+        <sc-if value="{{ s6 }}" hint-placeholder-val="{{ false }}">
+          <h2 style="font-family:Sora,sans-serif; font-size:22px; font-weight:800; margin:6px 0 6px 0">Tell us who you are</h2>
+          <p style="font-size:13.5px; color:#6B6E8C; margin:0 0 16px 0; line-height:1.55">Use your legal name exactly as on your ID — it must match for verification and payouts.</p>
+          <div style="display:flex; flex-direction:column; gap:12px; margin-bottom:14px">
+            <input value="{{ firstName }}" onChange="{{ setFirstName }}" placeholder="First name (legal)" style="width:100%; box-sizing:border-box; border:1px solid #D7D9E6; border-radius:12px; padding:14px; font-family:'Albert Sans',sans-serif; font-size:15px">
+            <input value="{{ lastName }}" onChange="{{ setLastName }}" placeholder="Last name (legal)" style="width:100%; box-sizing:border-box; border:1px solid #D7D9E6; border-radius:12px; padding:14px; font-family:'Albert Sans',sans-serif; font-size:15px">
+            <div style="display:flex; gap:8px; align-items:stretch">
+              <span style="border:1px solid #D7D9E6; border-radius:12px; padding:14px; font-size:15px; color:#9A9DBA; background:#F4F5FA">@</span>
+              <input value="{{ username }}" onChange="{{ setUsername }}" placeholder="username" style="flex:1; min-width:0; border:1px solid #D7D9E6; border-radius:12px; padding:14px; font-family:'Albert Sans',sans-serif; font-size:15px">
+            </div>
+          </div>
+          <sc-if value="{{ usernameOk }}" hint-placeholder-val="{{ false }}">
+            <div style="font-size:13px; font-weight:600; color:#0E7A59; margin-bottom:12px">✓ @{{ username }} is available</div>
+          </sc-if>
+          <div style="flex:1"></div>
+          <button onClick="{{ nextIfProfile }}" style="border:none; background:{{ profileBtnBg }}; color:#FFFFFF; font-family:Sora,sans-serif; font-size:15.5px; font-weight:700; padding:16px; border-radius:14px; cursor:pointer; width:100%">Continue</button>
+        </sc-if>
+
+        <!-- 7 Skills -->
+        <sc-if value="{{ s7 }}" hint-placeholder-val="{{ false }}">
+          <h2 style="font-family:Sora,sans-serif; font-size:22px; font-weight:800; margin:6px 0 6px 0">Pick your skills &amp; interests</h2>
+          <p style="font-size:13.5px; color:#6B6E8C; margin:0 0 16px 0">Choose at least 3. These shape your task recommendations.</p>
+          <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px">
+            <sc-for list="{{ skills }}" as="sk" hint-placeholder-count="12">
+              <button onClick="{{ sk.toggle }}" style="border:{{ sk.border }}; background:{{ sk.bg }}; color:{{ sk.fg }}; font-family:'Albert Sans',sans-serif; font-size:13.5px; font-weight:600; padding:9px 15px; border-radius:999px; cursor:pointer">{{ sk.name }}</button>
+            </sc-for>
+          </div>
+          <div style="font-size:13px; font-weight:600; color:#6B6E8C; margin-bottom:14px">{{ skillCount }} selected</div>
+          <div style="flex:1"></div>
+          <button onClick="{{ nextIfSkills }}" style="border:none; background:{{ skillsBtnBg }}; color:#FFFFFF; font-family:Sora,sans-serif; font-size:15.5px; font-weight:700; padding:16px; border-radius:14px; cursor:pointer; width:100%">Continue</button>
+        </sc-if>
+
+        <!-- 8 Availability & device -->
+        <sc-if value="{{ s8 }}" hint-placeholder-val="{{ false }}">
+          <h2 style="font-family:Sora,sans-serif; font-size:22px; font-weight:800; margin:6px 0 6px 0">Availability &amp; device</h2>
+          <p style="font-size:13.5px; color:#6B6E8C; margin:0 0 16px 0">Some tasks need a computer or a stable connection — we'll only show what fits.</p>
+          <div style="font-size:13px; font-weight:700; margin-bottom:8px">Hours per week</div>
+          <div style="display:flex; gap:8px; margin-bottom:18px">
+            <sc-for list="{{ hours }}" as="h" hint-placeholder-count="4">
+              <button onClick="{{ h.pick }}" style="flex:1; border:{{ h.border }}; background:{{ h.bg }}; color:{{ h.fg }}; font-family:'Albert Sans',sans-serif; font-size:13px; font-weight:700; padding:11px 4px; border-radius:10px; cursor:pointer">{{ h.label }}</button>
+            </sc-for>
+          </div>
+          <div style="font-size:13px; font-weight:700; margin-bottom:8px">Devices you can work on</div>
+          <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px">
+            <sc-for list="{{ devices }}" as="d" hint-placeholder-count="3">
+              <button onClick="{{ d.toggle }}" style="display:flex; align-items:center; gap:12px; border:{{ d.border }}; background:#FFFFFF; border-radius:12px; padding:13px 16px; cursor:pointer; font-family:'Albert Sans',sans-serif; text-align:left">
+                <span style="width:20px; height:20px; border-radius:6px; border:{{ d.boxBorder }}; background:{{ d.boxBg }}; color:#FFFFFF; font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0">{{ d.mark }}</span>
+                <span style="font-size:14.5px; font-weight:600; color:#171A3A">{{ d.name }}</span>
+              </button>
+            </sc-for>
+          </div>
+          <div style="flex:1"></div>
+          <button onClick="{{ next }}" style="border:none; background:#FF6A3D; color:#FFFFFF; font-family:Sora,sans-serif; font-size:15.5px; font-weight:700; padding:16px; border-radius:14px; cursor:pointer; width:100%" style-hover="background:#E5552B">Continue</button>
+        </sc-if>
+
+        <!-- 9 KYC -->
+        <sc-if value="{{ s9 }}" hint-placeholder-val="{{ false }}">
+          <h2 style="font-family:Sora,sans-serif; font-size:22px; font-weight:800; margin:6px 0 6px 0">Verify your identity</h2>
+          <p style="font-size:13.5px; color:#6B6E8C; margin:0 0 16px 0; line-height:1.55">Required before your first task — it keeps Taskryse real people only. Your documents are encrypted and never shared with sponsors.</p>
+          <div style="font-size:13px; font-weight:700; margin-bottom:8px">Choose an ID</div>
+          <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:16px">
+            <sc-for list="{{ idTypes }}" as="idt" hint-placeholder-count="4">
+              <button onClick="{{ idt.pick }}" style="display:flex; align-items:center; justify-content:space-between; border:{{ idt.border }}; background:#FFFFFF; border-radius:12px; padding:12px 16px; cursor:pointer; font-family:'Albert Sans',sans-serif">
+                <span style="font-size:14px; font-weight:600; color:#171A3A">{{ idt.name }}</span>
+                <span style="width:18px; height:18px; border-radius:50%; border:{{ idt.dot }}; box-sizing:border-box"></span>
+              </button>
+            </sc-for>
+          </div>
+          <button onClick="{{ uploadId }}" style="border:2px dashed {{ uploadBorder }}; background:{{ uploadBg }}; border-radius:14px; padding:18px; cursor:pointer; font-family:'Albert Sans',sans-serif; width:100%; margin-bottom:10px">
+            <span style="display:block; font-size:14px; font-weight:700; color:{{ uploadFg }}">{{ uploadLabel }}</span>
+            <span style="display:block; font-size:12.5px; color:#9A9DBA; margin-top:4px">{{ uploadSub }}</span>
+          </button>
+          <button onClick="{{ startSelfie }}" style="border:2px dashed {{ selfieBorder }}; background:{{ selfieBg }}; border-radius:14px; padding:18px; cursor:pointer; font-family:'Albert Sans',sans-serif; width:100%; margin-bottom:14px">
+            <span style="display:block; font-size:14px; font-weight:700; color:{{ selfieFg }}">{{ selfieLabel }}</span>
+            <span style="display:block; font-size:12.5px; color:#9A9DBA; margin-top:4px">{{ selfieSub }}</span>
+          </button>
+          <div style="flex:1"></div>
+          <button onClick="{{ nextIfKyc }}" style="border:none; background:{{ kycBtnBg }}; color:#FFFFFF; font-family:Sora,sans-serif; font-size:15.5px; font-weight:700; padding:16px; border-radius:14px; cursor:pointer; width:100%">{{ kycBtnLabel }}</button>
+        </sc-if>
+
+        <!-- 10 Payout -->
+        <sc-if value="{{ s10 }}" hint-placeholder-val="{{ false }}">
+          <h2 style="font-family:Sora,sans-serif; font-size:22px; font-weight:800; margin:6px 0 6px 0">Where should we pay you?</h2>
+          <p style="font-size:13.5px; color:#6B6E8C; margin:0 0 16px 0">Approved earnings withdraw here in naira. You can add more methods later.</p>
+          <div style="display:flex; gap:8px; margin-bottom:14px">
+            <button onClick="{{ payBank }}" style="flex:1; border:none; cursor:pointer; font-family:'Albert Sans',sans-serif; font-size:13.5px; font-weight:700; padding:10px; border-radius:10px; background:{{ payBankBg }}; color:{{ payBankFg }}">Bank account</button>
+            <button onClick="{{ payMomo }}" style="flex:1; border:none; cursor:pointer; font-family:'Albert Sans',sans-serif; font-size:13.5px; font-weight:700; padding:10px; border-radius:10px; background:{{ payMomoBg }}; color:{{ payMomoFg }}">Mobile money</button>
+          </div>
+          <select onChange="{{ setBank }}" style="width:100%; border:1px solid #D7D9E6; border-radius:12px; padding:13px 14px; font-family:'Albert Sans',sans-serif; font-size:14.5px; background:#FFFFFF; color:#171A3A; margin-bottom:12px; box-sizing:border-box">
+            <option>GTBank</option><option>Access Bank</option><option>Zenith Bank</option><option>UBA</option><option>First Bank</option><option>Kuda</option><option>OPay</option><option>Moniepoint</option>
+          </select>
+          <input value="{{ acct }}" onChange="{{ setAcct }}" placeholder="Account number (10 digits)" inputMode="numeric" maxLength="10" style="width:100%; box-sizing:border-box; border:1px solid #D7D9E6; border-radius:12px; padding:14px; font-family:'Albert Sans',sans-serif; font-size:15px; margin-bottom:10px">
+          <sc-if value="{{ acctVerified }}" hint-placeholder-val="{{ false }}">
+            <div style="background:#EDF7F3; border:1px solid #CDEBDF; border-radius:12px; padding:12px 16px; font-size:13.5px; font-weight:700; color:#0E7A59; margin-bottom:12px">✓ {{ acctName }}</div>
+          </sc-if>
+          <div style="flex:1"></div>
+          <button onClick="{{ nextIfAcct }}" style="border:none; background:{{ acctBtnBg }}; color:#FFFFFF; font-family:Sora,sans-serif; font-size:15.5px; font-weight:700; padding:16px; border-radius:14px; cursor:pointer; width:100%">Continue</button>
+        </sc-if>
+
+        <!-- 11 Agreement -->
+        <sc-if value="{{ s11 }}" hint-placeholder-val="{{ false }}">
+          <h2 style="font-family:Sora,sans-serif; font-size:22px; font-weight:800; margin:6px 0 6px 0">The contributor agreement</h2>
+          <p style="font-size:13.5px; color:#6B6E8C; margin:0 0 16px 0">Three things to understand before you continue.</p>
+          <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:14px">
+            <sc-for list="{{ agreements }}" as="ag" hint-placeholder-count="3">
+              <button onClick="{{ ag.toggle }}" style="display:flex; gap:12px; border:{{ ag.border }}; background:#FFFFFF; border-radius:14px; padding:15px 16px; cursor:pointer; font-family:'Albert Sans',sans-serif; text-align:left">
+                <span style="width:22px; height:22px; border-radius:7px; border:{{ ag.boxBorder }}; background:{{ ag.boxBg }}; color:#FFFFFF; font-size:14px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px">{{ ag.mark }}</span>
+                <span style="font-size:13.5px; color:#4A4D6B; line-height:1.55">{{ ag.text }}</span>
+              </button>
+            </sc-for>
+          </div>
+          <a href="#" style="font-size:13px; font-weight:700; margin-bottom:14px; display:inline-block">Read the full contributor agreement →</a>
+          <div style="flex:1"></div>
+          <button onClick="{{ nextIfAgree }}" style="border:none; background:{{ agreeBtnBg }}; color:#FFFFFF; font-family:Sora,sans-serif; font-size:15.5px; font-weight:700; padding:16px; border-radius:14px; cursor:pointer; width:100%">Agree &amp; continue</button>
+        </sc-if>
+
+        <!-- 12 Assessment -->
+        <sc-if value="{{ s12 }}" hint-placeholder-val="{{ false }}">
+          <h2 style="font-family:Sora,sans-serif; font-size:22px; font-weight:800; margin:6px 0 6px 0">Intro assessment</h2>
+          <p style="font-size:13.5px; color:#6B6E8C; margin:0 0 16px 0">Three quick questions on instruction-following. This shapes your recommended plan — you can retake it in 7 days.</p>
+          <div style="display:flex; flex-direction:column; gap:16px; margin-bottom:14px">
+            <sc-for list="{{ quiz }}" as="qz" hint-placeholder-count="3">
+              <div>
+                <div style="font-size:14px; font-weight:700; margin-bottom:8px; line-height:1.5">{{ qz.n }}. {{ qz.q }}</div>
+                <div style="display:flex; flex-direction:column; gap:6px">
+                  <sc-for list="{{ qz.opts }}" as="op" hint-placeholder-count="3">
+                    <button onClick="{{ op.pick }}" style="border:{{ op.border }}; background:{{ op.bg }}; border-radius:10px; padding:11px 14px; cursor:pointer; font-family:'Albert Sans',sans-serif; font-size:13.5px; font-weight:600; color:#171A3A; text-align:left">{{ op.label }}</button>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="flex:1"></div>
+          <button onClick="{{ submitQuiz }}" style="border:none; background:{{ quizBtnBg }}; color:#FFFFFF; font-family:Sora,sans-serif; font-size:15.5px; font-weight:700; padding:16px; border-radius:14px; cursor:pointer; width:100%">Submit assessment</button>
+        </sc-if>
+
+        <!-- 13 Plan & checkout -->
+        <sc-if value="{{ s13 }}" hint-placeholder-val="{{ false }}">
+          <div style="background:#EDF7F3; border:1px solid #CDEBDF; border-radius:12px; padding:12px 16px; font-size:13.5px; color:#0E7A59; font-weight:700; margin-bottom:14px">✓ Assessment passed — {{ quizScore }}/3 · Riser plan recommended</div>
+          <h2 style="font-family:Sora,sans-serif; font-size:22px; font-weight:800; margin:0 0 6px 0">Choose your plan</h2>
+          <p style="font-size:13px; color:#6B6E8C; margin:0 0 14px 0; line-height:1.55">A plan unlocks eligible task categories — it never includes or guarantees earnings.</p>
+          <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:14px">
+            <sc-for list="{{ obPlans }}" as="p" hint-placeholder-count="4">
+              <button onClick="{{ p.pick }}" style="display:flex; align-items:center; justify-content:space-between; gap:10px; border:{{ p.border }}; background:{{ p.bg }}; border-radius:12px; padding:13px 16px; cursor:pointer; font-family:'Albert Sans',sans-serif">
+                <span style="text-align:left">
+                  <span style="display:block; font-size:14.5px; font-weight:700; color:#171A3A">{{ p.name }} {{ p.tag }}</span>
+                  <span style="display:block; font-size:12px; color:#6B6E8C; margin-top:2px">{{ p.desc }}</span>
+                </span>
+                <span style="font-family:Sora,sans-serif; font-size:15px; font-weight:800; white-space:nowrap">{{ p.price }}<span style="font-size:11px; color:#9A9DBA; font-weight:600">/mo</span></span>
+              </button>
+            </sc-for>
+          </div>
+          <div style="background:#FFF8EC; border:1px solid #F2E2BC; border-radius:12px; padding:11px 14px; font-size:12px; color:#7A5A12; line-height:1.55; margin-bottom:14px">7-day refund window before your first task acceptance. Task availability varies; payment depends on completed, approved work.</div>
+          <div style="flex:1"></div>
+          <button onClick="{{ payNow }}" style="border:none; background:#FF6A3D; color:#FFFFFF; font-family:Sora,sans-serif; font-size:15.5px; font-weight:700; padding:16px; border-radius:14px; cursor:pointer; width:100%" style-hover="background:#E5552B">Pay {{ paySum }} · card or transfer</button>
+        </sc-if>
+
+        <!-- 14 Done -->
+        <sc-if value="{{ s14 }}" hint-placeholder-val="{{ false }}">
+          <div style="flex:1; display:flex; flex-direction:column; justify-content:center; text-align:center">
+            <div style="width:72px; height:72px; border-radius:50%; background:#EDF7F3; color:#16A67A; font-size:34px; font-weight:800; display:flex; align-items:center; justify-content:center; margin:0 auto 22px auto">✓</div>
+            <h2 style="font-family:Sora,sans-serif; font-size:26px; font-weight:800; margin:0 0 10px 0">You're in, {{ doneName }}!</h2>
+            <p style="font-size:14.5px; color:#4A4D6B; line-height:1.65; margin:0 0 6px 0">Payment confirmed — receipt sent to {{ otpTarget }}.</p>
+            <p style="font-size:14.5px; color:#4A4D6B; line-height:1.65; margin:0 0 22px 0">Your <strong>{{ chosenPlan }}</strong> plan is active and your first eligible task categories are unlocked. Identity verification continues in the background (~10 minutes).</p>
+            <div style="background:#FAFAFC; border:1px solid #ECEDF4; border-radius:14px; padding:16px; text-align:left; margin-bottom:8px">
+              <div style="font-size:12px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:#6B6E8C; margin-bottom:10px">While you wait</div>
+              <div style="font-size:13.5px; color:#4A4D6B; line-height:1.9">✓ Take your first qualification test<br>✓ Browse eligible tasks in the marketplace<br>✓ Set your withdrawal PIN in Security</div>
+            </div>
+          </div>
+          <button onClick="{{ restart }}" style="border:none; background:#FF6A3D; color:#FFFFFF; font-family:Sora,sans-serif; font-size:15.5px; font-weight:700; padding:16px; border-radius:14px; cursor:pointer; width:100%" style-hover="background:#E5552B">Enter your dashboard</button>
+          <div style="text-align:center; margin-top:12px; font-size:12.5px; color:#9A9DBA">Dashboard ships in Phase 3 — this restarts the demo</div>
+        </sc-if>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Step rail -->
+  <div style="flex:0 1 290px; min-width:230px; background:#FFFFFF; border:1px solid #E3E4EE; border-radius:16px; padding:18px 14px">
+    <div style="font-family:Sora,sans-serif; font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#6B6E8C; padding:0 10px 12px 10px">Onboarding steps</div>
+    <sc-for list="{{ rail }}" as="r" hint-placeholder-count="14">
+      <button onClick="{{ r.go }}" style="display:flex; align-items:center; gap:10px; width:100%; text-align:left; border:none; cursor:pointer; background:{{ r.bg }}; border-radius:10px; padding:9px 10px; font-family:'Albert Sans',sans-serif; margin-bottom:2px">
+        <span style="width:22px; height:22px; border-radius:7px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:11.5px; font-weight:800; background:{{ r.numBg }}; color:{{ r.numFg }}">{{ r.mark }}</span>
+        <span style="font-size:13.5px; font-weight:{{ r.weight }}; color:{{ r.fg }}">{{ r.label }}</span>
+      </button>
+    </sc-for>
+  </div>
+
+  <!-- Notes -->
+  <div style="flex:1 1 280px; min-width:250px; max-width:340px; display:flex; flex-direction:column; gap:14px">
+    <div style="background:#171A3A; border-radius:16px; padding:22px 22px; color:#FFFFFF">
+      <div style="font-family:Sora,sans-serif; font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#FFC857; margin-bottom:12px">Design notes</div>
+      <div style="font-size:13.5px; color:#B9BCD9; line-height:1.7">Every step validates before advancing — try continuing without input. Wrong OTP, unsupported country, weak password and incomplete KYC all show real error states. Progress saves at every step (“Save &amp; exit”).</div>
+    </div>
+    <div style="background:#FFFFFF; border:1px solid #E3E4EE; border-radius:16px; padding:22px">
+      <div style="font-family:Sora,sans-serif; font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#6B6E8C; margin-bottom:12px">Try these</div>
+      <div style="font-size:13.5px; color:#4A4D6B; line-height:1.85">· Pick “Somewhere else” as country<br>· Enter a wrong OTP first<br>· Type a weak vs strong password<br>· Enter a 10-digit account number<br>· Answer the assessment and see the recommended plan</div>
+    </div>
+  </div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    step: 1, country: -1, unsupported: false, regMode: "email", email: "", phone: "",
+    otp: "", otpError: false, pw: "", firstName: "", lastName: "", username: "",
+    skills: [], hoursIdx: 1, devices: [0], idType: -1, idUp: false, selfie: "idle",
+    payMode: "bank", bank: "GTBank", acct: "", agrees: [], answers: [-1,-1,-1], plan: 1
+  };
+  renderVals() {
+    const st = this.state, step = st.step;
+    const go = (n) => this.setState({ step: n });
+    const next = () => go(Math.min(step + 1, 14));
+    const stepLabels = ["Welcome","Country & language","Create account","Verify code","Password","Your details","Skills & interests","Availability & device","Identity verification","Payout method","Agreement","Intro assessment","Plan & checkout","Done"];
+    const countryList = [
+      { flag: "🇳🇬", name: "Nigeria", cur: "₦ naira", ok: true },
+      { flag: "🇬🇭", name: "Ghana", cur: "GH₵ cedi", ok: true },
+      { flag: "🇰🇪", name: "Kenya", cur: "KSh shilling", ok: true },
+      { flag: "🇿🇦", name: "South Africa", cur: "R rand", ok: true },
+      { flag: "🇬🇧", name: "United Kingdom", cur: "£ pound", ok: true },
+      { flag: "🌍", name: "Somewhere else", cur: "—", ok: false }
+    ];
+    const skillList = ["Writing","Translation","Transcription","Data labelling","Image annotation","Coding","App testing","Research","Voice recording","Surveys","Fact checking","Design feedback"];
+    const deviceList = ["Smartphone (Android/iOS)","Laptop or desktop","Tablet"];
+    const idList = ["NIN slip / National ID","Driver's licence","International passport","Voter's card"];
+    const quizDefs = [
+      { q: "A task says “label only vehicles, ignore bicycles.” An e-bike appears. What do you do?", opts: ["Label it — it has wheels", "Check the instructions' definition list, then ask for clarification if unclear", "Skip the whole task"], correct: 1 },
+      { q: "You notice you misread the instructions halfway through. The deadline is in 2 hours.", opts: ["Submit anyway and hope", "Fix the affected items before submitting", "Delete your account"], correct: 1 },
+      { q: "A sponsor's instructions conflict with Taskryse community guidelines.", opts: ["Follow the sponsor — they pay", "Follow the guidelines and report the task", "Do neither and submit blank"], correct: 1 }
+    ];
+    const planDefs = [
+      { name: "Starter", desc: "Core AI data tasks · 2 applications", m: 2500 },
+      { name: "Riser", desc: "+ transcription & annotation · 5 applications", m: 6000 },
+      { name: "Professional", desc: "+ writing, testing, research · 10 applications", m: 12000 },
+      { name: "Expert", desc: "All categories · unlimited applications", m: 24000 }
+    ];
+    const ngn = (n) => "₦" + n.toLocaleString("en-NG");
+    const pwLen = st.pw.length >= 8, pwNum = /\d/.test(st.pw), pwSym = /[^A-Za-z0-9]/.test(st.pw);
+    const pwScore = [pwLen, pwNum, pwSym].filter(Boolean).length;
+    const pwOk = pwScore === 3;
+    const acctOk = st.acct.replace(/\D/g, "").length === 10;
+    const kycOk = st.idType >= 0 && st.idUp && st.selfie === "passed";
+    const quizDone = st.answers.every(a => a >= 0);
+    const quizScore = st.answers.filter((a, i) => a === quizDefs[i].correct).length;
+    const gray = "#C3C5D6", orange = "#FF6A3D";
+    const regTarget = st.regMode === "email" ? (st.email || "you@example.com") : ("+234 " + (st.phone || "801 234 5678"));
+    return {
+      rail: stepLabels.map((label, i) => {
+        const n = i + 1, active = step === n, done = n < step;
+        return {
+          label, go: () => go(n),
+          bg: active ? "#FFF1EA" : "transparent",
+          fg: active ? "#E5552B" : done ? "#171A3A" : "#9A9DBA",
+          weight: active ? 700 : 600,
+          mark: done ? "✓" : String(n),
+          numBg: active ? "#FF6A3D" : done ? "#EDF7F3" : "#F0F1F7",
+          numFg: active ? "#FFFFFF" : done ? "#0E7A59" : "#9A9DBA"
+        };
+      }),
+      backVis: step > 1 && step < 14 ? "visible" : "hidden",
+      goBack: () => go(Math.max(1, step - 1)),
+      stepCounter: "Step " + step + " of 14",
+      progressPct: Math.round(step / 14 * 100) + "%",
+      s1: step===1, s2: step===2, s3: step===3, s4: step===4, s5: step===5, s6: step===6, s7: step===7,
+      s8: step===8, s9: step===9, s10: step===10, s11: step===11, s12: step===12, s13: step===13, s14: step===14,
+      next,
+      // 2
+      countries: countryList.map((c, i) => ({
+        ...c, pick: () => this.setState({ country: i, unsupported: !c.ok }),
+        border: st.country === i ? "2px solid #FF6A3D" : "1px solid #E1E2EC"
+      })),
+      unsupported: st.unsupported,
+      countryBtnBg: st.country >= 0 && !st.unsupported ? orange : gray,
+      nextIfCountry: () => { if (st.country >= 0 && !st.unsupported) next(); },
+      // 3
+      regEmail: () => this.setState({ regMode: "email" }),
+      regPhone: () => this.setState({ regMode: "phone" }),
+      regIsEmail: st.regMode === "email", regIsPhone: st.regMode === "phone",
+      regEmailBg: st.regMode === "email" ? "#171A3A" : "#F0F1F7", regEmailFg: st.regMode === "email" ? "#FFFFFF" : "#6B6E8C",
+      regPhoneBg: st.regMode === "phone" ? "#171A3A" : "#F0F1F7", regPhoneFg: st.regMode === "phone" ? "#FFFFFF" : "#6B6E8C",
+      email: st.email, setEmail: (e) => this.setState({ email: e.target.value }),
+      phone: st.phone, setPhone: (e) => this.setState({ phone: e.target.value }),
+      sendBtnBg: (st.regMode === "email" ? st.email.includes("@") : st.phone.length >= 7) ? orange : gray,
+      sendCode: () => { if (st.regMode === "email" ? st.email.includes("@") : st.phone.length >= 7) next(); },
+      socialReg: () => go(5),
+      // 4
+      otpTarget: regTarget,
+      otp: st.otp, setOtp: (e) => this.setState({ otp: e.target.value.replace(/\D/g, "").slice(0, 6), otpError: false }),
+      otpBorder: st.otpError ? "2px solid #E5484D" : "1px solid #D7D9E6",
+      otpError: st.otpError,
+      otpBtnBg: st.otp.length === 6 ? orange : gray,
+      verifyOtp: () => { if (st.otp.length !== 6) return; st.otp === "123456" ? next() : this.setState({ otpError: true }); },
+      // 5
+      pw: st.pw, setPw: (e) => this.setState({ pw: e.target.value }),
+      pwBar1: pwScore >= 1 ? "#E5484D" : "#EEEFF5",
+      pwBar2: pwScore >= 2 ? "#F5A623" : "#EEEFF5",
+      pwBar3: pwScore >= 3 ? "#16A67A" : "#EEEFF5",
+      pwMsg: st.pw === "" ? "" : pwOk ? "Strong password ✓" : !pwLen ? "Needs at least 8 characters" : !pwNum ? "Add a number" : "Add a symbol (e.g. ! or #)",
+      pwMsgColor: pwOk ? "#0E7A59" : "#B8860B",
+      pwBtnBg: pwOk ? orange : gray,
+      nextIfPw: () => { if (pwOk) next(); },
+      // 6
+      firstName: st.firstName, setFirstName: (e) => this.setState({ firstName: e.target.value }),
+      lastName: st.lastName, setLastName: (e) => this.setState({ lastName: e.target.value }),
+      username: st.username, setUsername: (e) => this.setState({ username: e.target.value.replace(/\s/g, "").toLowerCase() }),
+      usernameOk: st.username.length >= 3,
+      profileBtnBg: st.firstName && st.lastName && st.username.length >= 3 ? orange : gray,
+      nextIfProfile: () => { if (st.firstName && st.lastName && st.username.length >= 3) next(); },
+      // 7
+      skills: skillList.map((name, i) => {
+        const on = st.skills.includes(i);
+        return { name,
+          toggle: () => this.setState({ skills: on ? st.skills.filter(x => x !== i) : [...st.skills, i] }),
+          border: on ? "1.5px solid #FF6A3D" : "1.5px solid #E1E2EC",
+          bg: on ? "#FFF1EA" : "#FFFFFF", fg: on ? "#E5552B" : "#4A4D6B" };
+      }),
+      skillCount: st.skills.length + " of 3+",
+      skillsBtnBg: st.skills.length >= 3 ? orange : gray,
+      nextIfSkills: () => { if (st.skills.length >= 3) next(); },
+      // 8
+      hours: ["<5", "5–10", "10–20", "20+"].map((label, i) => ({
+        label: label + " hrs", pick: () => this.setState({ hoursIdx: i }),
+        border: st.hoursIdx === i ? "2px solid #FF6A3D" : "1px solid #E1E2EC",
+        bg: st.hoursIdx === i ? "#FFF1EA" : "#FFFFFF", fg: st.hoursIdx === i ? "#E5552B" : "#4A4D6B"
+      })),
+      devices: deviceList.map((name, i) => {
+        const on = st.devices.includes(i);
+        return { name, mark: on ? "✓" : "",
+          toggle: () => this.setState({ devices: on ? st.devices.filter(x => x !== i) : [...st.devices, i] }),
+          border: on ? "2px solid #FF6A3D" : "1px solid #E1E2EC",
+          boxBorder: on ? "none" : "2px solid #C3C5D6", boxBg: on ? "#FF6A3D" : "#FFFFFF" };
+      }),
+      // 9
+      idTypes: idList.map((name, i) => ({
+        name, pick: () => this.setState({ idType: i }),
+        border: st.idType === i ? "2px solid #FF6A3D" : "1px solid #E1E2EC",
+        dot: st.idType === i ? "6px solid #FF6A3D" : "2px solid #C3C5D6"
+      })),
+      uploadId: () => { if (st.idType >= 0) this.setState({ idUp: true }); },
+      uploadBorder: st.idUp ? "#16A67A" : "#C3C5D6", uploadBg: st.idUp ? "#EDF7F3" : "#FAFAFC",
+      uploadFg: st.idUp ? "#0E7A59" : "#171A3A",
+      uploadLabel: st.idUp ? "✓ ID document uploaded" : "📄 Upload your ID",
+      uploadSub: st.idUp ? "nin-slip.jpg · looks clear" : st.idType >= 0 ? "Tap to take a photo or choose a file" : "Choose an ID type first",
+      startSelfie: () => {
+        if (st.selfie !== "idle" || !st.idUp) return;
+        this.setState({ selfie: "checking" });
+        setTimeout(() => this.setState({ selfie: "passed" }), 1600);
+      },
+      selfieBorder: st.selfie === "passed" ? "#16A67A" : st.selfie === "checking" ? "#F5A623" : "#C3C5D6",
+      selfieBg: st.selfie === "passed" ? "#EDF7F3" : st.selfie === "checking" ? "#FFF8EC" : "#FAFAFC",
+      selfieFg: st.selfie === "passed" ? "#0E7A59" : st.selfie === "checking" ? "#B8860B" : "#171A3A",
+      selfieLabel: st.selfie === "passed" ? "✓ Liveness check passed" : st.selfie === "checking" ? "Checking… hold still" : "🤳 Start liveness selfie",
+      selfieSub: st.selfie === "passed" ? "Face matches ID" : st.selfie === "checking" ? "Analysing your selfie video" : st.idUp ? "A short selfie video — no photo needed" : "Upload your ID first",
+      kycBtnBg: kycOk ? orange : gray,
+      kycBtnLabel: kycOk ? "Continue" : "Complete both checks to continue",
+      nextIfKyc: () => { if (kycOk) next(); },
+      // 10
+      payBank: () => this.setState({ payMode: "bank" }),
+      payMomo: () => this.setState({ payMode: "momo" }),
+      payBankBg: st.payMode === "bank" ? "#171A3A" : "#F0F1F7", payBankFg: st.payMode === "bank" ? "#FFFFFF" : "#6B6E8C",
+      payMomoBg: st.payMode === "momo" ? "#171A3A" : "#F0F1F7", payMomoFg: st.payMode === "momo" ? "#FFFFFF" : "#6B6E8C",
+      setBank: (e) => this.setState({ bank: e.target.value }),
+      acct: st.acct, setAcct: (e) => this.setState({ acct: e.target.value.replace(/\D/g, "").slice(0, 10) }),
+      acctVerified: acctOk,
+      acctName: (st.firstName || "ADAEZE").toUpperCase() + " " + (st.lastName || "OKAFOR").toUpperCase() + " · " + st.bank,
+      acctBtnBg: acctOk ? orange : gray,
+      nextIfAcct: () => { if (acctOk) next(); },
+      // 11
+      agreements: [
+        "I earn only from completed work that is approved. A plan unlocks eligibility — it never guarantees tasks or earnings.",
+        "I will submit my own genuine work: no fake reviews, spam, account sharing or automation.",
+        "My identity details are true, and I understand fraud leads to account freezing and forfeiture of pending earnings."
+      ].map((text, i) => {
+        const on = st.agrees.includes(i);
+        return { text, mark: on ? "✓" : "",
+          toggle: () => this.setState({ agrees: on ? st.agrees.filter(x => x !== i) : [...st.agrees, i] }),
+          border: on ? "2px solid #16A67A" : "1px solid #E1E2EC",
+          boxBorder: on ? "none" : "2px solid #C3C5D6", boxBg: on ? "#16A67A" : "#FFFFFF" };
+      }),
+      agreeBtnBg: st.agrees.length === 3 ? orange : gray,
+      nextIfAgree: () => { if (st.agrees.length === 3) next(); },
+      // 12
+      quiz: quizDefs.map((qd, qi) => ({
+        n: qi + 1, q: qd.q,
+        opts: qd.opts.map((label, oi) => ({
+          label, pick: () => { const a = [...st.answers]; a[qi] = oi; this.setState({ answers: a }); },
+          border: st.answers[qi] === oi ? "2px solid #FF6A3D" : "1px solid #E1E2EC",
+          bg: st.answers[qi] === oi ? "#FFF1EA" : "#FFFFFF"
+        }))
+      })),
+      quizBtnBg: quizDone ? orange : gray,
+      submitQuiz: () => { if (quizDone) next(); },
+      quizScore,
+      // 13
+      obPlans: planDefs.map((p, i) => ({
+        name: p.name, desc: p.desc, price: ngn(p.m),
+        tag: i === 1 ? "· Recommended ★" : "",
+        pick: () => this.setState({ plan: i }),
+        border: st.plan === i ? "2px solid #FF6A3D" : "1px solid #E1E2EC",
+        bg: st.plan === i ? "#FFF8F4" : "#FFFFFF"
+      })),
+      paySum: ngn(planDefs[st.plan].m),
+      payNow: () => next(),
+      // 14
+      doneName: st.firstName || "Ryser",
+      chosenPlan: planDefs[st.plan].name,
+      restart: () => this.setState({ step: 1 })
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Albert+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#EEEFF5; font-family:'Albert Sans',sans-serif; color:#171A3A; }
+  a { color:#FF6A3D; text-decoration:none; }
+  a:hover { color:#E5552B; }
+  input:focus { outline:2px solid #FF6A3D; outline-offset:1px; }
+</style>
+</helmet>
+
+<div style="overflow-x:hidden; min-height:100vh">
+<div style="max-width:1240px; margin:0 auto; padding:20px 20px 4px 20px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px 16px">
+  <div style="display:flex; align-items:center; gap:12px">
+    <a href="Taskryse Index.dc.html"><img src="assets/taskryse-logo.png" alt="Taskryse" style="height:26px; width:auto"></a>
+    <span style="background:#171A3A; color:#FFC857; font-family:Sora,sans-serif; font-size:10.5px; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; padding:5px 11px; border-radius:999px; white-space:nowrap">Referrals · Sponsored · Security · Help</span>
+  </div>
+  <div style="font-size:12.5px; color:#6B6E8C">All four sections are clickable</div>
+</div>
+
+<div style="max-width:1240px; margin:0 auto; padding:16px 20px 64px 20px; display:flex; gap:28px; align-items:flex-start; flex-wrap:wrap; justify-content:center">
+
+  <div style="flex:0 0 auto; width:min(400px, 100%)">
+    <div style="background:#FAFAFC; border:1px solid #E3E4EE; border-radius:28px; box-shadow:0 24px 64px rgba(23,26,58,0.14); overflow:hidden; display:flex; flex-direction:column; height:800px; position:relative">
+
+      <!-- Switcher -->
+      <div style="background:#FFFFFF; border-bottom:1px solid #ECEDF4; padding:12px 14px; display:flex; gap:6px; overflow-x:auto">
+        <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
+          <button onClick="{{ t.go }}" style="border:none; cursor:pointer; white-space:nowrap; font-family:'Albert Sans',sans-serif; font-size:12.5px; font-weight:700; padding:8px 14px; border-radius:999px; background:{{ t.bg }}; color:{{ t.fg }}">{{ t.label }}</button>
+        </sc-for>
+      </div>
+
+      <!-- ===== REFERRALS ===== -->
+      <sc-if value="{{ vRef }}" hint-placeholder-val="{{ true }}">
+        <div style="flex:1; overflow-y:auto; padding:18px">
+          <div style="font-family:Sora,sans-serif; font-size:20px; font-weight:800; margin-bottom:4px">Invite &amp; earn rewards</div>
+          <div style="font-size:12.5px; color:#6B6E8C; margin-bottom:16px">Earn a Taskryse reward when a friend joins, verifies and completes their first approved task.</div>
+          <div style="background:#171A3A; border-radius:16px; padding:18px 20px; color:#FFFFFF; margin-bottom:14px">
+            <div style="font-size:11.5px; color:#8B8FB3; margin-bottom:8px">Your referral link</div>
+            <div style="display:flex; gap:8px; align-items:center">
+              <div style="flex:1; background:rgba(255,255,255,0.08); border-radius:10px; padding:11px 14px; font-size:13px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap">taskryse.com/r/adaeze-n</div>
+              <button onClick="{{ copyLink }}" style="border:none; background:#FF6A3D; color:#FFFFFF; font-family:'Albert Sans',sans-serif; font-size:12.5px; font-weight:700; padding:11px 16px; border-radius:10px; cursor:pointer; white-space:nowrap">{{ copyLabel }}</button>
+            </div>
+            <div style="display:flex; gap:8px; margin-top:12px">
+              <button style="flex:1; border:1px solid rgba(255,255,255,0.2); background:rgba(255,255,255,0.06); color:#FFFFFF; font-family:'Albert Sans',sans-serif; font-size:12px; font-weight:700; padding:10px; border-radius:9px; cursor:pointer">Share on WhatsApp</button>
+              <button style="border:1px solid rgba(255,255,255,0.2); background:rgba(255,255,255,0.06); color:#FFFFFF; font-family:'Albert Sans',sans-serif; font-size:12px; font-weight:700; padding:10px 14px; border-radius:9px; cursor:pointer">QR</button>
+            </div>
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:16px">
+            <div style="background:#FFFFFF; border:1px solid #E3E4EE; border-radius:12px; padding:12px 8px; text-align:center"><div style="font-family:Sora,sans-serif; font-size:18px; font-weight:800">14</div><div style="font-size:10px; color:#6B6E8C">Invited</div></div>
+            <div style="background:#FFFFFF; border:1px solid #E3E4EE; border-radius:12px; padding:12px 8px; text-align:center"><div style="font-family:Sora,sans-serif; font-size:18px; font-weight:800; color:#0E7A59">9</div><div style="font-size:10px; color:#6B6E8C">Verified</div></div>
+            <div style="background:#FFFFFF; border:1px solid #E3E4EE; border-radius:12px; padding:12px 8px; text-align:center"><div style="font-family:Sora,sans-serif; font-size:18px; font-weight:800; color:#B8860B">3</div><div style="font-size:10px; color:#6B6E8C">Pending</div></div>
+          </div>
+          <div style="background:#EDF7F3; border:1px solid #CDEBDF; border-radius:12px; padding:12px 14px; margin-bottom:16px; display:flex; justify-content:space-between; align-items:center">
+            <div><div style="font-size:11.5px; color:#0E7A59; font-weight:600">Rewards earned</div><div style="font-family:Sora,sans-serif; font-size:18px; font-weight:800; color:#0E7A59">₦4,500</div></div>
+            <div style="font-size:11px; color:#6B6E8C; text-align:right; max-width:150px; line-height:1.4">Paid as promo credit · not a deposit-based commission</div>
+          </div>
+          <div style="font-family:Sora,sans-serif; font-size:13.5px; font-weight:700; margin-bottom:8px">Referral history</div>
+          <sc-for list="{{ referrals }}" as="r" hint-placeholder-count="4">
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#FFFFFF; border:1px solid #E3E4EE; border-radius:12px; padding:12px 14px; margin-bottom:8px">
+              <div><div style="font-size:13px; font-weight:700">{{ r.name }}</div><div style="font-size:11px; color:#6B6E8C">{{ r.meta }}</div></div>
+              <span style="background:{{ r.bg }}; color:{{ r.fg }}; font-size:10.5px; font-weight:800; padding:4px 10px; border-radius:999px; white-space:nowrap">{{ r.status }}</span>
+            </div>
+          </sc-for>
+          <div style="font-size:11px; color:#9A9DBA; line-height:1.55; margin-top:8px">Referral rewards are direct promotional incentives from Taskryse. There are no multi-level commissions and no rewards tied to what anyone deposits. Fraudulent or self-referrals are reversed.</div>
+        </div>
+      </sc-if>
+
+      <!-- ===== SPONSORED ===== -->
+      <sc-if value="{{ vSpon }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1; overflow-y:auto; padding:18px">
+          <div style="font-family:Sora,sans-serif; font-size:20px; font-weight:800; margin-bottom:4px">Sponsored opportunities</div>
+          <div style="font-size:12.5px; color:#6B6E8C; margin-bottom:16px">Clearly-labelled campaigns from verified sponsors. Optional — save, hide or report any of them.</div>
+          <sc-for list="{{ sponsored }}" as="s" hint-placeholder-count="3">
+            <div style="background:#FFFFFF; border:1px solid #E3E4EE; border-radius:16px; padding:16px; margin-bottom:12px">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px">
+                <span style="background:#FFF1EA; color:#E5552B; font-size:10px; font-weight:800; letter-spacing:0.05em; text-transform:uppercase; padding:4px 9px; border-radius:999px">Sponsored</span>
+                <span style="font-size:11px; color:#0E7A59; font-weight:700">✓ {{ s.sponsor }}</span>
+              </div>
+              <div style="font-size:14.5px; font-weight:700; line-height:1.4; margin-bottom:6px">{{ s.title }}</div>
+              <div style="font-size:12.5px; color:#4A4D6B; line-height:1.55; margin-bottom:12px">{{ s.desc }}</div>
+              <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px">
+                <span style="background:#F4F5FA; color:#4A4D6B; font-size:10.5px; font-weight:600; padding:3px 8px; border-radius:999px">🎁 {{ s.reward }}</span>
+                <span style="background:#F4F5FA; color:#4A4D6B; font-size:10.5px; font-weight:600; padding:3px 8px; border-radius:999px">⏱ ~{{ s.mins }} min</span>
+                <span style="background:#F4F5FA; color:#4A4D6B; font-size:10.5px; font-weight:600; padding:3px 8px; border-radius:999px">{{ s.slots }} slots</span>
+              </div>
+              <div style="display:flex; gap:8px">
+                <button style="flex:1; border:none; background:#FF6A3D; color:#FFFFFF; font-family:Sora,sans-serif; font-size:13px; font-weight:700; padding:11px; border-radius:10px; cursor:pointer">View campaign</button>
+                <button onClick="{{ s.hide }}" style="border:1px solid #E1E2EC; background:#FFFFFF; color:#6B6E8C; font-family:'Albert Sans',sans-serif; font-size:12px; font-weight:700; padding:11px 14px; border-radius:10px; cursor:pointer">Hide</button>
+                <button onClick="{{ s.report }}" style="border:1px solid #E1E2EC; background:#FFFFFF; color:#B33A3E; font-family:'Albert Sans',sans-serif; font-size:12px; font-weight:700; padding:11px 14px; border-radius:10px; cursor:pointer">⚑</button>
+              </div>
+              <sc-if value="{{ s.acted }}" hint-placeholder-val="{{ false }}">
+                <div style="font-size:11.5px; font-weight:700; color:#0E7A59; margin-top:10px; text-align:center">{{ s.actedMsg }}</div>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- ===== SECURITY ===== -->
+      <sc-if value="{{ vSec }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1; overflow-y:auto; padding:18px">
+          <div style="font-family:Sora,sans-serif; font-size:20px; font-weight:800; margin-bottom:16px">Security &amp; account</div>
+          <div style="font-family:Sora,sans-serif; font-size:13px; font-weight:700; color:#6B6E8C; margin-bottom:8px">Protection</div>
+          <sc-for list="{{ toggles }}" as="tg" hint-placeholder-count="4">
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#FFFFFF; border:1px solid #E3E4EE; border-radius:13px; padding:14px 16px; margin-bottom:8px">
+              <div style="flex:1; padding-right:12px"><div style="font-size:13.5px; font-weight:700">{{ tg.label }}</div><div style="font-size:11.5px; color:#6B6E8C; line-height:1.4">{{ tg.sub }}</div></div>
+              <button onClick="{{ tg.toggle }}" style="border:none; cursor:pointer; width:44px; height:24px; border-radius:999px; background:{{ tg.bg }}; position:relative; flex-shrink:0"><span style="position:absolute; top:2px; left:{{ tg.left }}; width:20px; height:20px; border-radius:50%; background:#FFFFFF; transition:left 0.2s"></span></button>
+            </div>
+          </sc-for>
+          <div style="font-family:Sora,sans-serif; font-size:13px; font-weight:700; color:#6B6E8C; margin:16px 0 8px 0">Active sessions</div>
+          <sc-for list="{{ sessions }}" as="ss" hint-placeholder-count="3">
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#FFFFFF; border:1px solid #E3E4EE; border-radius:13px; padding:13px 15px; margin-bottom:8px">
+              <div><div style="font-size:13px; font-weight:700">{{ ss.device }} {{ ss.current }}</div><div style="font-size:11px; color:#6B6E8C">{{ ss.meta }}</div></div>
+              <sc-if value="{{ ss.canRevoke }}" hint-placeholder-val="{{ true }}">
+                <button onClick="{{ ss.revoke }}" style="border:1px solid #F3D2D3; background:#FDF6F6; color:#B33A3E; font-family:'Albert Sans',sans-serif; font-size:11.5px; font-weight:700; padding:7px 12px; border-radius:8px; cursor:pointer">{{ ss.revokeLabel }}</button>
+              </sc-if>
+            </div>
+          </sc-for>
+          <div style="font-family:Sora,sans-serif; font-size:13px; font-weight:700; color:#6B6E8C; margin:16px 0 8px 0">Account</div>
+          <sc-for list="{{ accountItems }}" as="ai" hint-placeholder-count="3">
+            <div style="display:flex; justify-content:space-between; align-items:center; background:#FFFFFF; border:1px solid #E3E4EE; border-radius:13px; padding:14px 16px; margin-bottom:8px">
+              <span style="font-size:13.5px; font-weight:700; color:{{ ai.color }}">{{ ai.label }}</span>
+              <span style="color:#9A9DBA; font-size:15px">›</span>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- ===== HELP ===== -->
+      <sc-if value="{{ vHelp }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1; overflow-y:auto; padding:18px; display:flex; flex-direction:column">
+          <sc-if value="{{ helpHome }}" hint-placeholder-val="{{ true }}">
+            <div style="font-family:Sora,sans-serif; font-size:20px; font-weight:800; margin-bottom:4px">Help centre</div>
+            <div style="font-size:12.5px; color:#6B6E8C; margin-bottom:14px">Ask the assistant or browse topics. Complex cases hand over to a human agent.</div>
+            <button onClick="{{ openChat }}" style="display:flex; align-items:center; gap:12px; width:100%; text-align:left; border:none; background:#171A3A; border-radius:14px; padding:16px; cursor:pointer; font-family:'Albert Sans',sans-serif; margin-bottom:14px">
+              <span style="width:40px; height:40px; border-radius:11px; background:#FF6A3D; color:#FFFFFF; display:flex; align-items:center; justify-content:center; font-size:19px">✦</span>
+              <span><span style="display:block; font-size:14px; font-weight:700; color:#FFFFFF">Ask Ryse Assistant</span><span style="display:block; font-size:11.5px; color:#8B8FB3">Instant answers · escalates to support</span></span>
+            </button>
+            <div style="font-family:Sora,sans-serif; font-size:13px; font-weight:700; margin-bottom:8px">Browse topics</div>
+            <sc-for list="{{ topics }}" as="tp" hint-placeholder-count="5">
+              <div style="display:flex; justify-content:space-between; align-items:center; background:#FFFFFF; border:1px solid #E3E4EE; border-radius:12px; padding:13px 15px; margin-bottom:8px">
+                <span style="font-size:13px; font-weight:600">{{ tp.icon }}&nbsp; {{ tp.label }}</span>
+                <span style="font-size:11px; color:#9A9DBA">{{ tp.count }}</span>
+              </div>
+            </sc-for>
+            <div style="font-family:Sora,sans-serif; font-size:13px; font-weight:700; margin:14px 0 8px 0">Open a dispute</div>
+            <div style="display:flex; gap:8px">
+              <sc-for list="{{ disputeTypes }}" as="dt" hint-placeholder-count="3">
+                <button onClick="{{ openChat }}" style="flex:1; border:1px solid #E3E4EE; background:#FFFFFF; font-family:'Albert Sans',sans-serif; font-size:11.5px; font-weight:700; padding:11px 4px; border-radius:10px; cursor:pointer; color:#171A3A">{{ dt }}</button>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ helpChat }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px">
+              <button onClick="{{ closeChat }}" style="border:none; background:#F4F5FA; width:32px; height:32px; border-radius:10px; cursor:pointer; font-size:15px">←</button>
+              <div><div style="font-family:Sora,sans-serif; font-weight:700; font-size:14px">Ryse Assistant</div><div style="font-size:11px; color:#0E7A59; font-weight:600">● Online</div></div>
+            </div>
+            <div style="flex:1; display:flex; flex-direction:column; gap:12px; overflow-y:auto; padding-bottom:8px">
+              <sc-for list="{{ chatMsgs }}" as="m" hint-placeholder-count="3">
+                <div style="align-self:{{ m.align }}; max-width:82%; background:{{ m.bg }}; color:{{ m.fg }}; border:{{ m.border }}; border-radius:14px; padding:11px 14px; font-size:13px; line-height:1.55">{{ m.text }}</div>
+              </sc-for>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:8px; margin-top:8px">
+              <sc-for list="{{ chatSuggest }}" as="cs" hint-placeholder-count="3">
+                <button onClick="{{ cs.ask }}" style="border:1px solid #E1E2EC; background:#FFFFFF; color:#171A3A; font-family:'Albert Sans',sans-serif; font-size:12.5px; font-weight:600; padding:11px 14px; border-radius:11px; cursor:pointer; text-align:left">{{ cs.q }}</button>
+              </sc-for>
+              <button onClick="{{ handover }}" style="border:none; background:#171A3A; color:#FFFFFF; font-family:Sora,sans-serif; font-size:12.5px; font-weight:700; padding:12px; border-radius:11px; cursor:pointer; margin-top:4px">Talk to a human agent</button>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+    </div>
+  </div>
+
+  <!-- Notes -->
+  <div style="flex:1 1 280px; min-width:250px; max-width:340px; display:flex; flex-direction:column; gap:14px">
+    <div style="background:#171A3A; border-radius:16px; padding:22px; color:#FFFFFF">
+      <div style="font-family:Sora,sans-serif; font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#FFC857; margin-bottom:12px">Phase 8 · Grow &amp; account</div>
+      <div style="font-size:13.5px; color:#B9BCD9; line-height:1.7">The remaining contributor surfaces: referral centre (promo-only, no MLM), clearly-labelled sponsored opportunities you can hide or report, full security controls with sessions and account recovery, and a help centre with AI assistant plus human handover and disputes.</div>
+    </div>
+    <div style="background:#FFFFFF; border:1px solid #E3E4EE; border-radius:16px; padding:22px">
+      <div style="font-family:Sora,sans-serif; font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#6B6E8C; margin-bottom:12px">Try these</div>
+      <div style="font-size:13.5px; color:#4A4D6B; line-height:1.85">· Copy your referral link<br>· Hide or report a sponsored campaign<br>· Toggle 2FA and revoke a session<br>· Open Help → Ryse Assistant → talk to a human</div>
+    </div>
+    <div style="background:#FFFFFF; border:1px solid #E3E4EE; border-radius:16px; padding:22px">
+      <div style="font-family:Sora,sans-serif; font-size:12px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#6B6E8C; margin-bottom:10px">All phases</div>
+      <div style="font-size:13.5px; line-height:1.9"><a href="Taskryse Index.dc.html" style="font-weight:700">← Master index</a></div>
+    </div>
+  </div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  state = {
+    tab: "ref", copied: false,
+    sponsoredActed: {}, sec: { twofa: true, pin: true, bio: false, alerts: true },
+    revoked: {}, help: "home", chat: [], chatStarted: false
+  };
+  renderVals() {
+    const st = this.state;
+    const go = (t) => this.setState({ tab: t, help: "home" });
+    const baseChat = [
+      { who: "bot", text: "Hi Adaeze 👋 I'm the Ryse Assistant. What can I help with today?" }
+    ];
+    const chat = st.chatStarted ? st.chat : baseChat;
+    return {
+      tabs: [
+        { key: "ref", label: "🎁 Referrals" }, { key: "spon", label: "📣 Sponsored" },
+        { key: "sec", label: "🔐 Security" }, { key: "help", label: "💬 Help" }
+      ].map(t => ({ label: t.label, go: () => go(t.key),
+        bg: st.tab === t.key ? "#171A3A" : "#F4F5FA", fg: st.tab === t.key ? "#FFFFFF" : "#6B6E8C" })),
+      vRef: st.tab === "ref", vSpon: st.tab === "spon", vSec: st.tab === "sec", vHelp: st.tab === "help",
+
+      copyLabel: st.copied ? "Copied ✓" : "Copy",
+      copyLink: () => { this.setState({ copied: true }); setTimeout(() => this.setState({ copied: false }), 1800); },
+      referrals: [
+        { name: "Emeka U.", meta: "Joined · completed first task · 20 Jul", status: "₦500 earned", bg: "#EDF7F3", fg: "#0E7A59" },
+        { name: "Ada O.", meta: "Verified · first task pending", status: "Pending", bg: "#FFF8EC", fg: "#B8860B" },
+        { name: "Ifeoma K.", meta: "Joined · not yet verified", status: "Pending", bg: "#FFF8EC", fg: "#B8860B" },
+        { name: "Unknown", meta: "Flagged · same device as you", status: "Reversed", bg: "#FDF6F6", fg: "#B33A3E" }
+      ],
+
+      sponsored: [
+        { id: 1, sponsor: "Kobo Insights", title: "Fintech habits brand survey", desc: "Share how you use mobile banking apps in a 10-minute survey. Honest answers only — attention checks scored.", reward: "₦1,200", mins: 10, slots: 65 },
+        { id: 2, sponsor: "Swiftly", title: "Verified product trial — food delivery beta", desc: "Try a new delivery app for 3 days and give structured feedback on the experience.", reward: "₦3,500", mins: 45, slots: 20 },
+        { id: 3, sponsor: "Naija Sounds", title: "Brand campaign feedback — new jingle", desc: "Listen to 3 short audio clips and rate memorability and brand fit.", reward: "₦800", mins: 8, slots: 120 }
+      ].map(s => ({ ...s,
+        acted: !!st.sponsoredActed[s.id],
+        actedMsg: st.sponsoredActed[s.id] === "hide" ? "Hidden — you won't see this again" : st.sponsoredActed[s.id] === "report" ? "Reported to our trust team — thank you" : "",
+        hide: () => this.setState({ sponsoredActed: { ...st.sponsoredActed, [s.id]: "hide" } }),
+        report: () => this.setState({ sponsoredActed: { ...st.sponsoredActed, [s.id]: "report" } }) })),
+
+      toggles: [
+        { key: "twofa", label: "Two-factor authentication", sub: "Authenticator app + SMS backup" },
+        { key: "pin", label: "Withdrawal PIN", sub: "Required to confirm every payout" },
+        { key: "bio", label: "Biometric login", sub: "Face or fingerprint on this device" },
+        { key: "alerts", label: "Suspicious-login alerts", sub: "Notify me of new-device sign-ins" }
+      ].map(t => ({ label: t.label, sub: t.sub,
+        toggle: () => this.setState({ sec: { ...st.sec, [t.key]: !st.sec[t.key] } }),
+        bg: st.sec[t.key] ? "#16A67A" : "#C3C5D6", left: st.sec[t.key] ? "22px" : "2px" })),
+      sessions: [
+        { id: 1, device: "Samsung Galaxy A54", current: "· this device", meta: "Lagos, NG · active now", canRevoke: false },
+        { id: 2, device: "Chrome · Windows", current: "", meta: "Lagos, NG · 2 hours ago", canRevoke: true },
+        { id: 3, device: "iPhone 12", current: "", meta: "Abuja, NG · 3 days ago", canRevoke: true }
+      ].map(s => ({ ...s,
+        revokeLabel: st.revoked[s.id] ? "Signed out" : "Sign out",
+        revoke: () => this.setState({ revoked: { ...st.revoked, [s.id]: true } }) })),
+      accountItems: [
+        { label: "Login history", color: "#171A3A" },
+        { label: "Download my data", color: "#171A3A" },
+        { label: "Account recovery & backup email", color: "#171A3A" },
+        { label: "Delete account", color: "#B33A3E" }
+      ],
+
+      helpHome: st.help === "home", helpChat: st.help === "chat",
+      openChat: () => this.setState({ help: "chat" }),
+      closeChat: () => this.setState({ help: "home", chatStarted: false }),
+      topics: [
+        { icon: "💸", label: "Withdrawals & payouts", count: "12" },
+        { icon: "✅", label: "Task reviews & approvals", count: "9" },
+        { icon: "🪪", label: "Identity verification (KYC)", count: "7" },
+        { icon: "💳", label: "Plans & billing", count: "8" },
+        { icon: "🎁", label: "Referrals & promo credits", count: "5" }
+      ],
+      disputeTypes: ["Task dispute", "Payment dispute", "Withdrawal dispute"],
+      chatMsgs: chat.map(m => ({ text: m.text,
+        align: m.who === "user" ? "flex-end" : "flex-start",
+        bg: m.who === "user" ? "#FF6A3D" : "#F4F5FA", fg: m.who === "user" ? "#FFFFFF" : "#171A3A",
+        border: m.who === "bot" ? "1px solid #E8E9F2" : "none" })),
+      chatSuggest: [
+        { q: "Why is my withdrawal still processing?" },
+        { q: "How long does task review take?" },
+        { q: "Can I withdraw my promo credits?" }
+      ].map(s => ({ q: s.q, ask: () => {
+        const answers = {
+          "Why is my withdrawal still processing?": "First payouts to a new account get a standard compliance check that clears within 24 hours. You'll be notified the moment it completes — no action needed.",
+          "How long does task review take?": "Most submissions are reviewed within 48 hours against the task's published rubric. You'll get a notification for approval, revision or rejection.",
+          "Can I withdraw my promo credits?": "Promo credits pay Taskryse fees and bills but aren't withdrawable to a bank — they're separate from your earned balance, which is always fully withdrawable."
+        };
+        this.setState({ chatStarted: true, chat: [...chat, { who: "user", text: s.q }, { who: "bot", text: answers[s.q] }] });
+      } })),
+      handover: () => this.setState({ chatStarted: true, chat: [...chat, { who: "bot", text: "I'm connecting you with a support agent now. Your chat history and account context travel with you — a human will reply here shortly (typically within a few hours)." }] })
+    };
+  }
+}
+</script>
+</body>
+</html>
