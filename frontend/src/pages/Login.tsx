@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { ApiError } from '../lib/api';
 import { Alert, Field } from '../components/ui';
+import { Logo } from '../components/Logo';
 
 const DEMO = [
   { label: 'Contributor', email: 'adaeze@example.com' },
@@ -48,7 +49,7 @@ export default function Login() {
       <div className="auth-form">
         <div className="auth-card">
           <div className="row" style={{ gap: 10, marginBottom: 18 }}>
-            <img src="/logo.png" alt="" style={{ width: 34, height: 34, borderRadius: 9 }} />
+            <Logo size={34} />
             <h2 style={{ margin: 0 }}>Sign in</h2>
           </div>
 

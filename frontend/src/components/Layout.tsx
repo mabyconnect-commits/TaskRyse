@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { ReactNode } from 'react';
 import { useAuth } from '../context/AuthContext';
+import { Logo } from './Logo';
 import type { Role } from '../lib/types';
 
 interface NavItem { to: string; label: string; roles?: Role[]; }
@@ -42,7 +43,7 @@ export default function Layout({ children }: { children: ReactNode }) {
     <div className="app-shell">
       <aside className="sidebar">
         <div className="brand">
-          <img src="/logo.png" alt="Taskryse" />
+          <Logo size={30} />
           <span>Taskryse</span>
         </div>
         {visible.map((g) => (
