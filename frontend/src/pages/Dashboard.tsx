@@ -71,14 +71,38 @@ export default function Dashboard() {
       )}
 
       {!isContributor && (
-        <div className="card card-pad">
-          <h3 style={{ marginTop: 0 }}>{user?.role} tools</h3>
-          <p className="muted small">
-            Use the navigation to reach your queues. Reviewers work the review queue; sponsors manage
-            organisations, campaigns and funding; admins operate KYC, payouts, fraud and audit.
-          </p>
+        <div className="grid cols-2">
+          {quickLinks(user?.role).map((q) => (
+            <Link key={q.to} to={q.to} className="card card-pad quick-link">
+              <div className="quick-ico">{q.icon}</div>
+              <div>
+                <h3 style={{ margin: '0 0 4px' }}>{q.title}</h3>
+                <p className="muted small" style={{ margin: 0 }}>{q.body}</p>
+              </div>
+            </Link>
+          ))}
         </div>
       )}
     </div>
   );
+}
+
+// Role-based quick actions shown on the dashboard for non-contributor roles.
+function quickLinks(role?: string) {
+  if (role === 'SPONSOR') {
+    return [
+      { to: '/business', icon: '⛁', title: 'Business', body: 'Create organisations, launch task campaigns and fund escrow.' },
+      { to: '/review', icon: '✓', title: 'Review Queue', body: 'Review submissions on your tasks — approve, request changes, reject.' },
+      { to: '/wallet', icon: '❖', title: 'Wallet', body: 'Track your organisation spend and transactions.' },
+    ];
+  }
+  if (role === 'REVIEWER') {
+    return [
+      { to: '/review', icon: '✓', title: 'Review Queue', body: 'Work the queue: approve, request revision, reject or flag submissions.' },
+    ];
+  }
+  // SUPPORT and any others
+  return [
+    { to: '/review', icon: '✓', title: 'Review Queue', body: 'Open the review queue.' },
+  ];
 }
