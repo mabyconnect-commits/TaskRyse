@@ -9,13 +9,13 @@ interface NavItem { to: string; label: string; roles?: Role[]; }
 // Top-nav items (design uses a horizontal top nav, not a sidebar).
 const NAV: NavItem[] = [
   { to: '/dashboard', label: 'Dashboard' },
-  { to: '/marketplace', label: 'Marketplace', roles: ['CONTRIBUTOR', 'ADMIN', 'SPONSOR'] },
+  { to: '/marketplace', label: 'Marketplace', roles: ['CONTRIBUTOR', 'ADMIN'] },
   { to: '/workspace', label: 'My Work', roles: ['CONTRIBUTOR', 'ADMIN'] },
-  { to: '/wallet', label: 'Wallet', roles: ['CONTRIBUTOR', 'SPONSOR', 'ADMIN'] },
+  { to: '/wallet', label: 'Wallet', roles: ['CONTRIBUTOR', 'ADMIN'] },
   { to: '/ryse', label: 'Ryse', roles: ['CONTRIBUTOR', 'ADMIN'] },
   { to: '/plans', label: 'Plans', roles: ['CONTRIBUTOR', 'ADMIN'] },
-  { to: '/review', label: 'Review', roles: ['REVIEWER', 'SPONSOR', 'ADMIN'] },
   { to: '/business', label: 'Business', roles: ['SPONSOR', 'ADMIN'] },
+  { to: '/review', label: 'Review', roles: ['REVIEWER', 'SPONSOR', 'ADMIN'] },
   { to: '/admin', label: 'Admin', roles: ['ADMIN'] },
 ];
 

@@ -146,7 +146,7 @@ export default function Dashboard() {
 // Compact home for sponsor/reviewer with quick links to their tools.
 function RoleHome({ role }: { role: string }) {
   const links = role === 'SPONSOR'
-    ? [{ to: '/business', i: '⛁', t: 'Business', d: 'Create organisations, launch campaigns, fund escrow.' }, { to: '/review', i: '✓', t: 'Review Queue', d: 'Review submissions on your tasks.' }, { to: '/wallet', i: '❖', t: 'Wallet', d: 'Organisation spend & transactions.' }]
+    ? [{ to: '/business', i: '🏢', t: 'Business Portal', d: 'Your organisation, campaigns, escrow funding and analytics.' }, { to: '/review', i: '✓', t: 'Review Queue', d: 'Review submissions on your tasks — approve & pay.' }]
     : [{ to: '/review', i: '✓', t: 'Review Queue', d: 'Approve, request revision, reject or flag submissions.' }];
   return (
     <div style={{ maxWidth: 620, margin: '0 auto' }}>
