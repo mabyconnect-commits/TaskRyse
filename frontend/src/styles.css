@@ -195,7 +195,33 @@ th { font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; color
 .quick-link:hover { text-decoration: none; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(15,17,40,0.1); }
 .quick-ico { width: 42px; height: 42px; flex: none; border-radius: 11px; display: grid; place-items: center; background: linear-gradient(135deg, var(--orange), var(--yellow)); color: #fff; font-size: 20px; }
 
-/* ---------------- Landing page ---------------- */
+/* ---------------- Landing (design-matched) ---------------- */
+.lp-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  border: none; border-radius: 10px; padding: 10px 16px; cursor: pointer;
+  font-family: var(--sans); font-weight: 700; font-size: 14px; text-decoration: none;
+}
+.lp-btn:hover { text-decoration: none; opacity: 0.94; }
+.lp-btn-lg { padding: 13px 22px; font-size: 15px; }
+.lp-btn-primary { background: #FF6A3D; color: #fff; }
+.lp-btn-ghost { background: rgba(255,255,255,0.1); color: #fff; }
+.lp-btn-ghost:hover { background: rgba(255,255,255,0.18); }
+.lp-toggle { border: none; background: none; padding: 7px 14px; border-radius: 999px; cursor: pointer; font-weight: 600; color: #6B6E8C; font-family: var(--sans); }
+.lp-toggle.on { background: #171A3A; color: #fff; }
+.lp-nav a:hover { color: #FF6A3D; text-decoration: none; }
+
+@media (max-width: 900px) {
+  .lp-nav { display: none !important; }
+  .lp-hero-grid { grid-template-columns: 1fr !important; }
+  .lp-grid-2 { grid-template-columns: 1fr !important; }
+  .lp-grid-3 { grid-template-columns: 1fr !important; }
+  .lp-grid-4 { grid-template-columns: 1fr 1fr !important; }
+}
+@media (max-width: 560px) {
+  .lp-grid-4 { grid-template-columns: 1fr !important; }
+}
+
+/* ---------------- Landing page (legacy, unused) ---------------- */
 .landing { background: var(--dark); color: #fff; min-height: 100vh; }
 .landing-nav {
   display: flex; align-items: center; justify-content: space-between;
