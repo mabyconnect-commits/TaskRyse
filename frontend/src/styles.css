@@ -195,6 +195,46 @@ th { font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.05em; color
 .quick-link:hover { text-decoration: none; transform: translateY(-1px); box-shadow: 0 6px 20px rgba(15,17,40,0.1); }
 .quick-ico { width: 42px; height: 42px; flex: none; border-radius: 11px; display: grid; place-items: center; background: linear-gradient(135deg, var(--orange), var(--yellow)); color: #fff; font-size: 20px; }
 
+/* ---------------- App shell (top nav, design-matched) ---------------- */
+.app { min-height: 100vh; background: #EEEFF5; }
+.appbar { background: #fff; border-bottom: 1px solid #E7E8F0; position: sticky; top: 0; z-index: 30; }
+.appbar-inner { max-width: 1160px; margin: 0 auto; padding: 11px 20px; display: flex; align-items: center; gap: 18px; }
+.appbar-brand { display: flex; align-items: center; text-decoration: none; }
+.appbar-brand:hover { text-decoration: none; }
+.appbar-nav { display: flex; align-items: center; gap: 4px; margin-left: 8px; flex: 1; }
+.appnav-link {
+  padding: 8px 13px; border-radius: 9px; font-size: 14px; font-weight: 600; color: #4A4E6B; text-decoration: none; white-space: nowrap;
+}
+.appnav-link:hover { background: #F1F2F8; text-decoration: none; }
+.appnav-link.active { background: #171A3A; color: #fff; }
+.appbar-right { display: flex; align-items: center; gap: 10px; margin-left: auto; }
+.role-pill { background: #171A3A; color: #FFC857; font-family: var(--display); font-size: 10.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 5px 11px; border-radius: 999px; }
+.appbar-signout { padding: 8px 14px; white-space: nowrap; }
+.app-main { max-width: 1160px; margin: 0 auto; }
+.app-content { padding: 26px 20px 60px; }
+
+.app-drawer {
+  position: fixed; top: 0; right: 0; height: 100vh; width: 280px; max-width: 84vw; background: #fff; z-index: 60;
+  transform: translateX(100%); transition: transform 0.22s ease; box-shadow: -8px 0 40px rgba(0,0,0,0.18);
+  display: flex; flex-direction: column; padding: 14px;
+}
+.app-drawer.open { transform: translateX(0); }
+.app-drawer-head { display: flex; align-items: center; justify-content: space-between; padding: 6px 6px 14px; border-bottom: 1px solid #E7E8F0; margin-bottom: 8px; }
+.app-drawer-link { padding: 12px 12px; border-radius: 10px; font-weight: 600; color: #4A4E6B; text-decoration: none; }
+.app-drawer-link:hover { background: #F1F2F8; text-decoration: none; }
+.app-drawer-link.active { background: #171A3A; color: #fff; }
+.app-drawer-foot { margin-top: auto; padding-top: 12px; border-top: 1px solid #E7E8F0; }
+.drawer-close { background: none; border: none; font-size: 18px; cursor: pointer; color: var(--muted); }
+
+@media (max-width: 900px) {
+  .appbar-nav { display: none; }
+  .email-chip { display: none; }
+  .appbar-signout { display: none; }
+  .hamburger { display: flex; }
+  .app-content { padding: 20px 16px 50px; }
+}
+@media (min-width: 901px) { .hamburger { display: none !important; } }
+
 /* ---------------- Landing (design-matched) ---------------- */
 .lp-btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 8px;
