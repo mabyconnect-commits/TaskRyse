@@ -37,8 +37,8 @@ export default function Landing() {
           <nav className="lp-nav" style={{ display: 'flex', gap: 22, fontSize: 14, color: '#4A4E6B', fontWeight: 500 }}>
             {NAV.map((n) => <a key={n} href="#how" style={{ color: '#4A4E6B' }}>{n}</a>)}
           </nav>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-            <Link to="/login" style={{ color: INK, fontWeight: 600, fontSize: 14 }}>Sign in</Link>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+            <Link to="/login" className="lp-signin" style={{ color: INK, fontWeight: 600, fontSize: 14, whiteSpace: 'nowrap' }}>Sign in</Link>
             <Link to="/login" className="lp-btn lp-btn-primary">Start Your Ryse</Link>
           </div>
         </div>
