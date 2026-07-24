@@ -69,6 +69,14 @@ export interface Plan {
   sponsoredAccess: boolean;
 }
 
+export interface Subscription {
+  id: string;
+  planId: string;
+  status: string;
+  renewsAt?: string;
+  plan?: Plan;
+}
+
 export interface Assignment {
   id: string;
   taskId: string;

@@ -18,6 +18,15 @@ router.get('/plans', asyncHandler(async (req, res) => {
   return sendJson(res, 200, plans);
 }));
 
+// GET /subscriptions — the caller's current subscription (with plan), or null.
+router.get('/subscriptions', authenticate, requireScope('subscription:manage'), asyncHandler(async (req, res) => {
+  const sub = await prisma.subscription.findUnique({
+    where: { userId: req.user.id },
+    include: { plan: true },
+  });
+  return sendJson(res, 200, sub || null);
+}));
+
 // POST /coupons/validate — check a coupon code.
 const couponSchema = z.object({ code: z.string() });
 router.post('/coupons/validate', asyncHandler(async (req, res) => {
@@ -54,7 +63,12 @@ router.post('/subscriptions', authenticate, requireScope('subscription:manage'),
   if (!plan || !plan.isLive) throw notFound('Plan not found');
 
   const existing = await prisma.subscription.findUnique({ where: { userId: req.user.id } });
-  if (existing && existing.status === 'ACTIVE') throw badRequest('Already subscribed; use upgrade/downgrade', 'already_subscribed');
+  // Already on this exact plan — nothing to charge, report it plainly.
+  if (existing && existing.status === 'ACTIVE' && existing.planId === plan.id) {
+    throw badRequest('You are already on this plan.', 'already_on_plan');
+  }
+  // Active on a different plan → treat this as a switch (upgrade/downgrade).
+  const isSwitch = Boolean(existing && existing.status === 'ACTIVE');
 
   const { priceMinor, discountMinor, couponCode } = await applyCoupon(body.couponCode, plan.priceMinor);
   const now = new Date();
@@ -86,16 +100,18 @@ router.post('/subscriptions', authenticate, requireScope('subscription:manage'),
     });
 
     // Ledger: record the plan SPEND only. This creates ZERO earnings.
+    // On a plan switch we don't re-charge the full price in this demo.
     const wallet = await ensureWallet(tx, req.user.id, plan.currency);
-    await recordSubscription(tx, wallet, priceMinor, makeReference('SUB'));
+    if (!isSwitch) await recordSubscription(tx, wallet, priceMinor, makeReference('SUB'));
 
     return sub;
   });
 
-  return sendJson(res, 201, {
+  return sendJson(res, isSwitch ? 200 : 201, {
     subscription: result,
-    charged: { minor: priceMinor, currency: plan.currency },
+    charged: { minor: isSwitch ? 0 : priceMinor, currency: plan.currency },
     discountMinor,
+    switched: isSwitch,
     note: 'Plan grants eligible task categories only. It creates no earnings, tasks, or returns.',
   });
 }));
