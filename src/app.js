@@ -7,6 +7,7 @@ const config = require('./lib/config');
 const { authenticate } = require('./middleware/authenticate');
 const { errorHandler, notFoundHandler } = require('./middleware/errorHandler');
 
+const setupRoutes = require('./routes/setup');
 const authRoutes = require('./routes/auth');
 const accountRoutes = require('./routes/account');
 const planRoutes = require('./routes/plans');
@@ -32,6 +33,8 @@ function createApp() {
 
   const api = express.Router();
 
+  // Public one-time DB setup (key-gated). Mounted before auth.
+  api.use('/', setupRoutes);
   // Public auth/onboarding routes.
   api.use('/auth', authRoutes);
   // Public plan catalogue + coupon validation (subscriptions inside authenticate themselves).
