@@ -28,7 +28,7 @@ export default function Marketplace() {
     .sort((a, b) => rank[a.eligibility] - rank[b.eligibility]);
 
   return (
-    <div style={{ maxWidth: 460, margin: '0 auto', fontFamily: 'Albert Sans, sans-serif' }}>
+    <div className="appx-wide">
       <div style={{ fontFamily: 'Sora, sans-serif', fontSize: 22, fontWeight: 800, marginBottom: 14 }}>Find tasks</div>
 
       <input
@@ -53,7 +53,7 @@ export default function Marketplace() {
           <div style={{ fontWeight: 700, fontSize: 14.5, color: '#171A3A', marginBottom: 6 }}>No tasks match</div>
           <div style={{ fontSize: 13, lineHeight: 1.6 }}>Try another search or category. New tasks arrive daily — availability varies.</div>
         </div>
-      ) : list.map((t) => {
+      ) : <div className="card-grid">{list.map((t) => {
         const e = ELIG[t.eligibility];
         const slotsLeft = t.totalSlots - t.slotsTaken;
         return (
@@ -72,7 +72,7 @@ export default function Marketplace() {
             </div>
           </Link>
         );
-      })}
+      })}</div>}
     </div>
   );
 }

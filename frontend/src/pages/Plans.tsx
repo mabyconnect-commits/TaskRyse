@@ -21,13 +21,14 @@ export default function Plans() {
   }
 
   return (
-    <div style={{ maxWidth: 500, margin: '0 auto', fontFamily: 'Albert Sans, sans-serif' }}>
+    <div className="appx-wide">
       <div style={{ fontFamily: 'Sora, sans-serif', fontSize: 22, fontWeight: 800, marginBottom: 4 }}>Plans</div>
       <p style={{ color: '#6B6E8C', fontSize: 13.5, margin: '0 0 16px' }}>A plan unlocks eligible task categories. It never grants tasks, earnings or returns.</p>
 
       {msg && <Alert kind={msg.k}>{msg.t}</Alert>}
       {error && <Alert kind="error">{error}</Alert>}
 
+      <div className="plans-grid">
       {loading ? <Loading /> : (data || []).map((p, i) => (
         <div key={p.id} style={{ background: '#fff', border: i === 2 ? '2px solid #FF6A3D' : '1px solid #E3E4EE', borderRadius: 16, padding: 18, marginBottom: 12, position: 'relative' }}>
           {i === 2 && <span style={{ position: 'absolute', top: -11, left: 18, background: '#FF6A3D', color: '#fff', fontSize: 10.5, fontWeight: 700, padding: '3px 10px', borderRadius: 999 }}>MOST POPULAR</span>}
@@ -47,6 +48,7 @@ export default function Plans() {
           </button>
         </div>
       ))}
+      </div>
       <p style={{ color: '#6B6E8C', fontSize: 12, marginTop: 6 }}>Earn from approved submissions. Payment depends on successful completion and approval. 7-day refund window while no task has been accepted.</p>
     </div>
   );

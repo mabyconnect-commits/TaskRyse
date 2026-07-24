@@ -39,7 +39,7 @@ export default function WalletPage() {
 
   const w = wallet.data;
   return (
-    <div style={{ maxWidth: 460, margin: '0 auto', fontFamily: 'Albert Sans, sans-serif' }}>
+    <div className="appx-wide">
       <div style={{ fontFamily: 'Sora, sans-serif', fontSize: 22, fontWeight: 800, marginBottom: 14 }}>Wallet</div>
 
       {wallet.loading ? <Loading /> : w && (

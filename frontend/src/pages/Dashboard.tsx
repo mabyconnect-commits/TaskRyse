@@ -43,7 +43,7 @@ export default function Dashboard() {
   ];
 
   return (
-    <div style={{ maxWidth: 460, margin: '0 auto', fontFamily: 'Albert Sans, sans-serif' }}>
+    <div className="appx-wide">
       {/* greeting */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18 }}>
         <div>
@@ -55,6 +55,8 @@ export default function Dashboard() {
         </span>
       </div>
 
+      <div className="dash-grid">
+      <div>
       {/* level card */}
       <div style={{ background: '#171A3A', borderRadius: 18, padding: '18px 20px', color: '#fff', marginBottom: 14 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
@@ -108,6 +110,8 @@ export default function Dashboard() {
         ))}
       </div>
 
+      </div>
+      <div>
       {/* recommended */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
         <div style={{ fontFamily: 'Sora, sans-serif', fontSize: 15, fontWeight: 700 }}>Recommended for you</div>
@@ -132,6 +136,8 @@ export default function Dashboard() {
       })}
       <div style={{ background: '#FFF8EC', border: '1px solid #F2E2BC', borderRadius: 12, padding: '11px 14px', fontSize: 11.5, color: '#7A5A12', lineHeight: 1.55, marginTop: 8 }}>
         Task availability varies. Earnings come only from completed, approved work.
+      </div>
+      </div>
       </div>
     </div>
   );

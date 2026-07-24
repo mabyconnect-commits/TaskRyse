@@ -24,7 +24,7 @@ export default function Review() {
   }
 
   return (
-    <div style={{ maxWidth: 500, margin: '0 auto', fontFamily: 'Albert Sans, sans-serif' }}>
+    <div className="appx-wide">
       <div style={{ fontFamily: 'Sora, sans-serif', fontSize: 22, fontWeight: 800, marginBottom: 4 }}>Review queue</div>
       <p style={{ color: '#6B6E8C', fontSize: 13.5, margin: '0 0 16px' }}>Approve to release pending earnings to withdrawable — only against funded escrow.</p>
 
@@ -37,7 +37,7 @@ export default function Review() {
           <div style={{ fontWeight: 700, fontSize: 14.5, color: '#171A3A', marginBottom: 6 }}>Queue is empty</div>
           <div style={{ fontSize: 13, lineHeight: 1.6 }}>Submissions awaiting review will appear here.</div>
         </div>
-      ) : data.map((q) => (
+      ) : <div className="card-grid">{data.map((q) => (
         <div key={q.submissionId} style={{ border: '1px solid #E3E4EE', background: '#fff', borderRadius: 14, padding: 16, marginBottom: 12 }}>
           <div style={{ fontSize: 15, fontWeight: 700, color: '#171A3A', marginBottom: 8 }}>{q.taskTitle}</div>
           <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 10 }}>
@@ -55,7 +55,7 @@ export default function Review() {
             <button disabled={!!busy} onClick={() => decide(q.submissionId, 'reject')} style={{ border: 'none', background: '#E5484D', color: '#fff', fontFamily: 'Sora, sans-serif', fontSize: 13, fontWeight: 700, padding: '10px 14px', borderRadius: 10, cursor: 'pointer' }}>Reject</button>
           </div>
         </div>
-      ))}
+      ))}</div>}
     </div>
   );
 }

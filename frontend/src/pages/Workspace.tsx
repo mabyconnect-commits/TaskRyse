@@ -42,7 +42,7 @@ export default function Workspace() {
   }
 
   return (
-    <div style={{ maxWidth: 460, margin: '0 auto', fontFamily: 'Albert Sans, sans-serif' }}>
+    <div className="appx-wide">
       <div style={{ fontFamily: 'Sora, sans-serif', fontSize: 22, fontWeight: 800, marginBottom: 14 }}>My work</div>
 
       {msg && <Alert kind={msg.k}>{msg.t}</Alert>}
@@ -55,7 +55,7 @@ export default function Workspace() {
           <div style={{ fontSize: 13, lineHeight: 1.6, marginBottom: 16 }}>Accept a task from the marketplace and it appears here.</div>
           <Link to="/marketplace" style={{ display: 'inline-block', background: '#FF6A3D', color: '#fff', fontFamily: 'Sora, sans-serif', fontSize: 14, fontWeight: 700, padding: '12px 24px', borderRadius: 12, textDecoration: 'none' }}>Find a task</Link>
         </div>
-      ) : data.map((a) => {
+      ) : <div className="card-grid">{data.map((a) => {
         const c = chip(a.status);
         return (
           <div key={a.id} style={{ border: '1px solid #E3E4EE', background: '#fff', borderRadius: 14, padding: '14px 16px', marginBottom: 10 }}>
@@ -92,7 +92,7 @@ export default function Workspace() {
             )}
           </div>
         );
-      })}
+      })}</div>}
     </div>
   );
 }

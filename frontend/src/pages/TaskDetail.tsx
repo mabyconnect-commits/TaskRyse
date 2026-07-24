@@ -53,7 +53,7 @@ export default function TaskDetail() {
     : { label: 'Upgrade your plan →', bg: '#171A3A', fg: '#fff', act: () => navigate('/plans') };
 
   return (
-    <div style={{ maxWidth: 460, margin: '0 auto', fontFamily: 'Albert Sans, sans-serif', background: '#FAFAFC', border: '1px solid #ECEDF4', borderRadius: 20, overflow: 'hidden' }}>
+    <div className="appx" style={{ background: '#FAFAFC', border: '1px solid #ECEDF4', borderRadius: 20, overflow: 'hidden' }}>
       {/* header */}
       <div style={{ padding: '16px 20px', display: 'flex', alignItems: 'center', gap: 12, borderBottom: '1px solid #ECEDF4', background: '#fff' }}>
         <Link to="/marketplace" style={{ border: 'none', background: '#F4F5FA', width: 34, height: 34, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 16, textDecoration: 'none', color: '#171A3A' }}>←</Link>
