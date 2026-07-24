@@ -39,7 +39,7 @@ export default function Landing() {
           </nav>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
             <Link to="/login" className="lp-signin" style={{ color: INK, fontWeight: 600, fontSize: 14, whiteSpace: 'nowrap' }}>Sign in</Link>
-            <Link to="/login" className="lp-btn lp-btn-primary">Start Your Ryse</Link>
+            <Link to="/register" className="lp-btn lp-btn-primary">Start Your Ryse</Link>
           </div>
         </div>
       </header>
@@ -55,7 +55,7 @@ export default function Landing() {
               Complete AI and digital tasks, develop your expertise and get paid for approved work — in your local currency.
             </p>
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-              <Link to="/login" className="lp-btn lp-btn-primary lp-btn-lg">Start Your Ryse</Link>
+              <Link to="/register" className="lp-btn lp-btn-primary lp-btn-lg">Start Your Ryse</Link>
               <Link to="/login" className="lp-btn lp-btn-ghost lp-btn-lg">Explore Tasks</Link>
             </div>
           </div>
@@ -179,7 +179,7 @@ export default function Landing() {
                 <li>✓ {p.supportTier} support</li>
                 <li>{p.sponsoredAccess ? '✓ Sponsored access' : '— No sponsored access'}</li>
               </ul>
-              <Link to="/login" className="lp-btn lp-btn-primary" style={{ width: '100%', marginTop: 14, justifyContent: 'center' }}>Choose {p.name.toLowerCase()}</Link>
+              <Link to="/register" className="lp-btn lp-btn-primary" style={{ width: '100%', marginTop: 14, justifyContent: 'center' }}>Choose {p.name.toLowerCase()}</Link>
             </div>
           ))}
         </div>
@@ -198,7 +198,7 @@ export default function Landing() {
               Post tasks or sponsored campaigns, define exactly who qualifies, fund upfront, and pay only for work you approve. Every contributor is identity-verified.
             </p>
           </div>
-          <Link to="/login" className="lp-btn lp-btn-primary lp-btn-lg">Post a Task</Link>
+          <Link to="/register" className="lp-btn lp-btn-primary lp-btn-lg">Post a Task</Link>
         </div>
       </section>
 
@@ -207,7 +207,7 @@ export default function Landing() {
         <div style={{ background: 'linear-gradient(120deg, #FF6A3D, #FF8A5D)', color: '#fff', borderRadius: 20, padding: '44px 24px', textAlign: 'center' }}>
           <h2 style={{ fontFamily: 'Sora, sans-serif', fontSize: 28, margin: '0 0 10px' }}>Ready to start your Ryse?</h2>
           <p style={{ opacity: 0.95, margin: '0 0 20px', fontSize: 15 }}>Create your profile, verify your identity and unlock your first eligible tasks today.</p>
-          <Link to="/login" className="lp-btn" style={{ background: INK, color: '#fff' }}>Start Your Ryse</Link>
+          <Link to="/register" className="lp-btn" style={{ background: INK, color: '#fff' }}>Start Your Ryse</Link>
         </div>
       </section>
 

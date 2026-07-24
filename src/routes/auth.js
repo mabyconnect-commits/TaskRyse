@@ -58,8 +58,10 @@ router.post('/register', asyncHandler(async (req, res) => {
     email: user.email,
     role: user.role,
     emailVerified: false,
-    // dev convenience only
-    otp: config.isDev ? otp : undefined,
+    // No email/SMS delivery is configured for this demo, so the one-time code is
+    // returned here for the onboarding flow to display/verify. In production this
+    // would be delivered out-of-band and never returned in the response.
+    otp,
   });
 }));
 

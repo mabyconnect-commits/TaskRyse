@@ -6,6 +6,7 @@ interface AuthState {
   user: SessionUser | null;
   loading: boolean;
   login: (email: string, password: string) => Promise<SessionUser>;
+  applySession: (token: string, user?: SessionUser) => SessionUser | null;
   logout: () => void;
 }
 
@@ -38,12 +39,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return res.user;
   }
 
+  // Apply a session from a token obtained outside login (e.g. OTP verify at signup).
+  function applySession(token: string, u?: SessionUser): SessionUser | null {
+    setToken(token);
+    const resolved = u || decodeToken(token);
+    setUser(resolved);
+    return resolved;
+  }
+
   function logout() {
     setToken(null);
     setUser(null);
   }
 
-  return <AuthContext.Provider value={{ user, loading, login, logout }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ user, loading, login, applySession, logout }}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth(): AuthState {

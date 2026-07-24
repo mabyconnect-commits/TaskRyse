@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { ApiError } from '../lib/api';
 import { Alert, Field } from '../components/ui';
-import { Logo } from '../components/Logo';
 
 const DEMO = [
   { label: 'Contributor', email: 'adaeze@example.com' },
@@ -66,6 +65,10 @@ export default function Login() {
               {busy ? <span className="spinner" /> : 'Sign in'}
             </button>
           </form>
+
+          <div style={{ textAlign: 'center', marginTop: 14, fontSize: 13.5, color: 'var(--muted)' }}>
+            New to Taskryse? <Link to="/register" style={{ color: 'var(--orange)', fontWeight: 700 }}>Create an account</Link>
+          </div>
 
           <div className="demo-accounts">
             <div className="muted" style={{ marginBottom: 6 }}>Demo accounts (password <code>Password123!</code>):</div>

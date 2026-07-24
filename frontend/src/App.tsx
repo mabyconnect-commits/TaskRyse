@@ -3,6 +3,7 @@ import { ReactNode } from 'react';
 import { useAuth } from './context/AuthContext';
 import Layout from './components/Layout';
 import Login from './pages/Login';
+import Register from './pages/Register';
 import Landing from './pages/Landing';
 import Dashboard from './pages/Dashboard';
 import Marketplace from './pages/Marketplace';
@@ -31,6 +32,7 @@ export default function App() {
       {/* Public front door: landing when logged out, dashboard when logged in. */}
       <Route path="/" element={user ? <Navigate to="/dashboard" replace /> : <Landing />} />
       <Route path="/login" element={user ? <Navigate to="/dashboard" replace /> : <Login />} />
+      <Route path="/register" element={user ? <Navigate to="/dashboard" replace /> : <Register />} />
       <Route path="/dashboard" element={<Protected><Dashboard /></Protected>} />
       <Route path="/marketplace" element={<Protected><Marketplace /></Protected>} />
       <Route path="/task/:id" element={<Protected><TaskDetail /></Protected>} />
