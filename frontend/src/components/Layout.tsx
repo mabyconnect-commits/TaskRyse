@@ -45,7 +45,9 @@ export default function Layout({ children }: { children: ReactNode }) {
 
           <div className="appbar-right">
             <span className="role-pill">{roleLabel}</span>
-            <span className="email-chip show-desktop">{user.email}</span>
+            <NavLink to="/profile" className="appbar-avatar" title="Profile & settings" aria-label="Profile">
+              {user.email.slice(0, 2).toUpperCase()}
+            </NavLink>
             <button className="lp-btn lp-btn-primary appbar-signout show-desktop" onClick={() => { logout(); navigate('/'); }}>Sign out</button>
             <button className="hamburger" onClick={() => setOpen(true)} aria-label="Menu"><span /><span /><span /></button>
           </div>
@@ -65,6 +67,10 @@ export default function Layout({ children }: { children: ReactNode }) {
             {i.label}
           </NavLink>
         ))}
+        <NavLink to="/profile" onClick={() => setOpen(false)}
+          className={({ isActive }) => `app-drawer-link ${isActive ? 'active' : ''}`}>
+          Profile &amp; settings
+        </NavLink>
         <div className="app-drawer-foot">
           <div className="tiny muted" style={{ marginBottom: 8 }}>{user.email}</div>
           <button className="lp-btn lp-btn-primary" style={{ width: '100%', justifyContent: 'center' }} onClick={() => { logout(); navigate('/'); }}>Sign out</button>

@@ -15,6 +15,7 @@ import Ryse from './pages/Ryse';
 import Review from './pages/Review';
 import Business from './pages/Business';
 import Admin from './pages/Admin';
+import Profile from './pages/Profile';
 
 function Protected({ children }: { children: ReactNode }) {
   const { user, loading } = useAuth();
@@ -43,6 +44,7 @@ export default function App() {
       <Route path="/review" element={<Protected><Review /></Protected>} />
       <Route path="/business" element={<Protected><Business /></Protected>} />
       <Route path="/admin" element={<Protected><Admin /></Protected>} />
+      <Route path="/profile" element={<Protected><Profile /></Protected>} />
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
