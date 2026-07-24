@@ -59,9 +59,6 @@ export default function Landing() {
       <section style={{ background: `radial-gradient(900px 500px at 15% -10%, #2A2F63 0%, ${INK} 55%, #0F1128 100%)`, color: '#fff' }}>
         <div style={{ maxWidth: 1160, margin: '0 auto', padding: '56px 20px 64px', display: 'grid', gridTemplateColumns: '1.05fr 0.95fr', gap: 40, alignItems: 'center' }} className="lp-hero-grid">
           <div>
-            <span style={{ display: 'inline-flex', gap: 8, alignItems: 'center', background: 'rgba(255,255,255,0.08)', padding: '7px 13px', borderRadius: 999, fontSize: 12.5, marginBottom: 20 }}>
-              ⚡ You earn only from approved work — never from joining
-            </span>
             <h1 style={{ fontFamily: 'Sora, sans-serif', fontWeight: 800, fontSize: 46, lineHeight: 1.05, letterSpacing: '-0.02em', margin: '0 0 16px' }}>
               Turn your skills into<br />verified opportunities.
             </h1>
