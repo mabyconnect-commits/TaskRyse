@@ -11,18 +11,7 @@ const MUTED = '#6B6E8C';
 
 function Logo({ light = false }: { light?: boolean }) {
   return (
-    <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
-      <svg width="26" height="26" viewBox="0 0 32 32" aria-hidden>
-        <defs>
-          <linearGradient id="lg" x1="0" y1="0" x2="32" y2="32">
-            <stop stopColor="#FF6A3D" /><stop offset="1" stopColor="#FFC857" />
-          </linearGradient>
-        </defs>
-        <rect width="32" height="32" rx="8" fill="url(#lg)" />
-        <path d="M8.5 17.2l4.4 4.4L23.5 11" stroke="#fff" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round" fill="none" />
-      </svg>
-      <span style={{ fontFamily: 'Sora, sans-serif', fontWeight: 800, letterSpacing: '0.02em', fontSize: 19, color: light ? '#fff' : INK }}>TASKRYSE</span>
-    </div>
+    <img src="/logo.png" alt="Taskryse" style={{ height: 28, width: 'auto', display: 'block', filter: light ? 'brightness(0) invert(1)' : undefined }} />
   );
 }
 

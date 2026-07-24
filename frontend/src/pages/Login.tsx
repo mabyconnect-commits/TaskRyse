@@ -48,8 +48,8 @@ export default function Login() {
 
       <div className="auth-form">
         <div className="auth-card">
-          <div className="row" style={{ gap: 10, marginBottom: 18 }}>
-            <Logo size={34} />
+          <div className="row" style={{ gap: 12, marginBottom: 18 }}>
+            <img src="/logo.png" alt="Taskryse" style={{ height: 30, width: 'auto' }} />
             <h2 style={{ margin: 0 }}>Sign in</h2>
           </div>
 

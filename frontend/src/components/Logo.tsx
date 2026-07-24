@@ -23,12 +23,14 @@ export function Logo({ size = 30 }: { size?: number }) {
   );
 }
 
-// Logo + TASKRYSE wordmark lockup, as used in the design header.
-export function WordmarkLogo({ size = 26 }: { size?: number }) {
+// The official Taskryse logo (icon + wordmark lockup) from the design assets.
+// `light` renders it white for use on dark backgrounds.
+export function WordmarkLogo({ height = 26, light = false }: { height?: number; light?: boolean }) {
   return (
-    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 9 }}>
-      <Logo size={size} />
-      <span style={{ fontFamily: 'Sora, sans-serif', fontWeight: 800, letterSpacing: '0.02em', fontSize: 18, color: 'var(--ink)' }}>TASKRYSE</span>
-    </span>
+    <img
+      src="/logo.png"
+      alt="Taskryse"
+      style={{ height, width: 'auto', display: 'block', filter: light ? 'brightness(0) invert(1)' : undefined }}
+    />
   );
 }
